@@ -24,9 +24,6 @@ class BookTimeCommand extends Command
 
     private ClientFactory $clientFactory;
 
-    /**
-     * @param string|null $name
-     */
     public function __construct(?string $name = null)
     {
         parent::__construct($name);
@@ -34,9 +31,6 @@ class BookTimeCommand extends Command
         $this->clientFactory = new ClientFactory();
     }
 
-    /**
-     * @return void
-     */
     protected function configure(): void
     {
         $this->setName(self::COMMAND_NAME);
@@ -49,13 +43,7 @@ class BookTimeCommand extends Command
         );
     }
 
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return void
-     */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputOutputStyle = new SymfonyStyle($input, $output);
 
@@ -80,12 +68,6 @@ class BookTimeCommand extends Command
         $inputOutputStyle->success('Booked ' . $duration . ' minutes for "' . $worklogComment . '" on ' . $issue);
     }
 
-    /**
-     * @param \Workflow\Transfers\JiraWorklogEntryTransfer $worklog
-     * @param \Symfony\Component\Console\Style\SymfonyStyle $inputOutputStyle
-     *
-     * @return string
-     */
     private function createWorklogComment(
         JiraWorklogEntryTransfer $worklog,
         SymfonyStyle $inputOutputStyle
@@ -105,12 +87,6 @@ class BookTimeCommand extends Command
         return $summary;
     }
 
-    /**
-     * @param \Workflow\Transfers\JiraWorklogEntryTransfer $worklog
-     * @param \Symfony\Component\Console\Style\SymfonyStyle $inputOutputStyle
-     *
-     * @return int
-     */
     private function createWorklogDuration(
         JiraWorklogEntryTransfer $worklog,
         SymfonyStyle $inputOutputStyle
@@ -130,12 +106,6 @@ class BookTimeCommand extends Command
         return $duration;
     }
 
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Style\SymfonyStyle $inputOutputStyle
-     *
-     * @return string
-     */
     private function getIssueTicketNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string
     {
         if ($input->getOption(self::FOR_CURRENT_BRANCH)) {
@@ -165,9 +135,6 @@ class BookTimeCommand extends Command
         return $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
     }
 
-    /**
-     * @return string
-     */
     private function getFavouriteTicketsFromEnvironment(): string
     {
         $envVarname = self::JIRA_FAVOURITE_TICKETS;
@@ -178,12 +145,6 @@ class BookTimeCommand extends Command
         return '';
     }
 
-    /**
-     * @param string $favouriteTicketsFromEnvironment
-     * @param array $choices
-     *
-     * @return array
-     */
     private function addFavouriteTicketsToChoices(string $favouriteTicketsFromEnvironment, array $choices): array
     {
         $issueArray = explode(',', $favouriteTicketsFromEnvironment);

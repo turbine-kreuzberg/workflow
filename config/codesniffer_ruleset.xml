@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<ruleset name="Turbine workflow">
+    <description>
+        Turbine workflow coding standard
+    </description>
+
+    <rule ref="PEAR">
+        <exclude name="PEAR.Commenting.FileComment" />
+        <exclude name="PEAR.Commenting.ClassComment" />
+        <exclude name="PEAR.Commenting.FunctionComment" />
+        <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore"/>
+        <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore"/>
+    </rule>
+
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="120"/>
+        </properties>
+    </rule>
+
+</ruleset>
