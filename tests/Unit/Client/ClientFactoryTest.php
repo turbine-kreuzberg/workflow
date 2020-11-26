@@ -3,11 +3,15 @@
 namespace Unit\Client;
 
 use PHPUnit\Framework\TestCase;
+use Workflow\Client\ClientFactory;
+use Workflow\Client\GitClient;
 
 class ClientFactoryTest extends TestCase
 {
-    public function testTest(): void
+    public function testGetGitClient(): void
     {
-        self::assertEquals(12,13);
+        $clientFactory = new ClientFactory();
+        $gitClient = $clientFactory->getGitClient();
+        self::assertInstanceOf(GitClient::class, $gitClient);
     }
 }
