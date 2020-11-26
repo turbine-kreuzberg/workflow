@@ -1,3 +1,5 @@
+include makefiles/help.mk
+
 CLI_COLORED = docker-compose exec cli
 
 setup: ##@setup install dependencies

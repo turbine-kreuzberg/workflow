@@ -1,5 +1,10 @@
-#install dependencies
-docker-compose run composer
+#Turbine Workflow
 
-run phpunit:
-docker-compose run php /var/www/vendor/bin/phpunit -c tests/phpunit.xml
+These tools help automate the development workflow.
+
+To setup run
+`make setup`
+
+to see other available commands run
+`make`
+
