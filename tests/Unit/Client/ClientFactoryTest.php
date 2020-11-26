@@ -1,11 +1,13 @@
 <?php
 
-use Codeception\TestCase\Test;
+namespace Unit\Client;
 
-class ClientFactoryTest extends Test
+use PHPUnit\Framework\TestCase;
+
+class ClientFactoryTest extends TestCase
 {
     public function testTest(): void
     {
-        $this->assertEquals(12,12);
+        self::assertEquals(12,13);
     }
 }
