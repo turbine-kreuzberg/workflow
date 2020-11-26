@@ -1,0 +1,13 @@
+version: '3'
+services:
+  php:
+    image: php:7.4-fpm
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www:delegated
+
+  composer:
+    image: prooph/composer:7.4
+    command: install -o
+    volumes:
+      - .:/app:delegated

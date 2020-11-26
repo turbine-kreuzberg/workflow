@@ -20,7 +20,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Workflow\\": "workflow"
+      "Workflow\\": "src/"
     }
   },
   "minimum-stability": "dev",
