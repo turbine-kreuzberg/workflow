@@ -7,7 +7,7 @@ services:
       - ./:/var/www:delegated
 
   composer:
-    image: prooph/composer:7.4
+    image: composer:latest
     command: install -o
     volumes:
       - .:/app:delegated
