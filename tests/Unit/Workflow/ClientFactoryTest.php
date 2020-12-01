@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit\Client;
+namespace Unit\Workflow;
 
 use PHPUnit\Framework\TestCase;
 use Workflow\Client\ClientFactory;
