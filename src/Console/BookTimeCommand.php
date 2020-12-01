@@ -109,7 +109,7 @@ class BookTimeCommand extends Command
     private function getIssueTicketNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string
     {
         if ($input->getOption(self::FOR_CURRENT_BRANCH)) {
-            return $this->clientFactory->getGitClient()->getTicketFromCurrentBranch();
+            return $this->clientFactory->getGitClient()->extractTicketIdFromCurrentBranch();
         }
 
         $favouriteTicketsFromEnvironment = $this->getFavouriteTicketsFromEnvironment();

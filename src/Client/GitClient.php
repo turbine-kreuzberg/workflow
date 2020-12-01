@@ -4,12 +4,7 @@ namespace Workflow\Client;
 
 class GitClient
 {
-    /**
-     * @throws \Exception
-     *
-     * @return string
-     */
-    public function getTicketFromCurrentBranch(): string
+    public function extractTicketIdFromCurrentBranch(): string
     {
         $matches = [];
         $branchName = $this->getCurrentBranchName();
