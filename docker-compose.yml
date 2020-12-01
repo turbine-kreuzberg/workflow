@@ -4,6 +4,8 @@ services:
     build:
       context: images/php
     working_dir: /var/www
+    env_file:
+      - .env
     volumes:
       - ./:/var/www:delegated
 

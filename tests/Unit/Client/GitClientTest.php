@@ -17,17 +17,17 @@ class GitClientTest extends TestCase
 
     protected function tearDown(): void
     {
-        exec('git checkout '. $this->oldBranch );
+        exec('git checkout ' . $this->oldBranch);
     }
 
     public function testExtractTicketIdFromCurrentBranch(): void
     {
         $client = new GitClient();
-        $testbranch = uniqid('SUK-100-', true);
-        exec('git checkout -b '.$testbranch);
+        $testBranch = uniqid('SUK-100-', true);
+        exec('git checkout -b ' . $testBranch);
         $ticket = $client->extractTicketIdFromCurrentBranch();
-        exec('git checkout '. $this->oldBranch );
-        exec('git branch -D '.$testbranch);
+        exec('git checkout ' . $this->oldBranch);
+        exec('git branch -D ' . $testBranch);
         self::assertEquals('SUK-100', $ticket);
     }
 }
