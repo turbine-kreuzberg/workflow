@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Workflow\Client\ClientFactory;
 use Workflow\Exception\JiraNoWorklogException;
 use Workflow\Transfers\JiraWorklogEntryTransfer;
 use Workflow\Workflow\WorkflowFactory;
@@ -22,13 +21,10 @@ class BookTimeCommand extends Command
 
     private WorkflowFactory $workflowFactory;
 
-    private ClientFactory $clientFactory;
-
     public function __construct(?string $name = null)
     {
         parent::__construct($name);
         $this->workflowFactory = new WorkflowFactory();
-        $this->clientFactory = new ClientFactory();
     }
 
     protected function configure(): void
@@ -109,7 +105,7 @@ class BookTimeCommand extends Command
     private function getIssueTicketNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string
     {
         if ($input->getOption(self::FOR_CURRENT_BRANCH)) {
-            return $this->clientFactory->getGitClient()->extractTicketIdFromCurrentBranch();
+            return $this->workflowFactory->getBookTime()->extractTicketIdFromCurrentBranch();
         }
 
         $favouriteTicketsFromEnvironment = $this->getFavouriteTicketsFromEnvironment();
