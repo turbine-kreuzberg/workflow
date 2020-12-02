@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use Workflow\Bootstrap;
+use Workflow\Workflow\Bootstrap;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

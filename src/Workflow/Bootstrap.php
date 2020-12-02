@@ -1,6 +1,6 @@
 <?php
 
-namespace Workflow;
+namespace Workflow\Workflow;
 
 use Symfony\Component\Console\Application;
 use Workflow\Console\BookTimeCommand;
