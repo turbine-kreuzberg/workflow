@@ -23,7 +23,7 @@ sniff-fix-project: ##@dvelopment run code sniffer
 .PHONY: sniff-fix-project
 
 book-time: ##@workflow book time on ticket
-	$(CLI_COLORED) ./tools/run-with-env.bash workflow/bin/workflow workflow:book-time
+	docker-compose run php /var/www/bin/workflow workflow:book-time
 .PHONY: book-time
 
 

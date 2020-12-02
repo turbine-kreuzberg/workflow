@@ -3,6 +3,7 @@
 namespace Workflow\Workflow;
 
 use Workflow\Client\ClientFactory;
+use Workflow\Workflow\Jira\IssueReader;
 
 class WorkflowFactory
 {
@@ -17,6 +18,17 @@ class WorkflowFactory
     public function getTicketIdentifier(): TicketIdentifier
     {
         return new TicketIdentifier();
+    }
+
+    public function createJiraIssueReader(): IssueReader
+    {
+        if ($this->issueReader === null) {
+            $this->issueReader = new IssueReader(
+                $this->clientFactory->getJiraClient()
+            );
+        }
+
+        return $this->issueReader;
     }
 
     private function getClientFactory(): ClientFactory

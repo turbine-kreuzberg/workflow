@@ -1,0 +1,9 @@
+#!/usr/bin/env php
+<?php
+
+use Workflow\Bootstrap;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$bootstrap = new Bootstrap();
+$bootstrap->run();
