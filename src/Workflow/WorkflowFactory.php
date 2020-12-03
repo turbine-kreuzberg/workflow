@@ -7,6 +7,10 @@ use Workflow\Workflow\Jira\IssueReader;
 
 class WorkflowFactory
 {
+    private ?ClientFactory $clientFactory = null;
+
+    private ?IssueReader $issueReader = null;
+
     public function getBookTime(): BookTime
     {
         return new BookTime(
@@ -24,7 +28,7 @@ class WorkflowFactory
     {
         if ($this->issueReader === null) {
             $this->issueReader = new IssueReader(
-                $this->clientFactory->getJiraClient()
+                $this->getClientFactory()->getJiraClient()
             );
         }
 
