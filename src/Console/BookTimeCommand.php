@@ -59,7 +59,7 @@ class BookTimeCommand extends Command
         if ($duration < 15) {
             $duration *= 60;
         }
-//        $this->workflowFactory->createJiraIssueUpdater()->bookTime($issue, $worklogComment, $duration, $today);
+        $this->workflowFactory->createJiraIssueUpdater()->bookTime($issue, $worklogComment, $duration, $today);
 
         $inputOutputStyle->success('Booked ' . $duration . ' minutes for "' . $worklogComment . '" on ' . $issue);
     }
