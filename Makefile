@@ -1,4 +1,5 @@
 include makefiles/help.mk
+include src/makefiles/Makefile
 
 CLI_COLORED = docker-compose exec cli
 
@@ -21,12 +22,3 @@ sniff-project: ##@dvelopment run code sniffer
 sniff-fix-project: ##@dvelopment run code sniffer
 	docker-compose run php /var/www/vendor/bin/phpcbf src/ tests/ --standard=./config/codesniffer_ruleset.xml
 .PHONY: sniff-fix-project
-
-book-time: ##@workflow book time on ticket
-	docker-compose run php /var/www/bin/workflow workflow:book-time
-.PHONY: book-time
-
-
-
-
-
