@@ -4,12 +4,15 @@ namespace Workflow\Workflow;
 
 use Workflow\Client\ClientFactory;
 use Workflow\Workflow\Jira\IssueReader;
+use Workflow\Workflow\Jira\IssueUpdater;
 
 class WorkflowFactory
 {
     private ?ClientFactory $clientFactory = null;
 
     private ?IssueReader $issueReader = null;
+
+    private ?IssueUpdater $issueUpdater = null;
 
     public function getBookTime(): BookTime
     {
@@ -33,6 +36,17 @@ class WorkflowFactory
         }
 
         return $this->issueReader;
+    }
+
+    public function createJiraIssueUpdater(): IssueUpdater
+    {
+        if ($this->issueUpdater === null) {
+            $this->issueUpdater = new IssueUpdater(
+                $this->getClientFactory()->getJiraClient()
+            );
+        }
+
+        return $this->issueUpdater;
     }
 
     private function getClientFactory(): ClientFactory

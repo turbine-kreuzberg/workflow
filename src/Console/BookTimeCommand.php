@@ -62,6 +62,8 @@ class BookTimeCommand extends Command
         $this->workflowFactory->createJiraIssueUpdater()->bookTime($issue, $worklogComment, $duration, $today);
 
         $inputOutputStyle->success('Booked ' . $duration . ' minutes for "' . $worklogComment . '" on ' . $issue);
+
+        return 0;
     }
 
     private function createWorklogComment(
