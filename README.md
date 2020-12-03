@@ -8,3 +8,5 @@ To setup run
 to see other available commands run
 `make`
 
+Add to your project makefile 
+`include vendor/turbine/workflow/src/makefiles/Makefile`
