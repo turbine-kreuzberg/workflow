@@ -1,5 +1,5 @@
 book-time: ##@workflow book time on ticket
-	docker-compose run php /var/www/bin/workflow workflow:book-time
+	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-cli /var/www/bin/workflow workflow:book-time
 .PHONY: book-time
 
 
