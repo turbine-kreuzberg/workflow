@@ -20,6 +20,9 @@
       "Workflow\\": "src/"
     }
   },
+  "bin": [
+    "bin/workflow"
+  ],
   "minimum-stability": "dev",
   "prefer-stable": true,
   "config": {
