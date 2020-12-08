@@ -8,6 +8,8 @@ services:
       - .env
     volumes:
       - ./:/var/www:delegated
+    tty: true
+    stdin_open: true
 
   composer:
     image: composer:latest

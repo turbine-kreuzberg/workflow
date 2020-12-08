@@ -4,23 +4,23 @@ CLI_COLORED = docker-compose exec cli
 
 setup: ##@setup install dependencies
 	make install-git-hooks
-	docker-compose run composer
+	docker-compose up -d
 .PHONY: setup
 
 tests: ##@development run tests
-	docker-compose run php /var/www/vendor/bin/phpunit -c tests/phpunit.xml
+	docker-compose exec php /var/www/vendor/bin/phpunit -c tests/phpunit.xml
 .PHONY: tests
 
 phpstan: ##@development run phpstan
-	docker-compose run php /var/www/vendor/bin/phpstan analyse ./src ./tests -l 8
+	docker-compose exec php /var/www/vendor/bin/phpstan analyse ./src ./tests -l 8
 .PHONY: phpstan
 
 sniff-project: ##@dvelopment run code sniffer
-	docker-compose run php /var/www/vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
+	docker-compose exec php /var/www/vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
 .PHONY: sniff-project
 
 sniff-fix-project: ##@dvelopment run code sniffer
-	docker-compose run php /var/www/vendor/bin/phpcbf src/ tests/ --standard=./config/codesniffer_ruleset.xml
+	docker-compose exec php /var/www/vendor/bin/phpcbf src/ tests/ --standard=./config/codesniffer_ruleset.xml
 .PHONY: sniff-fix-project
 
 book-time: ##@workflow book time on ticket
