@@ -8,19 +8,19 @@ setup: ##@setup install dependencies
 .PHONY: setup
 
 tests: ##@development run tests
-	docker-compose exec php /var/www/vendor/bin/phpunit -c tests/phpunit.xml
+	docker-compose exec -T php /var/www/vendor/bin/phpunit -c tests/phpunit.xml
 .PHONY: tests
 
 phpstan: ##@development run phpstan
-	docker-compose exec php /var/www/vendor/bin/phpstan analyse ./src ./tests -l 8
+	docker-compose exec -T php /var/www/vendor/bin/phpstan analyse ./src ./tests -l 8
 .PHONY: phpstan
 
 sniff-project: ##@dvelopment run code sniffer
-	docker-compose exec php /var/www/vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
+	docker-compose exec -T php /var/www/vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
 .PHONY: sniff-project
 
 sniff-fix-project: ##@dvelopment run code sniffer
-	docker-compose exec php /var/www/vendor/bin/phpcbf src/ tests/ --standard=./config/codesniffer_ruleset.xml
+	docker-compose exec -T php /var/www/vendor/bin/phpcbf src/ tests/ --standard=./config/codesniffer_ruleset.xml
 .PHONY: sniff-fix-project
 
 book-time: ##@workflow book time on ticket
