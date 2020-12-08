@@ -12,4 +12,4 @@ if [[ "$STAGED_PHP_FILES" != "" ]]; then
 	else
 		exit 1
 	fi
-f
+fi

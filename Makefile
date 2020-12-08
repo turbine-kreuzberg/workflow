@@ -3,6 +3,7 @@ include makefiles/help.mk
 CLI_COLORED = docker-compose exec cli
 
 setup: ##@setup install dependencies
+	make install-git-hooks
 	docker-compose run composer
 .PHONY: setup
 
@@ -27,6 +28,5 @@ book-time: ##@workflow book time on ticket
 .PHONY: book-time
 
 install-git-hooks: ##@development install git hooks
-	git config core.hooksPath tools/githooks
-	@if [ ${UNAME} = "Darwin" ]; then cp -f tools/githooks/* .git/hooks; else cp -f -l tools/githooks/* .git/hooks; fi
+	git config core.hooksPath .githooks
 .PHONY: install-git-hooks
