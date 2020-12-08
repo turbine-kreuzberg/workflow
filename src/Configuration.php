@@ -8,11 +8,7 @@ class Configuration
 {
     public const JIRA_PROJECT_KEY = "JIRA_PROJECT_KEY";
 
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    public static function getProjectKey(): string
+    public function getProjectKey(): string
     {
         try {
             return getenv(self::JIRA_PROJECT_KEY);
