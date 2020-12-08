@@ -20,29 +20,14 @@ class JiraClient
     private const ISSUE_URL = self::API_URL . 'issue/';
     private const BOARD_URL = self::BASE_URL . 'rest/agile/1.0/board/';
 
-    private AtlassianHttpClient $jiraHttpClient;
 
-    /**
-     * @param \Workflow\Client\Http\AtlassianHttpClient $jiraHttpClient
-     */
-    public function __construct(AtlassianHttpClient $jiraHttpClient)
-    {
-        $this->jiraHttpClient = $jiraHttpClient;
-    }
+    public function __construct(private AtlassianHttpClient $jiraHttpClient) {}
 
-    /**
-     * @return array
-     */
     public static function requiredEnvironmentVariables(): array
     {
         return [AtlassianHttpClient::USERNAME, AtlassianHttpClient::PASSWORD, self::PROJECT_NAME];
     }
 
-    /**
-     * @param array $issueData
-     *
-     * @return \Workflow\Transfers\JiraIssueTransfer
-     */
     public function createIssue(array $issueData): JiraIssueTransfer
     {
         $responseArray = $this->jiraHttpClient->post(self::ISSUE_URL, $issueData);
@@ -50,11 +35,6 @@ class JiraClient
         return $this->getIssue($responseArray['key']);
     }
 
-    /**
-     * @param string $statusName
-     *
-     * @return \Workflow\Transfers\JiraIssueTransferCollection
-     */
     public function getCurrentIssuesInStatus(string $statusName): JiraIssueTransferCollection
     {
         $issueData = [
@@ -68,11 +48,6 @@ class JiraClient
         return $this->mapResponseToJiraIssueTransferCollection($responseArray);
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return array
-     */
     public function getActiveSprint(): array
     {
         $responseArray = $this->jiraHttpClient->get(self::BOARD_URL . $this->getBoardId() . '/sprint');
@@ -86,12 +61,6 @@ class JiraClient
         throw new Exception('No active sprint found.');
     }
 
-    /**
-     * @param string $issue
-     * @param string $transitionId
-     *
-     * @return void
-     */
     public function transitionJiraIssue(string $issue, string $transitionId): void
     {
         $transitionData = ['transition' => ['id' => $transitionId]];
@@ -99,11 +68,6 @@ class JiraClient
         $this->jiraHttpClient->post($transitionUrl, $transitionData);
     }
 
-    /**
-     * @param string $issue
-     *
-     * @return void
-     */
     public function assignJiraIssueToUser(string $issue): void
     {
         $assigneeData = ['name' => $this->getUsername()];
@@ -111,11 +75,6 @@ class JiraClient
         $this->jiraHttpClient->put($issueUrl, $assigneeData);
     }
 
-    /**
-     * @throws \RuntimeException
-     *
-     * @return string
-     */
     private function getUsername(): string
     {
         $userName = getenv(AtlassianHttpClient::USERNAME);
@@ -126,23 +85,12 @@ class JiraClient
         return $userName;
     }
 
-    /**
-     * @param string $issue
-     * @param array $worklogEntry
-     *
-     * @return void
-     */
     public function bookTime(string $issue, array $worklogEntry): void
     {
         $bookTimeCall = self::ISSUE_URL . $issue . '/worklog';
         $this->jiraHttpClient->post($bookTimeCall, $worklogEntry);
     }
 
-    /**
-     * @param string $issue
-     *
-     * @return array
-     */
     public function getWorkLog(string $issue): array
     {
         $bookTimeCall = self::ISSUE_URL . $issue . '/worklog';
@@ -150,11 +98,6 @@ class JiraClient
         return $this->jiraHttpClient->get($bookTimeCall);
     }
 
-    /**
-     * @param string $issue
-     *
-     * @return array
-     */
     public function getIssue(string $issue): JiraIssueTransfer
     {
         $issueCall = self::ISSUE_URL . $issue;
@@ -164,11 +107,6 @@ class JiraClient
         );
     }
 
-    /**
-     * @param array $responseArray
-     *
-     * @return \Workflow\Transfers\JiraIssueTransferCollection
-     */
     private function mapResponseToJiraIssueTransferCollection(array $responseArray): JiraIssueTransferCollection
     {
         $jiraIssues = [];
@@ -179,11 +117,6 @@ class JiraClient
         return new JiraIssueTransferCollection($jiraIssues);
     }
 
-    /**
-     * @param array $issue
-     *
-     * @return \Workflow\Transfers\JiraIssueTransfer
-     */
     private function mapResponseToJiraIssueTransfer(array $issue): JiraIssueTransfer
     {
         $jiraIssueTransfer = new JiraIssueTransfer();
@@ -196,31 +129,21 @@ class JiraClient
         return $jiraIssueTransfer;
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return string
-     */
     private function getProjectName(): string
     {
         $envVarname = self::PROJECT_NAME;
         if (getenv($envVarname)) {
-            return getenv($envVarname);
+            return (string)getenv($envVarname);
         }
 
         throw new Exception('No project name provided. Please add to your ".env" file.');
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return string
-     */
     private function getBoardId(): string
     {
         $envVarname = self::BOARD_ID;
         if (getenv($envVarname)) {
-            return getenv($envVarname);
+            return (string)getenv($envVarname);
         }
 
         throw new Exception('No Jira board ID provided. Please add to your ".env" file.');

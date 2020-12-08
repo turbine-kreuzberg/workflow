@@ -24,11 +24,6 @@ class AtlassianHttpClient
         ]);
     }
 
-    /**
-     * @param string $uri
-     *
-     * @return array
-     */
     public function get(string $uri): array
     {
         $response = $this->client->get($uri);
@@ -36,12 +31,6 @@ class AtlassianHttpClient
         return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
     }
 
-    /**
-     * @param string $uri
-     * @param array $options
-     *
-     * @return array
-     */
     public function post(string $uri, array $options = []): array
     {
         $response = $this->client->post($uri, [RequestOptions::JSON => $options]);
@@ -52,12 +41,6 @@ class AtlassianHttpClient
         }
     }
 
-    /**
-     * @param string $uri
-     * @param array $options
-     *
-     * @return array
-     */
     public function put(string $uri, array $options): array
     {
         $response = $this->client->put($uri, [RequestOptions::JSON => $options]);
@@ -68,31 +51,21 @@ class AtlassianHttpClient
         }
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return string
-     */
     private function getUsername(): string
     {
         $envVarname = self::USERNAME;
         if (getenv($envVarname)) {
-            return getenv($envVarname);
+            return (string)getenv($envVarname);
         }
 
         throw new Exception('No username provided. Please add to your ".env" file.');
     }
 
-    /**
-     * @throws \Exception
-     *
-     * @return string
-     */
     private function getPassword(): string
     {
         $envVarname = self::PASSWORD;
         if (getenv($envVarname)) {
-            return getenv($envVarname);
+            return (string)getenv($envVarname);
         }
 
         throw new Exception('No password provided. Please add to your ".env" file.');
