@@ -9,14 +9,8 @@ use Workflow\Transfers\JiraWorklogEntryTransfer;
 
 class IssueReader
 {
-    private JiraClient $jiraClient;
-
-    /**
-     * @param \Workflow\Client\JiraClient $jiraClient
-     */
-    public function __construct(JiraClient $jiraClient)
+    public function __construct(private JiraClient $jiraClient)
     {
-        $this->jiraClient = $jiraClient;
     }
 
     public function getLastTicketWorklog(string $issue): JiraWorklogEntryTransfer
@@ -26,11 +20,6 @@ class IssueReader
         return $this->getLastWorkLogEntry($completeWorklog);
     }
 
-    /**
-     * @param array $issues
-     *
-     * @return \Workflow\Transfers\JiraIssueTransferCollection
-     */
     public function getIssues(array $issues): JiraIssueTransferCollection
     {
         $issueArray = [];
@@ -41,13 +30,6 @@ class IssueReader
         return new JiraIssueTransferCollection($issueArray);
     }
 
-    /**
-     * @param array $completeWorklog
-     *
-     * @throws \Workflow\Exception\JiraNoWorklogException
-     *
-     * @return \Workflow\Transfers\JiraWorklogEntryTransfer
-     */
     private function getLastWorkLogEntry(array $completeWorklog): JiraWorklogEntryTransfer
     {
         $jiraWorklogEntryTransfer = new JiraWorklogEntryTransfer();

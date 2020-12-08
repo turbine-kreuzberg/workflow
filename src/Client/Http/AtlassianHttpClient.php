@@ -16,12 +16,14 @@ class AtlassianHttpClient
 
     public function __construct()
     {
-        $this->client = new Client([
+        $this->client = new Client(
+            [
             'auth' => [
                 $this->getUsername(),
                 $this->getPassword(),
             ],
-        ]);
+            ]
+        );
     }
 
     public function get(string $uri): array

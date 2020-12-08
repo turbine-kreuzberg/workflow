@@ -8,7 +8,9 @@ use Iterator;
 class JiraIssueTransferCollection implements Iterator, Countable
 {
 
-    public function __construct(private array $issueCollection) {}
+    public function __construct(private array $issueCollection)
+    {
+    }
 
     public function current(): JiraIssueTransfer
     {

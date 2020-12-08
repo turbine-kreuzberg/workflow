@@ -7,14 +7,12 @@ use Workflow\Console\BookTimeCommand;
 
 class Bootstrap
 {
-    /**
-     * @return void
-     */
     public function run(): void
     {
         $application = new Application();
         $application->add(new BookTimeCommand());
-        /**$application->add(new CheckBranchStatusCommand());
+        /**
+* $application->add(new CheckBranchStatusCommand());
         $application->add(new SetBranchAccessLevelCommand());
         $application->add(new AcceptMergeRequestCommand());
         $application->add(new DeploymentCreateMergeRequestCommand());

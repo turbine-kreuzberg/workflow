@@ -13,8 +13,7 @@ class BookTime
     public function __construct(
         GitClient $gitClient,
         TicketIdentifier $ticketIdentifier
-    )
-    {
+    ) {
         $this->gitClient = $gitClient;
         $this->ticketIdentifier = $ticketIdentifier;
     }

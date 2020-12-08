@@ -8,8 +8,20 @@ fi
 
 if [[ "$STAGED_PHP_FILES" != "" ]]; then
 	if make tests; then
-		exit 0
+	  echo "Tests: success"
 	else
 		exit 1
 	fi
+	if make phpstan; then
+	  echo "PHPStan: success"
+	else
+		exit 1
+	fi
+	if make sniff-project; then
+	  echo "Codesniffer: success"
+	else
+		exit 1
+	fi
+
+	exit 0
 fi

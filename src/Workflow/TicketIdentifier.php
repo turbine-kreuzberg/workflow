@@ -8,7 +8,9 @@ use Workflow\Configuration;
 
 class TicketIdentifier
 {
-    public function __construct(private Configuration $configuration) {}
+    public function __construct(private Configuration $configuration)
+    {
+    }
 
     public function extractFromBranchName(string $branchName): string
     {

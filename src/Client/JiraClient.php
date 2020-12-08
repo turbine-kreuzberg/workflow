@@ -21,7 +21,9 @@ class JiraClient
     private const BOARD_URL = self::BASE_URL . 'rest/agile/1.0/board/';
 
 
-    public function __construct(public AtlassianHttpClient $jiraHttpClient) {}
+    public function __construct(public AtlassianHttpClient $jiraHttpClient)
+    {
+    }
 
     public static function requiredEnvironmentVariables(): array
     {
