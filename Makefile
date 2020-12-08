@@ -24,7 +24,7 @@ sniff-fix-project: ##@dvelopment run code sniffer
 .PHONY: sniff-fix-project
 
 book-time: ##@workflow book time on ticket
-	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-cli /var/www/bin/workflow workflow:book-time
+	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-alpine /var/www/bin/workflow workflow:book-time
 .PHONY: book-time
 
 install-git-hooks: ##@development install git hooks
