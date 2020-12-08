@@ -7,7 +7,7 @@ class GitClient
 
     public function getCurrentBranchName() : string
     {
-        return exec('git rev-parse --abbrev-ref HEAD');
+        return (string)exec('git rev-parse --abbrev-ref HEAD');
     }
 
 }

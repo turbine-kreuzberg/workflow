@@ -11,7 +11,7 @@ class Configuration
     public function getProjectKey(): string
     {
         try {
-            return getenv(self::JIRA_PROJECT_KEY);
+            return (string) getenv(self::JIRA_PROJECT_KEY);
         } catch (\Throwable $throwable) {
             throw new \RuntimeException('No project key set. Please see your ".env.dist" file how to create and use it.');
         }

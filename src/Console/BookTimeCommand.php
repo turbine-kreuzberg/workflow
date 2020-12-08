@@ -137,7 +137,7 @@ class BookTimeCommand extends Command
     {
         $envVarname = self::JIRA_FAVOURITE_TICKETS;
         if (getenv($envVarname)) {
-            return getenv($envVarname);
+            return (string)getenv($envVarname);
         }
 
         return '';

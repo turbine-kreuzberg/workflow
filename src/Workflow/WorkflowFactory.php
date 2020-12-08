@@ -3,6 +3,7 @@
 namespace Workflow\Workflow;
 
 use Workflow\Client\ClientFactory;
+use Workflow\Configuration;
 use Workflow\Workflow\Jira\IssueReader;
 use Workflow\Workflow\Jira\IssueUpdater;
 
@@ -24,7 +25,7 @@ class WorkflowFactory
 
     public function getTicketIdentifier(): TicketIdentifier
     {
-        return new TicketIdentifier();
+        return new TicketIdentifier($this->createConfiguration());
     }
 
     public function createJiraIssueReader(): IssueReader
@@ -52,5 +53,10 @@ class WorkflowFactory
     private function getClientFactory(): ClientFactory
     {
         return new ClientFactory();
+    }
+
+    private function createConfiguration(): Configuration
+    {
+        return new Configuration();
     }
 }
