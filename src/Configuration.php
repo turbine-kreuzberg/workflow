@@ -7,6 +7,7 @@ namespace Workflow;
 class Configuration
 {
     public const JIRA_PROJECT_KEY = "JIRA_PROJECT_KEY";
+    public const JIRA_FAVOURITE_TICKETS = 'JIRA_FAVOURITE_TICKETS';
 
     public function getProjectKey(): string
     {
@@ -17,5 +18,15 @@ class Configuration
                 'No project key set. Please see your ".env.dist" file how to create and use it.'
             );
         }
+    }
+
+    public function getFavouriteTicketsFromEnvironment(): string
+    {
+        $envVarname = Configuration::JIRA_FAVOURITE_TICKETS;
+        if (getenv($envVarname)) {
+            return (string)getenv($envVarname);
+        }
+
+        return '';
     }
 }

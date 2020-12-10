@@ -3,6 +3,7 @@
 namespace Workflow\Workflow;
 
 use Symfony\Component\Console\Application;
+use Workflow\Configuration;
 use Workflow\Console\BookTimeCommand;
 
 class Bootstrap
@@ -10,7 +11,7 @@ class Bootstrap
     public function run(): void
     {
         $application = new Application();
-        $application->add(new BookTimeCommand());
+        $application->add(new BookTimeCommand(configuration: new Configuration(), name: null));
         /**
 * $application->add(new CheckBranchStatusCommand());
         $application->add(new SetBranchAccessLevelCommand());

@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Workflow\Configuration;
 use Workflow\Exception\JiraNoWorklogException;
 use Workflow\Transfers\JiraWorklogEntryTransfer;
 use Workflow\Workflow\WorkflowFactory;
@@ -17,11 +18,10 @@ class BookTimeCommand extends Command
     private const FOR_CURRENT_BRANCH = 'forCurrentBranch';
     private const CUSTOM_INPUT_KEY = 'custom';
     private const CUSTOM_INPUT = 'Custom input';
-    private const JIRA_FAVOURITE_TICKETS = 'JIRA_FAVOURITE_TICKETS';
 
     private WorkflowFactory $workflowFactory;
 
-    public function __construct(?string $name = null)
+    public function __construct(?string $name = null, private Configuration $configuration)
     {
         parent::__construct($name);
         $this->workflowFactory = new WorkflowFactory();
@@ -110,7 +110,7 @@ class BookTimeCommand extends Command
             return $this->workflowFactory->getBookTime()->extractTicketIdFromCurrentBranch();
         }
 
-        $favouriteTicketsFromEnvironment = $this->getFavouriteTicketsFromEnvironment();
+        $favouriteTicketsFromEnvironment = $this->configuration->getFavouriteTicketsFromEnvironment();
 
         if (empty($favouriteTicketsFromEnvironment)) {
             return  $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
@@ -131,16 +131,6 @@ class BookTimeCommand extends Command
         }
 
         return $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
-    }
-
-    private function getFavouriteTicketsFromEnvironment(): string
-    {
-        $envVarname = self::JIRA_FAVOURITE_TICKETS;
-        if (getenv($envVarname)) {
-            return (string)getenv($envVarname);
-        }
-
-        return '';
     }
 
     private function addFavouriteTicketsToChoices(string $favouriteTicketsFromEnvironment, array $choices): array
