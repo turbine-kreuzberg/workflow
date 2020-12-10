@@ -9,6 +9,39 @@ use Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
 
 class FavouriteTicketsChoicesProviderTest extends TestCase
 {
+    public function testNoConfiguredFavouriteTicketsReturnsNoChoices(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::once())
+            ->method('getFavouriteTicketsFromEnvironment')
+            ->willReturn('');
+
+        $issueReaderMock = $this->createMock(IssueReader::class);
+        $issueReaderMock->expects(self::never())
+            ->method('getIssues');
+
+        $favouriteTicketProvider = new FavouriteTicketChoicesProvider($configurationMock, $issueReaderMock);
+
+        self::assertEquals([], $favouriteTicketProvider->provide());
+    }
+
+    public function testIssueReaderFindsNoJiraIssuesReturnsNoChoices(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::once())
+            ->method('getFavouriteTicketsFromEnvironment')
+            ->willReturn('test-123,ticket-123');
+        $issueReaderMock = $this->createMock(IssueReader::class);
+
+        $issueReaderMock->expects(self::once())
+            ->method('getIssues')
+            ->willReturn(new JiraIssueTransferCollection([]));
+
+        $favouriteTicketProvider = new FavouriteTicketChoicesProvider($configurationMock, $issueReaderMock);
+
+        self::assertEquals([], $favouriteTicketProvider->provide());
+    }
+
     public function testProvideFavouriteTickets(): void
     {
         $configurationMock = $this->createMock(Configuration::class);

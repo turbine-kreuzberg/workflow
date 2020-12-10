@@ -5,6 +5,7 @@
          backupGlobals="false"
          colors="true"
          bootstrap="../vendor/composer/autoload_psr4.php"
+         verbose="true"
 >
 
     <testsuites>
