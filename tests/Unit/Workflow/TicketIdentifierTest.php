@@ -3,7 +3,6 @@
 namespace Unit\Workflow;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Client\GitClient;
 use Workflow\Configuration;
 use Workflow\Workflow\TicketIdentifier;
 
