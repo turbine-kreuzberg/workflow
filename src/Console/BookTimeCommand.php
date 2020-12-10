@@ -110,14 +110,12 @@ class BookTimeCommand extends Command
             return $this->workflowFactory->getBookTime()->extractTicketIdFromCurrentBranch();
         }
 
-        $favouriteTicketsFromEnvironment = $this->configuration->getFavouriteTicketsFromEnvironment();
+        $choices = $this->workflowFactory->createFavouriteTicketChoicesProvider()->provide();
 
-        if (empty($favouriteTicketsFromEnvironment)) {
+        if (empty($choices)) {
             return  $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
         }
 
-        $choices = [];
-        $choices = $this->addFavouriteTicketsToChoices($favouriteTicketsFromEnvironment, $choices);
         $choices[self::CUSTOM_INPUT_KEY] = self::CUSTOM_INPUT;
 
         $choice = $inputOutputStyle->choice(
@@ -133,16 +131,4 @@ class BookTimeCommand extends Command
         return $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
     }
 
-    private function addFavouriteTicketsToChoices(string $favouriteTicketsFromEnvironment, array $choices): array
-    {
-        $issueArray = explode(',', $favouriteTicketsFromEnvironment);
-
-        $favouriteIssues = $this->workflowFactory->createJiraIssueReader()->getIssues($issueArray);
-
-        foreach ($favouriteIssues as $issue) {
-            $choices[$issue->key] = $issue->summary;
-        }
-
-        return $choices;
-    }
 }

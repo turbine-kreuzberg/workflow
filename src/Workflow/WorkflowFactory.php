@@ -6,6 +6,7 @@ use Workflow\Client\ClientFactory;
 use Workflow\Configuration;
 use Workflow\Workflow\Jira\IssueReader;
 use Workflow\Workflow\Jira\IssueUpdater;
+use Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
 
 class WorkflowFactory
 {
@@ -48,6 +49,14 @@ class WorkflowFactory
         }
 
         return $this->issueUpdater;
+    }
+
+    public function createFavouriteTicketChoicesProvider(): FavouriteTicketChoicesProvider
+    {
+        return new FavouriteTicketChoicesProvider(
+            $this->createConfiguration(),
+            $this->createJiraIssueReader()
+        );
     }
 
     private function getClientFactory(): ClientFactory
