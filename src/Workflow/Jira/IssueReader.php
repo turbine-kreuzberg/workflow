@@ -1,5 +1,4 @@
 <?php
-
 namespace Workflow\Workflow\Jira;
 
 use Workflow\Client\JiraClient;
@@ -32,13 +31,17 @@ class IssueReader
 
     private function getLastWorkLogEntry(array $completeWorklog): JiraWorklogEntryTransfer
     {
-        $jiraWorklogEntryTransfer = new JiraWorklogEntryTransfer();
+        if (empty($completeWorklog)) {
+            throw new JiraNoWorklogException('No worklog entry found.');
+        }
+
         if ($completeWorklog['total'] === 0) {
-            throw new JiraNoWorklogException('no worklog entry found');
+            throw new JiraNoWorklogException('No worklog entry found.');
         }
 
         $workLogEntryData = $completeWorklog['worklogs'][($completeWorklog['total'] - 1)];
 
+        $jiraWorklogEntryTransfer = new JiraWorklogEntryTransfer();
         $jiraWorklogEntryTransfer->author = $workLogEntryData['author']['displayName'];
         $jiraWorklogEntryTransfer->comment = $workLogEntryData['comment'];
         $jiraWorklogEntryTransfer->timeSpentSeconds = $workLogEntryData['timeSpentSeconds'];
