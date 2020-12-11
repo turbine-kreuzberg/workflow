@@ -7,10 +7,16 @@
          verbose="true"
          printerClass="PHPUnit\Util\TestDox\CliTestDoxPrinter"
 >
-  <coverage/>
   <testsuites>
     <testsuite name="Project Test Suite">
       <directory>../tests/</directory>
     </testsuite>
   </testsuites>
+
+  <coverage cacheDirectory=".phpunit.cache/code-coverage"
+            processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">../src/</directory>
+    </include>
+  </coverage>
 </phpunit>
