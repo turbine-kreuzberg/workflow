@@ -1,4 +1,6 @@
 /tests/.phpunit.result.cache
+/tests/.phpunit.cache
+/tests/output
 /vendor/
 .idea/
 .env
