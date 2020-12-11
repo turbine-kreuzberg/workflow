@@ -4,6 +4,8 @@
         Turbine workflow coding standard
     </description>
 
+    <exclude-pattern>*/tests/output/*</exclude-pattern>
+
     <rule ref="PEAR">
         <exclude name="PEAR.Commenting.FileComment" />
         <exclude name="PEAR.Commenting.ClassComment" />

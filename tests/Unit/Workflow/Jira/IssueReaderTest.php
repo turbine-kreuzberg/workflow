@@ -5,6 +5,8 @@ namespace Unit\Workflow\Jira;
 use PHPUnit\Framework\TestCase;
 use Workflow\Client\JiraClient;
 use Workflow\Exception\JiraNoWorklogException;
+use Workflow\Transfers\JiraIssueTransfer;
+use Workflow\Transfers\JiraIssueTransferCollection;
 use Workflow\Transfers\JiraWorklogEntryTransfer;
 use Workflow\Workflow\Jira\IssueReader;
 
@@ -112,5 +114,30 @@ class IssueReaderTest extends TestCase
         $jiraWorklogEntryTransfer->timeSpentSeconds = self::ISSUE_TIME_SPENT_2;
 
         self::assertEquals($jiraWorklogEntryTransfer, $lastTicketWorkLog);
+    }
+
+    public function testGetIssuesReturnsEmptyIssueCollectionForEmptyIssueList(): void
+    {
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::never())
+            ->method('getIssue');
+
+        $issueReader = new IssueReader($jiraClientMock);
+
+        $issuesCollection = $issueReader->getIssues([]);
+        self::assertEquals(new JiraIssueTransferCollection([]), $issuesCollection);
+    }
+
+    public function testGetIssuesReturnsIssueCollectionOfReceivedJiraIssues(): void
+    {
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::once())
+            ->method('getIssue')
+            ->willReturn(new JiraIssueTransfer());
+
+        $issueReader = new IssueReader($jiraClientMock);
+
+        $issuesCollection = $issueReader->getIssues(['BCM-12']);
+        self::assertEquals(new JiraIssueTransferCollection([new JiraIssueTransfer()]), $issuesCollection);
     }
 }
