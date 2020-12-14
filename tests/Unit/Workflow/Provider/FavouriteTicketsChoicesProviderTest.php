@@ -1,4 +1,5 @@
 <?php
+namespace Unit\Workflow\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Workflow\Configuration;
@@ -13,7 +14,8 @@ class FavouriteTicketsChoicesProviderTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getFavouriteTicketsFromEnvironment')
+            ->method('getConfiguration')
+            ->with('JIRA_FAVOURITE_TICKETS')
             ->willReturn('');
 
         $issueReaderMock = $this->createMock(IssueReader::class);
@@ -29,7 +31,8 @@ class FavouriteTicketsChoicesProviderTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getFavouriteTicketsFromEnvironment')
+            ->method('getConfiguration')
+            ->with('JIRA_FAVOURITE_TICKETS')
             ->willReturn('test-123,ticket-123');
         $issueReaderMock = $this->createMock(IssueReader::class);
 
@@ -46,7 +49,8 @@ class FavouriteTicketsChoicesProviderTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getFavouriteTicketsFromEnvironment')
+            ->method('getConfiguration')
+            ->with('JIRA_FAVOURITE_TICKETS')
             ->willReturn('test-123,ticket-123');
 
         $issueReaderMock = $this->createMock(IssueReader::class);

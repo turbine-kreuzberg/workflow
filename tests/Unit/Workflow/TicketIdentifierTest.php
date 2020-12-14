@@ -13,7 +13,8 @@ class TicketIdentifierTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getProjectKey')
+            ->method('getConfiguration')
+            ->with('JIRA_PROJECT_KEY')
             ->willReturn('BCM');
         $ticketIdentifier = new TicketIdentifier($configurationMock);
         $testbranch = uniqid('BCM-100-', true);

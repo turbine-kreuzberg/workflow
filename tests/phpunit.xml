@@ -7,6 +7,9 @@
          verbose="true"
          printerClass="PHPUnit\Util\TestDox\CliTestDoxPrinter"
 >
+  <php>
+    <env name="TEST_ENVIRONMENT_KEY" value="TEST_ENVIRONMENT_VALUE" force="true" />
+  </php>
   <testsuites>
     <testsuite name="Project Test Suite">
       <directory>../tests/</directory>

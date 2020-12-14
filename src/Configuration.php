@@ -9,24 +9,23 @@ class Configuration
     public const JIRA_PROJECT_KEY = "JIRA_PROJECT_KEY";
     public const JIRA_FAVOURITE_TICKETS = 'JIRA_FAVOURITE_TICKETS';
 
-    public function getProjectKey(): string
+    public function getConfiguration(string $key): string
     {
-        try {
-            return (string) getenv(self::JIRA_PROJECT_KEY);
-        } catch (\Throwable $throwable) {
-            throw new \RuntimeException(
-                'No project key set. Please see your ".env.dist" file how to create and use it.'
-            );
+        $configurationValue = (string)getenv($key);
+        if (!$configurationValue) {
+            $this->throwException($key);
         }
+
+        return $configurationValue;
     }
 
-    public function getFavouriteTicketsFromEnvironment(): string
+    private function throwException(string $key): void
     {
-        $envVarname = Configuration::JIRA_FAVOURITE_TICKETS;
-        if (getenv($envVarname)) {
-            return (string)getenv($envVarname);
-        }
+        $errorMessage = sprintf(
+            'Configuration with %s was not found. Please check your ".env.dist" file how to create and use it',
+            $key
+        );
 
-        return '';
+        throw new \RuntimeException($errorMessage);
     }
 }
