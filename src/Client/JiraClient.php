@@ -3,16 +3,13 @@
 namespace Workflow\Client;
 
 use Exception;
-use RuntimeException;
 use Workflow\Client\Http\AtlassianHttpClient;
+use Workflow\Configuration;
 use Workflow\Transfers\JiraIssueTransfer;
 use Workflow\Transfers\JiraIssueTransferCollection;
 
 class JiraClient
 {
-    private const PROJECT_NAME = 'JIRA_PROJECT_NAME';
-    private const BOARD_ID = 'JIRA_BOARD_ID';
-
     private const BASE_URL = 'https://jira.votum.info:7443/';
     private const API_URL = self::BASE_URL . 'rest/api/latest/';
     private const SEARCH_URL = self::API_URL . 'search/';
@@ -21,13 +18,8 @@ class JiraClient
     private const BOARD_URL = self::BASE_URL . 'rest/agile/1.0/board/';
 
 
-    public function __construct(public AtlassianHttpClient $jiraHttpClient)
+    public function __construct(private AtlassianHttpClient $jiraHttpClient, private Configuration $configuration)
     {
-    }
-
-    public static function requiredEnvironmentVariables(): array
-    {
-        return [AtlassianHttpClient::USERNAME, AtlassianHttpClient::PASSWORD, self::PROJECT_NAME];
     }
 
     public function createIssue(array $issueData): JiraIssueTransfer
@@ -79,12 +71,7 @@ class JiraClient
 
     private function getUsername(): string
     {
-        $userName = getenv(AtlassianHttpClient::USERNAME);
-        if (empty($userName)) {
-            throw new RuntimeException('No username provided. Please add it to your ".env" file.');
-        }
-
-        return $userName;
+        return $this->configuration->getConfiguration(Configuration::JIRA_USERNAME);
     }
 
     public function bookTime(string $issue, array $worklogEntry): void
@@ -133,21 +120,11 @@ class JiraClient
 
     private function getProjectName(): string
     {
-        $envVarname = self::PROJECT_NAME;
-        if (getenv($envVarname)) {
-            return (string)getenv($envVarname);
-        }
-
-        throw new Exception('No project name provided. Please add to your ".env" file.');
+        return $this->configuration->getConfiguration(Configuration::PROJECT_NAME);
     }
 
     private function getBoardId(): string
     {
-        $envVarname = self::BOARD_ID;
-        if (getenv($envVarname)) {
-            return (string)getenv($envVarname);
-        }
-
-        throw new Exception('No Jira board ID provided. Please add to your ".env" file.');
+        return $this->configuration->getConfiguration(Configuration::BOARD_ID);
     }
 }

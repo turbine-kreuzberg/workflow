@@ -8,6 +8,10 @@ class Configuration
 {
     public const JIRA_PROJECT_KEY = "JIRA_PROJECT_KEY";
     public const JIRA_FAVOURITE_TICKETS = 'JIRA_FAVOURITE_TICKETS';
+    public const JIRA_USERNAME = 'JIRA_USERNAME';
+    public const PROJECT_NAME = 'JIRA_PROJECT_NAME';
+    public const BOARD_ID = 'JIRA_BOARD_ID';
+
 
     public function getConfiguration(string $key): string
     {
