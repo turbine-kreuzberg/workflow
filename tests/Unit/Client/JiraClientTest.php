@@ -7,6 +7,7 @@ use Workflow\Client\Http\AtlassianHttpClient;
 use Workflow\Client\JiraClient;
 use Workflow\Configuration;
 use Workflow\Transfers\JiraIssueTransfer;
+use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraClientTest extends TestCase
 {
@@ -18,7 +19,11 @@ class JiraClientTest extends TestCase
             ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/worklog')
             ->willReturn(['some-worklog']);
 
-        $jiraClient = new JiraClient($jiraHttpClientMock, $this->createMock(Configuration::class));
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $this->createMock(Configuration::class),
+            $this->createMock(JiraIssueMapper::class)
+        );
         $worklog = $jiraClient->getWorkLog('BCM-12');
 
         self::assertSame(['some-worklog'], $worklog);
@@ -32,7 +37,11 @@ class JiraClientTest extends TestCase
             ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/worklog')
             ->willReturn(['some-worklog']);
 
-        $jiraClient = new JiraClient($jiraHttpClientMock, $this->createMock(Configuration::class));
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $this->createMock(Configuration::class),
+            $this->createMock(JiraIssueMapper::class)
+        );
         $jiraClient->bookTime('BCM-12', ['worklogEntry']);
     }
 
@@ -42,28 +51,27 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
             ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12')
-            ->willReturn(
-                [
-                    'key' => 'BCM-12',
-                    'fields' => [
-                        'summary' => 'summary',
-                        'issuetype' => [
-                            'subtask' => false,
-                        ],
-                        'labels' => ['label'],
-                    ],
-                ]
-            );
+            ->willReturn(['some-response']);
 
-        $jiraClient = new JiraClient($jiraHttpClientMock, $this->createMock(Configuration::class));
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+        $jiraIssueTransfer = (new JiraIssueTransfer());
+        $jiraIssueTransfer->key = 'BCM-12';
+
+        $jiraIssueMapperMock
+            ->expects(self::once())
+            ->method('map')
+            ->willReturn($jiraIssueTransfer);
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $this->createMock(Configuration::class),
+            $jiraIssueMapperMock
+        );
         $jiraIssueTransfer = $jiraClient->getIssue(issue: 'BCM-12');
 
         $expectedJiraIssueTransfer = new JiraIssueTransfer();
         $expectedJiraIssueTransfer->key = 'BCM-12';
-        $expectedJiraIssueTransfer->isSubTask = false;
-        $expectedJiraIssueTransfer->summary = 'summary';
         $expectedJiraIssueTransfer->url = 'https://jira.votum.info:7443/browse/BCM-12';
-        $expectedJiraIssueTransfer->labels = ['label'];
 
         self::assertEquals($expectedJiraIssueTransfer, $jiraIssueTransfer);
     }

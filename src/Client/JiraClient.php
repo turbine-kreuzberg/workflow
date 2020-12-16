@@ -7,6 +7,7 @@ use Workflow\Client\Http\AtlassianHttpClient;
 use Workflow\Configuration;
 use Workflow\Transfers\JiraIssueTransfer;
 use Workflow\Transfers\JiraIssueTransferCollection;
+use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraClient
 {
@@ -18,8 +19,11 @@ class JiraClient
     private const BOARD_URL = self::BASE_URL . 'rest/agile/1.0/board/';
 
 
-    public function __construct(private AtlassianHttpClient $jiraHttpClient, private Configuration $configuration)
-    {
+    public function __construct(
+        private AtlassianHttpClient $jiraHttpClient,
+        private Configuration $configuration,
+        private JiraIssueMapper $jiraIssueMapper
+    ) {
     }
 
     public function createIssue(array $issueData): JiraIssueTransfer
@@ -108,12 +112,8 @@ class JiraClient
 
     private function mapResponseToJiraIssueTransfer(array $issue): JiraIssueTransfer
     {
-        $jiraIssueTransfer = new JiraIssueTransfer();
-        $jiraIssueTransfer->key = $issue['key'];
-        $jiraIssueTransfer->summary = $issue['fields']['summary'];
-        $jiraIssueTransfer->isSubTask = (bool)$issue['fields']['issuetype']['subtask'];
-        $jiraIssueTransfer->labels = $issue['fields']['labels'] ?? [];
-        $jiraIssueTransfer->url = self::BROWSE_URL . $issue['key'];
+        $jiraIssueTransfer = $this->jiraIssueMapper->map($issue);
+        $jiraIssueTransfer->url = self::BROWSE_URL . $jiraIssueTransfer->key;
 
         return $jiraIssueTransfer;
     }

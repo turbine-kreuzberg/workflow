@@ -4,6 +4,7 @@ namespace Workflow\Client;
 
 use Workflow\Client\Http\AtlassianHttpClient;
 use Workflow\Configuration;
+use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class ClientFactory
 {
@@ -14,6 +15,6 @@ class ClientFactory
 
     public function getJiraClient(): JiraClient
     {
-        return new JiraClient(new AtlassianHttpClient(), new Configuration());
+        return new JiraClient(new AtlassianHttpClient(), new Configuration(), new JiraIssueMapper());
     }
 }
