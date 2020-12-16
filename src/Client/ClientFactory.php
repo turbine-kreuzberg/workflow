@@ -2,6 +2,7 @@
 
 namespace Workflow\Client;
 
+use GuzzleHttp\Client;
 use Workflow\Client\Http\AtlassianHttpClient;
 use Workflow\Configuration;
 use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
@@ -15,6 +16,10 @@ class ClientFactory
 
     public function getJiraClient(): JiraClient
     {
-        return new JiraClient(new AtlassianHttpClient(), new Configuration(), new JiraIssueMapper());
+        return new JiraClient(
+            new AtlassianHttpClient(new Configuration(), new Client()),
+            new Configuration(),
+            new JiraIssueMapper()
+        );
     }
 }
