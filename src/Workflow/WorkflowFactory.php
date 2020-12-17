@@ -4,12 +4,15 @@ namespace Workflow\Workflow;
 
 use Workflow\Client\ClientFactory;
 use Workflow\Configuration;
+use Workflow\Workflow\Jira\IssueCreator;
 use Workflow\Workflow\Jira\IssueReader;
 use Workflow\Workflow\Jira\IssueUpdater;
 use Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
 
 class WorkflowFactory
 {
+    private ?Configuration $configuration = null;
+
     private ?ClientFactory $clientFactory = null;
 
     private ?IssueReader $issueReader = null;
@@ -59,6 +62,11 @@ class WorkflowFactory
         );
     }
 
+    public function createJiraIssueCreator(): IssueCreator
+    {
+        return new IssueCreator($this->getClientFactory()->getJiraClient(), $this->createConfiguration());
+    }
+
     private function getClientFactory(): ClientFactory
     {
         return new ClientFactory();
@@ -66,6 +74,10 @@ class WorkflowFactory
 
     private function createConfiguration(): Configuration
     {
-        return new Configuration();
+        if ($this->configuration === null) {
+            $this->configuration = new Configuration();
+        }
+
+        return $this->configuration;
     }
 }

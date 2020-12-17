@@ -9,6 +9,8 @@ use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class ClientFactory
 {
+    private ?JiraClient $jiraClient = null;
+
     public function getGitClient(): GitClient
     {
         return new GitClient();
@@ -16,10 +18,14 @@ class ClientFactory
 
     public function getJiraClient(): JiraClient
     {
-        return new JiraClient(
-            new AtlassianHttpClient(new Configuration(), new Client()),
-            new Configuration(),
-            new JiraIssueMapper()
-        );
+        if ($this->jiraClient === null) {
+            $this->jiraClient = new JiraClient(
+                new AtlassianHttpClient(new Configuration(), new Client()),
+                new Configuration(),
+                new JiraIssueMapper()
+            );
+        }
+
+        return $this->jiraClient;
     }
 }

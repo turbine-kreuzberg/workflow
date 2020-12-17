@@ -31,6 +31,10 @@ book-time: ##@workflow book time on ticket
 	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-alpine /var/www/bin/workflow workflow:book-time
 .PHONY: book-time
 
+improvement-ticket: ##@workflow create a jira ticket
+	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-alpine /var/www/bin/workflow workflow:create:jira-issue improvement
+.PHONY: improvement-ticket
+
 install-git-hooks: ##@development install git hooks
 	git config core.hooksPath .githooks
 .PHONY: install-git-hooks

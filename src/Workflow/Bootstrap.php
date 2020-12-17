@@ -5,6 +5,7 @@ namespace Workflow\Workflow;
 use Symfony\Component\Console\Application;
 use Workflow\Configuration;
 use Workflow\Console\BookTimeCommand;
+use Workflow\Console\CreateJiraIssueCommand;
 
 class Bootstrap
 {
@@ -12,6 +13,7 @@ class Bootstrap
     {
         $application = new Application();
         $application->add(new BookTimeCommand(configuration: new Configuration(), name: null));
+        $application->add(new CreateJiraIssueCommand(workflowFactory: new WorkflowFactory(), name: null));
         /**
 * $application->add(new CheckBranchStatusCommand());
         $application->add(new SetBranchAccessLevelCommand());
@@ -21,7 +23,6 @@ class Bootstrap
         $application->add(new LiveDeployCommand());
         $application->add(new DeployCommand());
         $application->add(new TicketStatusCommand());
-        $application->add(new CreateJiraIssueCommand());
         $application->add(new WorkflowCreateMergeRequestCommand());
         $application->add(new WorkOnTicketCommand());
          **/
