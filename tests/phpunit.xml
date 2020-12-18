@@ -21,5 +21,9 @@
     <include>
       <directory suffix=".php">../src/</directory>
     </include>
+    <exclude>
+      <file>../src/Workflow/WorkflowFactory.php</file>
+      <file>../src/Client/ClientFactory.php</file>
+    </exclude>
   </coverage>
 </phpunit>
