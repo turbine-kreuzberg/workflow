@@ -47,7 +47,7 @@ class BookTimeCommand extends Command
 
         try {
             $worklog = $this->workflowFactory->createJiraIssueReader()->getLastTicketWorklog($issue);
-            $worklogComment = $this->createWorklogComment($worklog, $inputOutputStyle);
+            $worklogComment = $this->createWorklogComment($issue, $inputOutputStyle);
             $duration = $this->createWorklogDuration($worklog, $inputOutputStyle);
         } catch (JiraNoWorklogException $jiraNoWorklogException) {
             $worklogComment = $inputOutputStyle->ask('What did you do');
@@ -67,17 +67,20 @@ class BookTimeCommand extends Command
     }
 
     private function createWorklogComment(
-        JiraWorklogEntryTransfer $worklog,
+        string $issueNumber,
         SymfonyStyle $inputOutputStyle
     ): string {
-        $worklogComment = $worklog->comment . ' (from ' . $worklog->author . ')';
+        $worklogChoices = $this->workflowFactory->createWorklogChoiceProvider()->provide($issueNumber);
+
+        $worklogChoices[] = self::CUSTOM_INPUT;
+
         $commentChoice = $inputOutputStyle->choice(
             'Choose your worklog comment',
-            [$worklogComment, self::CUSTOM_INPUT],
-            $worklogComment
+            $worklogChoices,
+            $worklogChoices[0]
         );
 
-        $summary = $worklog->comment;
+        $summary = $commentChoice;
         if ($commentChoice === self::CUSTOM_INPUT) {
             $summary = $inputOutputStyle->ask('What did you do');
         }

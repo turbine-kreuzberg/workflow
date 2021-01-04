@@ -8,6 +8,7 @@ use Workflow\Workflow\Jira\IssueCreator;
 use Workflow\Workflow\Jira\IssueReader;
 use Workflow\Workflow\Jira\IssueUpdater;
 use Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
+use Workflow\Workflow\Provider\WorklogChoicesProvider;
 
 class WorkflowFactory
 {
@@ -65,6 +66,11 @@ class WorkflowFactory
     public function createJiraIssueCreator(): IssueCreator
     {
         return new IssueCreator($this->getClientFactory()->getJiraClient(), $this->createConfiguration());
+    }
+
+    public function createWorklogChoiceProvider(): WorklogChoicesProvider
+    {
+        return new WorklogChoicesProvider($this->createJiraIssueReader());
     }
 
     private function getClientFactory(): ClientFactory

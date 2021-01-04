@@ -16,8 +16,7 @@ class WorklogChoicesProvider
         $jiraWorklogEntryTransfer = $this->issueReader->getLastTicketWorklog($issue);
 
         $worklogChoices = [
-            $jiraWorklogEntryTransfer->comment . ' (from ' . $jiraWorklogEntryTransfer->author . ')',
-
+            $jiraWorklogEntryTransfer->comment,
         ];
 
         return $worklogChoices;
