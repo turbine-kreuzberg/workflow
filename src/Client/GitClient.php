@@ -12,7 +12,7 @@ class GitClient
 
     public function getLastCommitMessage() : string
     {
-        return (string)exec('git log --format=%B -n 1 HEAD');
+        return (string)exec('git log -n 1 HEAD --format=%s');
     }
 
 }

@@ -28,7 +28,7 @@ sniff-fix-project: ##@dvelopment run code sniffer
 .PHONY: sniff-fix-project
 
 book-time: ##@workflow book time on ticket
-	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-alpine /var/www/bin/workflow workflow:book-time
+	docker-compose exec php /var/www/bin/workflow workflow:book-time
 .PHONY: book-time
 
 improvement-ticket: ##@workflow create a jira ticket
