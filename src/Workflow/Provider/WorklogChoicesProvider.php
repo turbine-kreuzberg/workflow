@@ -7,7 +7,7 @@ use Workflow\Workflow\Jira\IssueReader;
 class WorklogChoicesProvider
 {
 
-    public function __construct(private IssueReader $issueReader)
+    public function __construct(private IssueReader $issueReader, private CommitMessageProvider $commitMessageProvider)
     {
     }
 
@@ -17,6 +17,7 @@ class WorklogChoicesProvider
 
         $worklogChoices = [
             $jiraWorklogEntryTransfer->comment,
+            $this->commitMessageProvider->getLastCommitMessage()
         ];
 
         return $worklogChoices;
