@@ -31,6 +31,10 @@ book-time: ##@workflow book time on ticket
 	docker-compose exec php /var/www/bin/workflow workflow:book-time
 .PHONY: book-time
 
+book-time-current-branch: ##@workflow book time on ticket depending on current branch
+	docker-compose exec php /var/www/bin/workflow workflow:book-time --forCurrentBranch
+.PHONY: book-time-current-branch
+
 improvement-ticket: ##@workflow create a jira ticket
 	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-alpine /var/www/bin/workflow workflow:create:jira-issue improvement
 .PHONY: improvement-ticket
