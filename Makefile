@@ -12,7 +12,7 @@ tests: ##@development run tests
 .PHONY: tests
 
 test-coverage: ##@development run tests
-	docker-compose exec -T php /var/www/vendor/bin/phpunit -c tests/phpunit.xml --coverage-text --coverage-html=tests/output
+	docker-compose exec -T php /var/www/vendor/bin/phpunit -c tests/phpunit.xml --coverage-text --coverage-html=tests/output/coverage
 .PHONY: test-coverage
 
 phpstan: ##@development run phpstan
