@@ -14,8 +14,7 @@
     "phpstan/phpstan": "^0.12.57"
   },
   "scripts": {
-    "post-install-cmd": "docker build -f vendor/turbine/workflow/images/php/Dockerfile . -t workflow",
-    "post-update-cmd": "docker build -f vendor/turbine/workflow/images/php/Dockerfile . -t workflow"
+    "post-install-cmd": "sh src/scripts/post-install.sh"
   },
     "autoload": {
     "psr-4": {
