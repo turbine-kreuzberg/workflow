@@ -93,18 +93,7 @@ class BookTimeCommand extends Command
         SymfonyStyle $inputOutputStyle
     ): int {
         $timeSpentInMinutes = $worklog->timeSpentSeconds / 60;
-        $durationChoice = $inputOutputStyle->choice(
-            'Choose your time spent (in minutes)',
-            [$timeSpentInMinutes, self::CUSTOM_INPUT],
-            $timeSpentInMinutes
-        );
-
-        $duration = $durationChoice;
-        if ($durationChoice === self::CUSTOM_INPUT) {
-            $duration = (int)$inputOutputStyle->ask('For how long did you do it');
-        }
-
-        return $duration;
+        return (int)$inputOutputStyle->ask('For how long did you do it', (string)$timeSpentInMinutes);
     }
 
     private function getIssueTicketNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string
