@@ -12,10 +12,9 @@ These tools help automate the development workflow.
    }
   ]
   
-* run `composer require turbine/workflow`
-* add to your Makefile 
-  ```
-  -include vendor/turbine/workflow/src/makefiles/Makefile
+* run `composer require turbine/workflow --dev`
+* run `make workflow-setup`
+
 * run `make book-time`
 
 ## Library development
