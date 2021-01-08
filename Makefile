@@ -42,4 +42,3 @@ improvement-ticket: ##@workflow create a jira ticket
 install-git-hooks: ##@development install git hooks
 	git config core.hooksPath .githooks
 .PHONY: install-git-hooks-include vendor/turbine/workflow/src/makefiles/Makefile
--include vendor/turbine/workflow/src/makefiles/Makefile
