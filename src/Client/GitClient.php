@@ -15,4 +15,12 @@ class GitClient
         return (string)exec('git log -n 1 HEAD --format=%s');
     }
 
+    public function createBranchOnTopOf(string $sourceBranch, string $branchName): void
+    {
+        exec('git checkout ' . $sourceBranch);
+        exec('git pull --rebase');
+        exec('git checkout -b ' . $branchName);
+        exec('git push --set-upstream origin  ' . $branchName);
+    }
+
 }

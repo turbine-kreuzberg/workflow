@@ -7,6 +7,7 @@ use Workflow\Configuration;
 use Workflow\Workflow\Jira\IssueCreator;
 use Workflow\Workflow\Jira\IssueReader;
 use Workflow\Workflow\Jira\IssueUpdater;
+use Workflow\Workflow\Model\WorkOnTicket;
 use Workflow\Workflow\Provider\CommitMessageProvider;
 use Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
 use Workflow\Workflow\Provider\WorklogChoicesProvider;
@@ -74,6 +75,15 @@ class WorkflowFactory
         return new WorklogChoicesProvider(
             $this->createJiraIssueReader(),
             $this->getCommitMessageProvider()
+        );
+    }
+
+    public function createWorkOnTicket(): WorkOnTicket
+    {
+        return new WorkOnTicket(
+            $this->getClientFactory()->getJiraClient(),
+            $this->getClientFactory()->getGitClient(),
+            $this->createConfiguration()
         );
     }
 
