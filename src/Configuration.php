@@ -11,8 +11,8 @@ class Configuration
     public const JIRA_PASSWORD = 'JIRA_PASSWORD';
     public const PROJECT_NAME = 'JIRA_PROJECT_NAME';
     public const BOARD_ID = 'JIRA_BOARD_ID';
-    public const BRANCH_DEVELOPMENT = 'develop';
-    public const BRANCH_DEPLOYMENT = 'main';
+    public const BRANCH_DEVELOPMENT = 'BRANCH_DEVELOPMENT';
+    public const BRANCH_DEPLOYMENT = 'BRANCH_DEPLOYMENT';
 
 
     public function getConfiguration(string $key): string

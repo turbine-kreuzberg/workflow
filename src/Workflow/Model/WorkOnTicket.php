@@ -9,7 +9,7 @@ use Workflow\Transfers\JiraIssueTransfer;
 
 class WorkOnTicket
 {
-    private const TRANSITION_ID_IN_PROGRESS = '691';
+    private const STATUS_IN_PROGRESS = 'in progress';
 
     public function __construct(
         private JiraClient $jiraClient,
@@ -22,12 +22,13 @@ class WorkOnTicket
     public function workOnTicket(string $ticketNumber, string $branchName): void
     {
         $issueKey = $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $ticketNumber;
+
         $this->gitClient->createBranchOnTopOf(
             $this->configuration->getConfiguration(Configuration::BRANCH_DEVELOPMENT),
             $branchName
         );
         $this->jiraClient->assignJiraIssueToUser($issueKey);
-        $this->jiraClient->transitionJiraIssue($issueKey, self::TRANSITION_ID_IN_PROGRESS);
+        $this->jiraClient->moveIssueToStatus($issueKey, self::STATUS_IN_PROGRESS);
     }
 
     public function getBranchNameFromTicket(string $ticketNumber): string

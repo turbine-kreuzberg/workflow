@@ -100,6 +100,21 @@ class JiraClient
         );
     }
 
+    public function moveIssueToStatus(string $issue, string $targetState): void
+    {
+        $transitions = $this->jiraHttpClient->get(static::ISSUE_URL . $issue . '/' . 'transitions');
+        foreach ($transitions['transitions'] as $transition) {
+            if (mb_strtolower($transition['to']['name']) === mb_strtolower($targetState)) {
+                $transitionId = $transition['id'];
+                $this->transitionJiraIssue($issue, $transitionId);
+                return;
+            }
+        }
+
+        throw new Exception(sprintf('target state "%s" not available for issue', $targetState));
+
+    }
+
     private function mapResponseToJiraIssueTransferCollection(array $responseArray): JiraIssueTransferCollection
     {
         $jiraIssues = [];

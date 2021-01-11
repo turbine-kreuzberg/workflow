@@ -40,7 +40,7 @@ improvement-ticket: ##@workflow create a jira ticket
 .PHONY: improvement-ticket
 
 work-on-ticket: ##@workflow create a git branch and move ticket to in progress
-  docker-compose exec php /var/www/bin/workflow workflow:work-on-ticket
+	docker-compose exec php /var/www/bin/workflow workflow:work-on-ticket
 .PHONY: work-on-ticket
 
 install-git-hooks: ##@development install git hooks
