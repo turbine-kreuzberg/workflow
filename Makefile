@@ -39,6 +39,10 @@ improvement-ticket: ##@workflow create a jira ticket
 	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-alpine /var/www/bin/workflow workflow:create:jira-issue improvement
 .PHONY: improvement-ticket
 
+work-on-ticket: ##@workflow create a git branch and move ticket to in progress
+  docker-compose exec php /var/www/bin/workflow workflow:work-on-ticket
+.PHONY: work-on-ticket
+
 install-git-hooks: ##@development install git hooks
 	git config core.hooksPath .githooks
 .PHONY: install-git-hooks-include vendor/turbine/workflow/src/makefiles/Makefile
