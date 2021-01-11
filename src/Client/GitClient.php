@@ -20,7 +20,6 @@ class GitClient
         exec('git checkout ' . $sourceBranch);
         exec('git pull --rebase');
         exec('git checkout -b ' . $branchName);
-        exec('git push --set-upstream origin  ' . $branchName);
     }
 
 }
