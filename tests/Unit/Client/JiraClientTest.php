@@ -111,4 +111,23 @@ class JiraClientTest extends TestCase
 
         self::assertEquals($expectedJiraIssueTransfer, $jiraIssueTransfer);
     }
+
+    public function testAssignJiraIssueToUser(): void
+    {
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraHttpClientMock->expects(self::once())
+            ->method('put')
+            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/assignee', ['name' => ''])
+            ->willReturn(['key' => 'BCM-12']);
+
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $this->createMock(Configuration::class),
+            $jiraIssueMapperMock
+        );
+
+        $jiraClient->assignJiraIssueToUser('BCM-12');
+    }
 }
