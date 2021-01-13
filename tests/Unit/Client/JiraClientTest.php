@@ -112,13 +112,61 @@ class JiraClientTest extends TestCase
         self::assertEquals($expectedJiraIssueTransfer, $jiraIssueTransfer);
     }
 
-    public function testAssignJiraIssueToUser(): void
+    public function testUseHttpClientToAssignJiraIssueToUser(): void
     {
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::once())
+            ->method('getConfiguration')
+            ->with('JIRA_USERNAME')
+            ->willReturn('testUser');
+
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('put')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/assignee', ['name' => ''])
+            ->with(
+                'https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/assignee',
+                ['name' => 'testUser']
+            )
             ->willReturn(['key' => 'BCM-12']);
+
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+
+        $jiraClient->assignJiraIssueToUser('BCM-12');
+    }
+
+    public function testUseHttpClientToMoveIssueToStatus(): void
+    {
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions'
+            )
+            ->willReturn(
+                [
+                    'transitions' => [
+                        [
+                            'to' => [
+                                'name' => 'targetState',
+                            ],
+                            'id' => 'transitionId',
+                        ],
+                    ],
+                ]
+            );
+
+        $jiraHttpClientMock->expects(self::once())
+            ->method('post')
+            ->with(
+                'https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions',
+                ['transition' => ['id' => 'transitionId']]
+            );
 
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
 
@@ -128,6 +176,6 @@ class JiraClientTest extends TestCase
             $jiraIssueMapperMock
         );
 
-        $jiraClient->assignJiraIssueToUser('BCM-12');
+        $jiraClient->moveIssueToStatus('BCM-12', 'targetState');
     }
 }
