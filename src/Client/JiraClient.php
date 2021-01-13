@@ -5,6 +5,7 @@ namespace Workflow\Client;
 use Exception;
 use Workflow\Client\Http\AtlassianHttpClient;
 use Workflow\Configuration;
+use Workflow\Exception\JiraStateNotFoundException;
 use Workflow\Transfers\JiraIssueTransfer;
 use Workflow\Transfers\JiraIssueTransferCollection;
 use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
@@ -59,6 +60,11 @@ class JiraClient
         throw new Exception('No active sprint found.');
     }
 
+    public function getIssueTransitions(string $issue): array
+    {
+        return $this->jiraHttpClient->get(static::ISSUE_URL . $issue . '/' . 'transitions');
+    }
+
     public function transitionJiraIssue(string $issue, string $transitionId): void
     {
         $transitionData = ['transition' => ['id' => $transitionId]];
@@ -98,21 +104,6 @@ class JiraClient
         return $this->mapResponseToJiraIssueTransfer(
             $this->jiraHttpClient->get($issueCall)
         );
-    }
-
-    public function moveIssueToStatus(string $issue, string $targetState): void
-    {
-        $transitions = $this->jiraHttpClient->get(static::ISSUE_URL . $issue . '/' . 'transitions');
-        foreach ($transitions['transitions'] as $transition) {
-            if (mb_strtolower($transition['to']['name']) === mb_strtolower($targetState)) {
-                $transitionId = $transition['id'];
-                $this->transitionJiraIssue($issue, $transitionId);
-                return;
-            }
-        }
-
-        throw new Exception(sprintf('target state "%s" not available for issue', $targetState));
-
     }
 
     private function mapResponseToJiraIssueTransferCollection(array $responseArray): JiraIssueTransferCollection

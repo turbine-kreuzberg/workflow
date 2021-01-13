@@ -6,6 +6,7 @@ use Workflow\Client\GitClient;
 use Workflow\Client\JiraClient;
 use Workflow\Configuration;
 use Workflow\Transfers\JiraIssueTransfer;
+use Workflow\Workflow\Jira\IssueUpdater;
 
 class WorkOnTicket
 {
@@ -14,7 +15,8 @@ class WorkOnTicket
     public function __construct(
         private JiraClient $jiraClient,
         private GitClient $gitClient,
-        private Configuration $configuration
+        private Configuration $configuration,
+        private IssueUpdater $issueUpdater
     ) {
 
     }
@@ -28,7 +30,7 @@ class WorkOnTicket
             $branchName
         );
         $this->jiraClient->assignJiraIssueToUser($issueKey);
-        $this->jiraClient->moveIssueToStatus($issueKey, self::STATUS_IN_PROGRESS);
+        $this->issueUpdater->moveIssueToStatus($issueKey, self::STATUS_IN_PROGRESS);
     }
 
     public function getBranchNameFromTicket(string $ticketNumber): string

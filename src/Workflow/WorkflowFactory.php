@@ -83,7 +83,8 @@ class WorkflowFactory
         return new WorkOnTicket(
             $this->getClientFactory()->getJiraClient(),
             $this->getClientFactory()->getGitClient(),
-            $this->createConfiguration()
+            $this->createConfiguration(),
+            $this->createJiraIssueUpdater()
         );
     }
 

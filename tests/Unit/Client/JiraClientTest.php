@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Workflow\Client\Http\AtlassianHttpClient;
 use Workflow\Client\JiraClient;
 use Workflow\Configuration;
+use Workflow\Exception\JiraStateNotFoundException;
 use Workflow\Transfers\JiraIssueTransfer;
 use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
@@ -140,42 +141,24 @@ class JiraClientTest extends TestCase
         $jiraClient->assignJiraIssueToUser('BCM-12');
     }
 
-    public function testUseHttpClientToMoveIssueToStatus(): void
+    public function testUseHttpClientToGetTransitionsForGivenIssue(): void
     {
+        $configurationMock = $this->createMock(Configuration::class);
+
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
-            ->with(
-                'https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions'
-            )
-            ->willReturn(
-                [
-                    'transitions' => [
-                        [
-                            'to' => [
-                                'name' => 'targetState',
-                            ],
-                            'id' => 'transitionId',
-                        ],
-                    ],
-                ]
-            );
-
-        $jiraHttpClientMock->expects(self::once())
-            ->method('post')
-            ->with(
-                'https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions',
-                ['transition' => ['id' => 'transitionId']]
-            );
+            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions')
+            ->willReturn(['transitions']);
 
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
 
         $jiraClient = new JiraClient(
             $jiraHttpClientMock,
-            $this->createMock(Configuration::class),
+            $configurationMock,
             $jiraIssueMapperMock
         );
 
-        $jiraClient->moveIssueToStatus('BCM-12', 'targetState');
+        $jiraClient->getIssueTransitions('BCM-12');
     }
 }

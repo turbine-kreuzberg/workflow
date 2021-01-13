@@ -3,6 +3,7 @@
 namespace Workflow\Workflow\Jira;
 
 use Workflow\Client\JiraClient;
+use Workflow\Exception\JiraStateNotFoundException;
 
 class IssueUpdater
 {
@@ -23,5 +24,18 @@ class IssueUpdater
         ];
 
         $this->jiraClient->bookTime($issue, $worklogEntry);
+    }
+    public function moveIssueToStatus(string $issue, string $targetState): void
+    {
+        $transitions = $this->jiraClient->getIssueTransitions($issue);
+        foreach ($transitions['transitions'] as $transition) {
+            if (mb_strtolower($transition['to']['name']) === mb_strtolower($targetState)) {
+                $transitionId = $transition['id'];
+                $this->jiraClient->transitionJiraIssue($issue, $transitionId);
+                return;
+            }
+        }
+
+        throw new JiraStateNotFoundException(sprintf('target state "%s" not available for issue', $targetState));
     }
 }
