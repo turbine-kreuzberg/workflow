@@ -16,16 +16,26 @@ class TicketIdentifier
     {
         $matches = [];
         preg_match(
-            sprintf("/(?'ticket'%s-\d{3,5})/", $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY)),
+            sprintf("/(?'ticket'%s-\d{1,5})/", $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY)),
             $branchName,
             $matches
         );
 
-        if (!isset($matches['ticket'])) {
-            throw new \RuntimeException(sprintf('Ticket number not found in branch name %s', $branchName));
+        if (isset($matches['ticket'])) {
+            return $matches['ticket'];
         }
 
-        return $matches['ticket'];
+        preg_match(
+            "/^(?'ticket'\d{1,5})-/",
+            $branchName,
+            $matches
+        );
+
+        if (isset($matches['ticket'])) {
+            return $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $matches['ticket'];
+        }
+
+        throw new \RuntimeException(sprintf('Ticket number not found in branch name %s', $branchName));
     }
 
 }

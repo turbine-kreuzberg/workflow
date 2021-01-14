@@ -34,4 +34,17 @@ class TicketIdentifierTest extends TestCase
         $this->expectException(RuntimeException::class);
         $ticketIdentifier->extractFromBranchName($testBranch);
     }
+
+    public function testExtractTicketIdFromUnprefixedBranchName(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::exactly(2))
+            ->method('getConfiguration')
+            ->with('JIRA_PROJECT_KEY')
+            ->willReturn('BCM');
+        $ticketIdentifier = new TicketIdentifier($configurationMock);
+        $testBranch = uniqid('100-', true);
+        $ticketIdentifier = $ticketIdentifier->extractFromBranchName($testBranch);
+        self::assertEquals('BCM-100', $ticketIdentifier);
+    }
 }
