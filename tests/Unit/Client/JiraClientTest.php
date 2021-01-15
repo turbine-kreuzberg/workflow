@@ -161,4 +161,23 @@ class JiraClientTest extends TestCase
 
         $jiraClient->getIssueTransitions('BCM-12');
     }
+
+    public function testTransitionJiraIssue(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraHttpClientMock->expects(self::once())
+            ->method('post')
+            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions', ['transition' => ['id' => '123']]);
+
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+
+        $jiraClient->transitionJiraIssue('BCM-12', '123');
+    }
 }
