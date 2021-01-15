@@ -11,5 +11,5 @@ workflow-setup:
 .PHONY: workflow-setup
 
 work-on-ticket: ##@workflow create a git branch and move ticket to in progress
-  docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it workflow /var/www/vendor/bin/workflow workflow:work-on-ticket
+	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it workflow /var/www/vendor/bin/workflow workflow:work-on-ticket
 .PHONY: work-on-ticket
