@@ -168,7 +168,10 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('post')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions', ['transition' => ['id' => '123']]);
+            ->with(
+                'https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions',
+                ['transition' => ['id' => '123']]
+            );
 
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
 

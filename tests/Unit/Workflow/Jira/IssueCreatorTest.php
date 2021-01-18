@@ -89,4 +89,58 @@ issue-summary\n\nh1.How to reproduce\n\nh1.Expected Behavior\n\nh1.Details\n",
 
         $issueCreator->createIssue('issue-summary', 'improvement');
     }
+
+    public function testCreateIssueForSprint(): void
+    {
+        $jiraClientMock = $this->createMock(JiraClient::class);
+
+        $jiraClientMock->expects(self::once())
+            ->method('getActiveSprint')
+            ->willReturn(['id' => 123]);
+
+        $jiraIssueTransfer = new JiraIssueTransfer();
+        $jiraIssueTransfer->key = '123';
+        $jiraClientMock->expects(self::once())
+            ->method('createIssue')
+            ->with(
+                [
+                    'fields' => [
+                        'summary' => 'issue-summary',
+                        'description' => "h1.Details\nissue-summary\n",
+                        'issuetype' => [
+                            'name' => 'Improvement',
+                        ],
+                        'labels' => ['Improvement'],
+                        'components' => [
+                            [
+                                'name' => 'Improvements'
+                            ],
+                        ],
+                        'project' => [
+                            'key' => 'BCM'
+                        ],
+                        'customfield_10007' => '123',
+                        'customfield_10002' => '162',
+                    ],
+                ]
+            )
+            ->willReturn($jiraIssueTransfer);
+
+        $jiraClientMock->expects(self::exactly(2))
+            ->method('transitionJiraIssue')
+            ->withConsecutive(
+                ['123', '821'],
+                ['123', '711']
+            );
+
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::once())
+            ->method('getConfiguration')
+            ->with('JIRA_PROJECT_KEY')
+            ->willReturn('BCM');
+
+        $issueCreator = new IssueCreator($jiraClientMock, $configurationMock);
+
+        $issueCreator->createIssueForSprint('issue-summary', 'improvement');
+    }
 }
