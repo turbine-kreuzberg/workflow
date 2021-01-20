@@ -12,11 +12,10 @@ use Workflow\Workflow\Provider\FastWorklogProvider;
 
 class FastWorklogProviderTest extends TestCase
 {
-
     /**
      * @dataProvider provideMalformedCommitMessages
      */
-    public function testFastWorklogFail(string $commitMessage) : void
+    public function testFastWorklogFail(string $commitMessage): void
     {
         $commitMessageProvider = $this
             ->createMock(CommitMessageProvider::class);
@@ -28,23 +27,24 @@ class FastWorklogProviderTest extends TestCase
             $commitMessageProvider,
             new Configuration()
         );
-        self::expectException(MalformedCommitMessageException::class);
-        $fastWorklogProvider->provide();
+        [$issue, $message] = $fastWorklogProvider->provide();
+        self::assertNull($issue);
+        self::assertNull($message);
 
     }
 
     public function provideMalformedCommitMessages(): array
     {
         return [
-            ['BCM -999 i am not well formed'],
-            ['999 i am not well formed'],
+            ['commitMessage' => 'BCM -999 i am not well formed'],
+            ['commitMessage' => '999 i am not well formed'],
         ];
     }
 
     /**
      * @dataProvider provideCommitMessages
      */
-    public function testFastWorklog(string $commitMessage, string $expectedIssueNumber, string $expectedMessage) : void
+    public function testFastWorklog(string $commitMessage, string $expectedIssueNumber, string $expectedMessage): void
     {
         $commitMessageProvider = $this
             ->createMock(CommitMessageProvider::class);
@@ -65,10 +65,16 @@ class FastWorklogProviderTest extends TestCase
     public function provideCommitMessages(): array
     {
         return [
-            ['BCM-123 add test', 'BCM-123', 'add test'],
-            ['BCM-999 add even more tests', 'BCM-999', 'add even more tests'],
+            [
+                'commitMessage' => 'BCM-123 add test',
+                'expectedIssueNumber' => 'BCM-123',
+                'expectedMessage' => 'add test',
+            ],
+            [
+                'commitMessage' => 'BCM-999 add even more tests',
+                'expectedIssueNumber' => 'BCM-999',
+                'expectedMessage' => 'add even more tests'
+            ],
         ];
     }
-
-
 }

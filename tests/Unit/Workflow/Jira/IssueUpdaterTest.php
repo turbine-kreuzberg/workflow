@@ -9,7 +9,7 @@ use Workflow\Workflow\Jira\IssueUpdater;
 
 class IssueUpdaterTest extends TestCase
 {
-    public function testBookTime(): void
+    public function testBookTimeConvertsToHours(): void
     {
         $jiraClientMock = $this->createMock(JiraClient::class);
         $jiraClientMock->expects(self::once())
@@ -18,7 +18,7 @@ class IssueUpdaterTest extends TestCase
                 'issue', [
                 'comment' => 'comment',
                 'started' => 'now',
-                'timeSpentSeconds' => 60,
+                'timeSpentSeconds' => 3600,
                 ]
             );
 
@@ -28,6 +28,29 @@ class IssueUpdaterTest extends TestCase
             'issue',
             'comment',
             1,
+            'now'
+        );
+    }
+
+    public function testBookTimeInMinutes(): void
+    {
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::once())
+            ->method('bookTime')
+            ->with(
+                'issue', [
+                    'comment' => 'comment',
+                    'started' => 'now',
+                    'timeSpentSeconds' => 900,
+                ]
+            );
+
+        $issueUpdater = new IssueUpdater($jiraClientMock);
+
+        $issueUpdater->bookTime(
+            'issue',
+            'comment',
+            15,
             'now'
         );
     }

@@ -14,16 +14,21 @@ class IssueUpdater
     public function bookTime(
         string $issue,
         string $comment,
-        int $minutes,
+        int $duration,
         string $date
-    ): void {
+    ): int {
+        if ($duration < 15) {
+            $duration *= 60;
+        }
         $worklogEntry = [
             'comment' => $comment,
             'started' => $date,
-            'timeSpentSeconds' => $minutes * 60,
+            'timeSpentSeconds' => $duration * 60,
         ];
 
         $this->jiraClient->bookTime($issue, $worklogEntry);
+
+        return $duration;
     }
     public function moveIssueToStatus(string $issue, string $targetState): void
     {

@@ -31,6 +31,10 @@ book-time: ##@workflow book time on ticket
 	docker-compose exec php /var/www/bin/workflow workflow:book-time
 .PHONY: book-time
 
+fast-book-time: ##@workflow book time on ticket
+	docker-compose exec php /var/www/bin/workflow workflow:book-time --fast-worklog
+.PHONY: fast-book-time
+
 book-time-current-branch: ##@workflow book time on ticket depending on current branch
 	docker-compose exec php /var/www/bin/workflow workflow:book-time --forCurrentBranch
 .PHONY: book-time-current-branch

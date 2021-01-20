@@ -10,6 +10,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Workflow\Configuration;
 use Workflow\Exception\JiraNoWorklogException;
 use Workflow\Transfers\JiraWorklogEntryTransfer;
+use Workflow\Workflow\Exception\MalformedCommitMessageException;
 use Workflow\Workflow\WorkflowFactory;
 
 class BookTimeCommand extends Command
@@ -18,6 +19,7 @@ class BookTimeCommand extends Command
     private const FOR_CURRENT_BRANCH = 'forCurrentBranch';
     private const CUSTOM_INPUT_KEY = 'custom';
     private const CUSTOM_INPUT = 'Custom input';
+    private const FAST_WORKLOG = 'fast-worklog';
 
     private WorkflowFactory $workflowFactory;
 
@@ -37,28 +39,56 @@ class BookTimeCommand extends Command
             InputOption::VALUE_NONE,
             'Use this option to book time for current branch'
         );
+        $this->addOption(
+            self::FAST_WORKLOG,
+            null,
+            InputOption::VALUE_NONE,
+            'Use this option to enable fast worklog'
+        );
     }
+
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputOutputStyle = new SymfonyStyle($input, $output);
+        $today = date('Y-m-d') . 'T12:00:00.000+0000';
 
-        $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
+        [$issue, $worklogComment] = $this->workflowFactory->createFastWorklogProvider()->provide();
+
+        if (isset($issue, $worklogComment)
+            && (bool)$input->getOption(self::FAST_WORKLOG) === true
+        ) {
+            $questionFastWorklog = sprintf(
+                'How much time do you want to book on <fg=yellow>[%s]</> with message <fg=yellow>"%s"</>',
+                $issue,
+                $worklogComment
+            );
+            $duration = $inputOutputStyle->ask($questionFastWorklog);
+            $bookedTimeInMinutes = $this
+                ->workflowFactory
+                ->createJiraIssueUpdater()
+                ->bookTime($issue, $worklogComment, $duration, $today);
+            $inputOutputStyle->success(
+                'Booked '
+                . $bookedTimeInMinutes
+                . ' minutes for "'
+                . $worklogComment
+                . '" on '
+                . $issue
+            );
+            return 0;
+        }
 
         try {
-            $worklog = $this->workflowFactory->createJiraIssueReader()->getLastTicketWorklog($issue);
+            $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
             $worklogComment = $this->createWorklogComment($issue, $inputOutputStyle);
-            $duration = $this->createWorklogDuration($worklog, $inputOutputStyle);
+            $lastTicketWorklog = $this->workflowFactory->createJiraIssueReader()->getLastTicketWorklog($issue);
+            $duration = $this->createWorklogDuration($lastTicketWorklog, $inputOutputStyle);
         } catch (JiraNoWorklogException $jiraNoWorklogException) {
             $worklogComment = $inputOutputStyle->ask('What did you do');
             $duration = $inputOutputStyle->ask('For how long did you do it');
         }
 
-        $today = date('Y-m-d') . 'T12:00:00.000+0000';
-
-        if ($duration < 15) {
-            $duration *= 60;
-        }
         $this->workflowFactory->createJiraIssueUpdater()->bookTime($issue, $worklogComment, $duration, $today);
 
         $inputOutputStyle->success('Booked ' . $duration . ' minutes for "' . $worklogComment . '" on ' . $issue);
@@ -105,7 +135,7 @@ class BookTimeCommand extends Command
         $choices = $this->workflowFactory->createFavouriteTicketChoicesProvider()->provide();
 
         if (empty($choices)) {
-            return  $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
+            return $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
         }
 
         $choices[self::CUSTOM_INPUT_KEY] = self::CUSTOM_INPUT;

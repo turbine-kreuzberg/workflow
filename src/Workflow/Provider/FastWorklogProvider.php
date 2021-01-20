@@ -27,7 +27,7 @@ class FastWorklogProvider
         );
 
         if (!isset($matches['issueNumber']) || !isset($matches['message'])) {
-            throw new MalformedCommitMessageException();
+            return [null, null];
         }
 
         $issueNumber = $matches['issueNumber'];

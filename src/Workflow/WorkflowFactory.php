@@ -9,6 +9,7 @@ use Workflow\Workflow\Jira\IssueReader;
 use Workflow\Workflow\Jira\IssueUpdater;
 use Workflow\Workflow\Model\WorkOnTicket;
 use Workflow\Workflow\Provider\CommitMessageProvider;
+use Workflow\Workflow\Provider\FastWorklogProvider;
 use Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
 use Workflow\Workflow\Provider\WorklogChoicesProvider;
 
@@ -86,6 +87,11 @@ class WorkflowFactory
             $this->createConfiguration(),
             $this->createJiraIssueUpdater()
         );
+    }
+
+    public function createFastWorklogProvider() : FastWorklogProvider
+    {
+        return new FastWorklogProvider($this->getCommitMessageProvider(), $this->createConfiguration());
     }
 
     private function getClientFactory(): ClientFactory
