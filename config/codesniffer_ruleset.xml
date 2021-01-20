@@ -12,6 +12,7 @@
         <exclude name="PEAR.Commenting.FunctionComment" />
         <exclude name="PEAR.NamingConventions.ValidFunctionName.PrivateNoUnderscore"/>
         <exclude name="PEAR.NamingConventions.ValidVariableName.PrivateNoUnderscore"/>
+        <exclude name="Generic.Commenting.DocComment"/>
     </rule>
 
     <rule ref="Generic.Files.LineLength">
