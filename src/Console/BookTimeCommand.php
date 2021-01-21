@@ -76,6 +76,7 @@ class BookTimeCommand extends Command
                 . '" on '
                 . $issue
             );
+
             return 0;
         }
 
@@ -89,9 +90,21 @@ class BookTimeCommand extends Command
             $duration = $inputOutputStyle->ask('For how long did you do it');
         }
 
-        $this->workflowFactory->createJiraIssueUpdater()->bookTime($issue, $worklogComment, $duration, $today);
+        $bookedTimeInMinutes = $this->workflowFactory->createJiraIssueUpdater()->bookTime(
+            $issue,
+            $worklogComment,
+            $duration,
+            $today
+        );
 
-        $inputOutputStyle->success('Booked ' . $duration . ' minutes for "' . $worklogComment . '" on ' . $issue);
+        $inputOutputStyle->success(
+            'Booked '
+            . $bookedTimeInMinutes
+            . ' minutes for "'
+            . $worklogComment
+            . '" on '
+            . $issue
+        );
 
         return 0;
     }
@@ -121,9 +134,10 @@ class BookTimeCommand extends Command
     private function createWorklogDuration(
         JiraWorklogEntryTransfer $worklog,
         SymfonyStyle $inputOutputStyle
-    ): int {
+    ): float {
         $timeSpentInMinutes = $worklog->timeSpentSeconds / 60;
-        return (int)$inputOutputStyle->ask('For how long did you do it', (string)$timeSpentInMinutes);
+
+        return (float)$inputOutputStyle->ask('For how long did you do it', (string)$timeSpentInMinutes);
     }
 
     private function getIssueTicketNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string

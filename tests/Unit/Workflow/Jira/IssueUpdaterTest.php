@@ -18,7 +18,7 @@ class IssueUpdaterTest extends TestCase
                 'issue', [
                 'comment' => 'comment',
                 'started' => 'now',
-                'timeSpentSeconds' => 3600,
+                'timeSpentSeconds' => 5400,
                 ]
             );
 
@@ -27,7 +27,7 @@ class IssueUpdaterTest extends TestCase
         $issueUpdater->bookTime(
             'issue',
             'comment',
-            1,
+            1.5,
             'now'
         );
     }
@@ -41,18 +41,20 @@ class IssueUpdaterTest extends TestCase
                 'issue', [
                     'comment' => 'comment',
                     'started' => 'now',
-                    'timeSpentSeconds' => 900,
+                    'timeSpentSeconds' => 930,
                 ]
             );
 
         $issueUpdater = new IssueUpdater($jiraClientMock);
 
-        $issueUpdater->bookTime(
+        $bookedTime = $issueUpdater->bookTime(
             'issue',
             'comment',
-            15,
+            15.5,
             'now'
         );
+
+        self::assertEquals(15.5, $bookedTime);
     }
 
     public function testUseHttpClientToMoveIssueToStatus(): void

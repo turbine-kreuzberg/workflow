@@ -14,12 +14,14 @@ class IssueUpdater
     public function bookTime(
         string $issue,
         string $comment,
-        int $duration,
+        float $duration,
         string $date
-    ): int {
+    ): float {
+
         if ($duration < 15) {
             $duration *= 60;
         }
+
         $worklogEntry = [
             'comment' => $comment,
             'started' => $date,
