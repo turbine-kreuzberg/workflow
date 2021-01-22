@@ -84,6 +84,12 @@ class JiraClient
         return $this->configuration->getConfiguration(Configuration::JIRA_USERNAME);
     }
 
+    public function getUserLocale(): string
+    {
+        $localeCall = self::API_URL . 'myself';
+        return $this->jiraHttpClient->get($localeCall)['locale'];
+    }
+
     public function bookTime(string $issue, array $worklogEntry): void
     {
         $bookTimeCall = self::ISSUE_URL . $issue . '/worklog';
