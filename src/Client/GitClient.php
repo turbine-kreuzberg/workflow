@@ -22,4 +22,12 @@ class GitClient
         exec('git checkout -b ' . $branchName);
     }
 
+    public function getGitLog(): string
+    {
+        $gitLog = [];
+        exec('git log -1 --pretty=%B', $gitLog);
+        $gitLog = implode(PHP_EOL, $gitLog);
+
+        return $gitLog;
+    }
 }

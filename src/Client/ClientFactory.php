@@ -4,6 +4,7 @@ namespace Workflow\Client;
 
 use GuzzleHttp\Client;
 use Workflow\Client\Http\AtlassianHttpClient;
+use Workflow\Client\Http\GitlabHttpClient;
 use Workflow\Configuration;
 use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
@@ -14,6 +15,14 @@ class ClientFactory
     public function getGitClient(): GitClient
     {
         return new GitClient();
+    }
+
+    public function getGitLabClient(): GitlabClient
+    {
+        return new GitlabClient(
+            new GitlabHttpClient(),
+            new Configuration()
+        );
     }
 
     public function getJiraClient(): JiraClient

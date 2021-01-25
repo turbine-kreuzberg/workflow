@@ -4,7 +4,7 @@ namespace Workflow\Workflow;
 
 use Workflow\Client\GitClient;
 
-class BookTime
+class TicketIdProvider
 {
     private GitClient $gitClient;
 

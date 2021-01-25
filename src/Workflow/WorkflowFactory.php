@@ -23,9 +23,9 @@ class WorkflowFactory
 
     private ?IssueUpdater $issueUpdater = null;
 
-    public function getBookTime(): BookTime
+    public function getTicketIdProvider(): TicketIdProvider
     {
-        return new BookTime(
+        return new TicketIdProvider(
             $this->getClientFactory()->getGitClient(),
             $this->getTicketIdentifier()
         );

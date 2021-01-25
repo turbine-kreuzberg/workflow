@@ -4,7 +4,7 @@ namespace Unit\Workflow;
 
 use PHPUnit\Framework\TestCase;
 use Workflow\Client\GitClient;
-use Workflow\Workflow\BookTime;
+use Workflow\Workflow\TicketIdProvider;
 use Workflow\Workflow\TicketIdentifier;
 
 class BookTimeTest extends TestCase
@@ -22,7 +22,7 @@ class BookTimeTest extends TestCase
             ->with('testBranch')
             ->willReturn('test');
 
-        $bookTime = new BookTime($gitClientMock, $ticketIdentifierMock);
+        $bookTime = new TicketIdProvider($gitClientMock, $ticketIdentifierMock);
 
         self::assertEquals('test', $bookTime->extractTicketIdFromCurrentBranch());
     }

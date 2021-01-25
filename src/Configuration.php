@@ -13,6 +13,8 @@ class Configuration
     public const BOARD_ID = 'JIRA_BOARD_ID';
     public const BRANCH_DEVELOPMENT = 'BRANCH_DEVELOPMENT';
     public const BRANCH_DEPLOYMENT = 'BRANCH_DEPLOYMENT';
+    public const REPOSITORY = 'REPOSITORY';
+    public const GITLAB_API_URL = 'GITLAB_API_URL';
 
 
     public function getConfiguration(string $key): string
@@ -23,6 +25,14 @@ class Configuration
         }
 
         return $configurationValue;
+    }
+
+    public function getNonRemovableBranches(): array
+    {
+        return [
+            $this->getConfiguration(self::BRANCH_DEVELOPMENT),
+            $this->getConfiguration(self::BRANCH_DEPLOYMENT),
+        ];
     }
 
     private function throwException(string $key): void

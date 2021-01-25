@@ -47,6 +47,10 @@ work-on-ticket: ##@workflow create a git branch and move ticket to in progress
 	docker-compose exec php /var/www/bin/workflow workflow:work-on-ticket
 .PHONY: work-on-ticket
 
+mr: ##@workflow create mr
+	docker-compose exec php /var/www/bin/workflow workflow:create-merge-request
+.PHONY: mr
+
 install-git-hooks: ##@development install git hooks
 	git config core.hooksPath .githooks
 .PHONY: install-git-hooks-include vendor/turbine/workflow/src/makefiles/Makefile

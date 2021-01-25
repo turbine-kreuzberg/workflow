@@ -143,7 +143,7 @@ class BookTimeCommand extends Command
     private function getIssueTicketNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string
     {
         if ($input->getOption(self::FOR_CURRENT_BRANCH)) {
-            return $this->workflowFactory->getBookTime()->extractTicketIdFromCurrentBranch();
+            return $this->workflowFactory->getTicketIdProvider()->extractTicketIdFromCurrentBranch();
         }
 
         $choices = $this->workflowFactory->createFavouriteTicketChoicesProvider()->provide();
