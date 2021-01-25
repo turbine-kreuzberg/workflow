@@ -34,14 +34,14 @@ class WorkOnTicketCommand extends Command
         $workOnTicket = $this->workflowFactory->createWorkOnTicket();
 
         $ticketNumber = $inputOutputStyle->ask('Ticket number?');
-        $branchNameFromTicket = $workOnTicket->getBranchNameFromTicket($ticketNumber);
+        $branchNameFromTicketCutAtFifty = substr($workOnTicket->getBranchNameFromTicket($ticketNumber), 0, 50);
 
         $question = (new Question(
-            "Branch name?\n   $branchNameFromTicket\n   --------------------------------------------------",
-            $branchNameFromTicket
+            "Branch name?\n   $branchNameFromTicketCutAtFifty\n   " . str_repeat('-', 50) . "",
+            $branchNameFromTicketCutAtFifty
         )
         )
-            ->setAutocompleterValues([$branchNameFromTicket])
+            ->setAutocompleterValues([$branchNameFromTicketCutAtFifty])
             ->setValidator(
                 function ($name) {
                     return $this->validateInputBranchName($name);
