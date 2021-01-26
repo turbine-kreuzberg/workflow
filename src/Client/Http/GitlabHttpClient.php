@@ -6,19 +6,19 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
+use Workflow\Configuration;
 
 class GitlabHttpClient
 {
-    public const PERSONAL_ACCESS_TOKEN = 'GITLAB_PERSONAL_ACCESS_TOKEN';
 
     private Client $client;
 
-    public function __construct()
+    public function __construct(private Configuration $configuration)
     {
         $this->client = new Client(
             [
             'headers' => [
-                'Private-Token' => $this->getPersonalAccessToken(),
+                'Private-Token' => $this->configuration->getConfiguration(Configuration::PERSONAL_ACCESS_TOKEN),
                 'Content-Type' => 'application/json',
             ],
             ]
@@ -30,7 +30,7 @@ class GitlabHttpClient
         try {
             $gitlabResponse = $this->client->post($uri, [RequestOptions::JSON => $options]);
         } catch (BadResponseException $exception) {
-            if ($exception->getResponse()->getStatusCode() === 401) {
+            if ($exception->getResponse()?->getStatusCode() === 401) {
                 throw new Exception(
                     'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
                 );
@@ -47,7 +47,7 @@ class GitlabHttpClient
         try {
             $gitlabResponse = $this->client->get($uri, $options);
         } catch (BadResponseException $exception) {
-            if ($exception->getResponse()->getStatusCode() === 401) {
+            if ($exception->getResponse()?->getStatusCode() === 401) {
                 throw new Exception(
                     'Gitlab answered with 401 Unauthorized: Please check your personal acccess token in your .env file.'
                 );
@@ -67,17 +67,5 @@ class GitlabHttpClient
     public function put(string $uri): void
     {
         $this->client->put($uri);
-    }
-
-    private function getPersonalAccessToken(): string
-    {
-        $envVarname = self::PERSONAL_ACCESS_TOKEN;
-        if (getenv($envVarname)) {
-            return getenv($envVarname);
-        }
-
-        throw new Exception(
-            'No personal access token provided. Please see your ".env.dist" file how to create and use the token.'
-        );
     }
 }

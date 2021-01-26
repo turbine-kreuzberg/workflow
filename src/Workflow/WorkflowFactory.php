@@ -4,6 +4,7 @@ namespace Workflow\Workflow;
 
 use Workflow\Client\ClientFactory;
 use Workflow\Configuration;
+use Workflow\Model\MergeRequestCreator;
 use Workflow\Workflow\Jira\IssueCreator;
 use Workflow\Workflow\Jira\IssueReader;
 use Workflow\Workflow\Jira\IssueUpdater;
@@ -92,6 +93,18 @@ class WorkflowFactory
     public function createFastWorklogProvider() : FastWorklogProvider
     {
         return new FastWorklogProvider($this->getCommitMessageProvider(), $this->createConfiguration());
+    }
+
+    public function createMergeRequestCreator(): MergeRequestCreator
+    {
+        return new MergeRequestCreator(
+            $this->getClientFactory()->getGitLabClient(),
+            $this->getClientFactory()->getJiraClient(),
+            $this->getClientFactory()->getGitClient(),
+            $this->createConfiguration(),
+            $this->getTicketIdProvider(),
+            $this->createJiraIssueUpdater()
+        );
     }
 
     private function getClientFactory(): ClientFactory

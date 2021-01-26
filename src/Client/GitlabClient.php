@@ -22,7 +22,7 @@ class GitlabClient
 
     public static function requiredEnvironmentVariables(): array
     {
-        return [GitlabHttpClient::PERSONAL_ACCESS_TOKEN];
+        return [Configuration::PERSONAL_ACCESS_TOKEN];
     }
 
     public function setAccessLevel(string $branchName, string $mergeAccessLevel, string $pushAccessLevel): void
@@ -69,7 +69,7 @@ class GitlabClient
         try {
             $gitlabResponse = $this->gitlabHttpClient->post($mergeRequestUrl, $mergeRequestData);
         } catch (BadResponseException $exception) {
-            if ($exception->getResponse()->getStatusCode() === 409) {
+            if ($exception->getResponse()?->getStatusCode() === 409) {
                 $gitlabResponse = $this->gitlabHttpClient->get($mergeRequestUrl, ['query' => $mergeRequestData]);
 
                 return $gitlabResponse[0]['web_url'];
@@ -125,9 +125,9 @@ class GitlabClient
     public function getMergeRequestId(MergeRequestParameterRequestTransfer $mergeRequestParameterRequestTransfer): int
     {
         $mergeRequestUrlParameters = [
-            'source_branch' => $mergeRequestParameterRequestTransfer->getSourceBranch(),
-            'target_branch' => $mergeRequestParameterRequestTransfer->getTargetBranch(),
-            'state' => $mergeRequestParameterRequestTransfer->getState(),
+            'source_branch' => $mergeRequestParameterRequestTransfer->sourceBranch,
+            'target_branch' => $mergeRequestParameterRequestTransfer->targetBranch,
+            'state' => $mergeRequestParameterRequestTransfer->state,
         ];
 
         $mergeRequestUrl = $this->getProjectUrl() . 'merge_requests/?' . http_build_query($mergeRequestUrlParameters);
@@ -137,8 +137,8 @@ class GitlabClient
         if ($mergeRequestId === null) {
             throw new Exception(
                 'Merge request from ' .
-                $mergeRequestParameterRequestTransfer->getSourceBranch() . ' to ' .
-                $mergeRequestParameterRequestTransfer->getTargetBranch() . ' not found.'
+                $mergeRequestParameterRequestTransfer->sourceBranch . ' to ' .
+                $mergeRequestParameterRequestTransfer->targetBranch . ' not found.'
             );
         }
 

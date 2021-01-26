@@ -20,7 +20,9 @@ class ClientFactory
     public function getGitLabClient(): GitlabClient
     {
         return new GitlabClient(
-            new GitlabHttpClient(),
+            new GitlabHttpClient(
+                new Configuration(),
+            ),
             new Configuration()
         );
     }

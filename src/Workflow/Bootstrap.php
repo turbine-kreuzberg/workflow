@@ -16,14 +16,12 @@ class Bootstrap
     {
         $application = new Application();
         $application->add(new BookTimeCommand(configuration: new Configuration(), name: null));
-        $application->add(new CreateJiraIssueCommand(workflowFactory: new WorkflowFactory(), name: null));
-        $application->add(new WorkOnTicketCommand(workflowFactory: new WorkflowFactory(), name: null));
+        $workflowFactory = new WorkflowFactory();
+        $application->add(new CreateJiraIssueCommand(workflowFactory: $workflowFactory, name: null));
+        $application->add(new WorkOnTicketCommand(workflowFactory: $workflowFactory, name: null));
         $application->add(
             new CreateMergeRequestCommand(
-                clientFactory: new ClientFactory(),
-                name: null,
-                workflowFactory: new WorkflowFactory(),
-                configuration: new Configuration()
+                mergeRequestCreator: $workflowFactory->createMergeRequestCreator()
             )
         );
 

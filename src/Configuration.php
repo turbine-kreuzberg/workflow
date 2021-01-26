@@ -15,6 +15,7 @@ class Configuration
     public const BRANCH_DEPLOYMENT = 'BRANCH_DEPLOYMENT';
     public const REPOSITORY = 'REPOSITORY';
     public const GITLAB_API_URL = 'GITLAB_API_URL';
+    public const PERSONAL_ACCESS_TOKEN = 'GITLAB_PERSONAL_ACCESS_TOKEN';
 
 
     public function getConfiguration(string $key): string
