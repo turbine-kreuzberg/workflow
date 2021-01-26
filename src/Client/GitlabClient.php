@@ -2,11 +2,9 @@
 
 namespace Workflow\Client;
 
-use Exception;
 use GuzzleHttp\Exception\BadResponseException;
 use Workflow\Client\Http\GitlabHttpClient;
 use Workflow\Configuration;
-use Workflow\Transfers\MergeRequestParameterRequestTransfer;
 
 class GitlabClient
 {
@@ -18,42 +16,6 @@ class GitlabClient
         private Configuration $configuration
     ) {
 
-    }
-
-    public static function requiredEnvironmentVariables(): array
-    {
-        return [Configuration::PERSONAL_ACCESS_TOKEN];
-    }
-
-    public function setAccessLevel(string $branchName, string $mergeAccessLevel, string $pushAccessLevel): void
-    {
-        $protectBranchUrl = $this->getProjectUrl() . 'protected_branches';
-
-        $postData = [
-            'name' => $branchName,
-            'push_access_level' => $pushAccessLevel,
-            'merge_access_level' => $mergeAccessLevel,
-        ];
-
-        try {
-            $this->gitlabHttpClient->delete($protectBranchUrl . '/' . $branchName);
-        } catch (BadResponseException $exception) {
-            /**
-             * If the branch is not protected we would get an error while trying to delete the protection.
-             * We don't need to do anything in that case.
-             */
-        }
-
-        $this->gitlabHttpClient->post($protectBranchUrl, $postData);
-    }
-
-    public function isBranchProtected(string $branchName): bool
-    {
-        $branchUrl = $this->getProjectUrl() . 'repository/branches/' . $branchName;
-
-        $response = $this->gitlabHttpClient->get($branchUrl);
-
-        return !$response['developers_can_merge'];
     }
 
     public function createMergeRequest(array $mergeRequestData): string
@@ -79,15 +41,6 @@ class GitlabClient
         }
 
         return $gitlabResponse['web_url'];
-    }
-
-    public function getCurrentBranchRevision(string $branchName): string
-    {
-        $commitUrls = $this->getProjectUrl() . 'repository/commits?ref_name=' . $branchName;
-
-        $response = $this->gitlabHttpClient->get($commitUrls);
-
-        return $response[0]['id'];
     }
 
     private function getProjectUrl(): string
@@ -120,48 +73,5 @@ class GitlabClient
     {
         return $sourceBranch === $this->configuration->getConfiguration(Configuration::BRANCH_DEVELOPMENT) &&
             $targetBranch === $this->configuration->getConfiguration(Configuration::BRANCH_DEPLOYMENT);
-    }
-
-    public function getMergeRequestId(MergeRequestParameterRequestTransfer $mergeRequestParameterRequestTransfer): int
-    {
-        $mergeRequestUrlParameters = [
-            'source_branch' => $mergeRequestParameterRequestTransfer->sourceBranch,
-            'target_branch' => $mergeRequestParameterRequestTransfer->targetBranch,
-            'state' => $mergeRequestParameterRequestTransfer->state,
-        ];
-
-        $mergeRequestUrl = $this->getProjectUrl() . 'merge_requests/?' . http_build_query($mergeRequestUrlParameters);
-        $gitlabResponseArray = $this->gitlabHttpClient->get($mergeRequestUrl);
-
-        $mergeRequestId = $gitlabResponseArray[0]['iid'];
-        if ($mergeRequestId === null) {
-            throw new Exception(
-                'Merge request from ' .
-                $mergeRequestParameterRequestTransfer->sourceBranch . ' to ' .
-                $mergeRequestParameterRequestTransfer->targetBranch . ' not found.'
-            );
-        }
-
-        return $mergeRequestId;
-    }
-
-
-    /**
-     * @param int $mergeRequestId
-     *
-     * @return string[]
-     */
-    public function getMergeRequestChangedFiles(int $mergeRequestId): array
-    {
-        $mergeRequestChangesUrl = $this->getProjectUrl() . 'merge_requests/' . $mergeRequestId . '/changes';
-        $response = $this->gitlabHttpClient->get($mergeRequestChangesUrl);
-        $changes = $response['changes'];
-
-        $changedFiles = [];
-        foreach ($changes as $change) {
-            $changedFiles[] = $change['new_path'];
-        }
-
-        return $changedFiles;
     }
 }
