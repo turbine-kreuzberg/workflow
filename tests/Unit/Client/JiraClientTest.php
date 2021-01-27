@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Workflow\Client\Http\AtlassianHttpClient;
 use Workflow\Client\JiraClient;
 use Workflow\Configuration;
-use Workflow\Exception\JiraStateNotFoundException;
 use Workflow\Transfers\JiraIssueTransfer;
 use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
