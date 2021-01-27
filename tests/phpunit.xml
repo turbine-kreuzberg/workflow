@@ -9,6 +9,8 @@
 >
   <php>
     <env name="TEST_ENVIRONMENT_KEY" value="TEST_ENVIRONMENT_VALUE" force="true" />
+    <env name="BRANCH_DEVELOPMENT" value="BRANCH_DEVELOPMENT" force="true" />
+    <env name="BRANCH_DEPLOYMENT" value="BRANCH_DEPLOYMENT" force="true" />
   </php>
   <testsuites>
     <testsuite name="Project Test Suite">

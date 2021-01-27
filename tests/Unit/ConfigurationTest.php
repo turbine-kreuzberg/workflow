@@ -1,4 +1,5 @@
 <?php
+
 namespace Unit\Workflow;
 
 use PHPUnit\Framework\TestCase;
@@ -24,5 +25,19 @@ class ConfigurationTest extends TestCase
         $value = $configuration->getConfiguration('TEST_ENVIRONMENT_KEY');
 
         self::assertEquals('TEST_ENVIRONMENT_VALUE', $value);
+    }
+
+    public function testGetNonRemovableBranchesConfiguredByPhpUnitXml(): void
+    {
+        $configuration = new Configuration();
+        $nonRemovableBranches = $configuration->getNonRemovableBranches();
+
+        self::assertEquals(
+            [
+                'BRANCH_DEVELOPMENT',
+                'BRANCH_DEPLOYMENT',
+            ],
+            $nonRemovableBranches
+        );
     }
 }
