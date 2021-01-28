@@ -182,4 +182,47 @@ class JiraClientTest extends TestCase
 
         $jiraClient->transitionJiraIssue('BCM-12', '123');
     }
+
+    public function testGetActiveSprintReturnsActiveSprint(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $configurationMock->expects(self::once())
+            ->method('getConfiguration')
+            ->with('JIRA_BOARD_ID')
+            ->willReturn('232');
+
+        $jiraHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'https://jira.votum.info:7443/rest/agile/1.0/board/232/sprint',
+            )
+            ->willReturn(
+                [
+                    'values' => [
+                        [
+                            'state' => 'not-active',
+                        ],
+                        [
+                            'state' => 'active',
+                        ],
+                    ],
+                ]
+            );
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+
+        self::assertEquals(
+            [
+                'state' => 'active',
+            ],
+            $jiraClient->getActiveSprint()
+        );
+    }
 }
