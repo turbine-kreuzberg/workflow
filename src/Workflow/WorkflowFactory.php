@@ -4,10 +4,10 @@ namespace Workflow\Workflow;
 
 use Workflow\Client\ClientFactory;
 use Workflow\Configuration;
-use Workflow\Model\MergeRequestCreator;
 use Workflow\Workflow\Jira\IssueCreator;
 use Workflow\Workflow\Jira\IssueReader;
 use Workflow\Workflow\Jira\IssueUpdater;
+use Workflow\Workflow\Model\MergeRequestCreator;
 use Workflow\Workflow\Model\WorkOnTicket;
 use Workflow\Workflow\Provider\CommitMessageProvider;
 use Workflow\Workflow\Provider\FastWorklogProvider;

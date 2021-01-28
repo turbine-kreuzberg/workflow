@@ -6,12 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Workflow\Client\GitClient;
-use Workflow\Client\GitlabClient;
-use Workflow\Client\JiraClient;
-use Workflow\Configuration;
-use Workflow\Model\MergeRequestCreator;
-use Workflow\Workflow\WorkflowFactory;
+use Workflow\Workflow\Model\MergeRequestCreator;
 
 class CreateMergeRequestCommand extends Command
 {

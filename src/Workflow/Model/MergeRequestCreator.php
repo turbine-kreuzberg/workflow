@@ -1,6 +1,6 @@
 <?php
 
-namespace Workflow\Model;
+namespace Workflow\Workflow\Model;
 
 use Workflow\Client\GitClient;
 use Workflow\Client\GitlabClient;
@@ -8,7 +8,6 @@ use Workflow\Client\JiraClient;
 use Workflow\Configuration;
 use Workflow\Workflow\Jira\IssueUpdater;
 use Workflow\Workflow\TicketIdProvider;
-use Workflow\Workflow\WorkflowFactory;
 
 class MergeRequestCreator
 {
