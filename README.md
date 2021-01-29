@@ -13,6 +13,17 @@ These tools help automate the development workflow.
   ]
   
 * run `composer require turbine/workflow --dev`
+* include in your makefile `include vendor/turbine/workflow/src/makefiles/Makefile`
+* add to your .env 
+```
+JIRA_USERNAME=maxmusterman
+JIRA_PASSWORD=password
+JIRA_FAVOURITE_TICKETS=TXB-2,TXB-9
+#Add your GitLab Personal Access Token to enable workflow automations
+#Create your token with API scope here: https://git.votum-media.net/-/profile/personal_access_tokens
+#The scope of api should be checked
+GITLAB_PERSONAL_ACCESS_TOKEN=access-token
+```
 * run `make workflow-setup`
 
 * run `make book-time`
