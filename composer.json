@@ -14,7 +14,7 @@
     "phpstan/phpstan": "^0.12.57"
   },
   "scripts": {
-    "post-install-cmd": "sh src/scripts/post-install.sh"
+    "post-install-cmd": "sh vendor/turbine/workflow/src/scripts/post-install.sh"
   },
     "autoload": {
     "psr-4": {
