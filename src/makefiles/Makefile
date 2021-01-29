@@ -22,3 +22,7 @@ work-on-ticket: ##@workflow create a git branch and move ticket to in progress
 mr: ##@workflow create mr
 	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it workflow /var/www/vendor/bin/workflow workflow:create-merge-request
 .PHONY: mr
+
+improvement-ticket: ##@workflow create a jira ticket
+	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -it php:8.0-alpine /var/www/bin/workflow workflow:create:jira-issue improvement
+.PHONY: improvement-ticket
