@@ -31,7 +31,7 @@ class GitlabClient
         try {
             $gitlabResponse = $this->gitlabHttpClient->post($mergeRequestUrl, $mergeRequestData);
         } catch (BadResponseException $exception) {
-            if ($exception->getResponse()?->getStatusCode() === 409) {
+            if ($exception->getResponse()->getStatusCode() === 409) {
                 $gitlabResponse = $this->gitlabHttpClient->get($mergeRequestUrl, ['query' => $mergeRequestData]);
 
                 return $gitlabResponse[0]['web_url'];

@@ -3,9 +3,11 @@
 namespace Unit\Client\Http;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\StreamInterface;
 use Workflow\Client\Http\AtlassianHttpClient;
 use Workflow\Configuration;
 
@@ -13,21 +15,19 @@ class AtlassianHttpClientTest extends TestCase
 {
     public function testGetFunctionCallsGuzzleClient(): void
     {
-        $streamMock = $this->createMock(StreamInterface::class);
-        $streamMock->expects(self::once())
-            ->method('getContents')
-            ->willReturn('{}');
+        $container = [];
+        $historyMock = Middleware::history($container);
 
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseMock->expects(self::once())
-            ->method('getBody')
-            ->willReturn($streamMock);
+        $responseMockHandler = new MockHandler(
+            [
+            new Response(200, [], json_encode([], JSON_THROW_ON_ERROR)),
+            ]
+        );
 
-        $clientMock = $this->createMock(Client::class);
-        $clientMock->expects(self::once())
-            ->method('__call')
-            ->with('get', ['url', ['auth' => ['username', 'password']]])
-            ->willReturn($responseMock);
+        $handlerStack = HandlerStack::create($responseMockHandler);
+        $handlerStack->push($historyMock);
+
+        $clientMock = new Client(['handler' => $handlerStack]);
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
@@ -41,30 +41,26 @@ class AtlassianHttpClientTest extends TestCase
             $configurationMock,
             $clientMock
         );
-
         self::assertEquals([], $atlassianHttpClient->get('url'));
+        self::assertEquals('url', $container[0]['request']->getUri()->__toString());
+        self::assertEquals(['username', 'password'], $container[0]['options']['auth']);
     }
 
     public function testPostFunctionCallsGuzzleClient(): void
     {
-        $streamMock = $this->createMock(StreamInterface::class);
-        $streamMock->expects(self::once())
-            ->method('getContents')
-            ->willReturn('{}');
+        $container = [];
+        $historyMock = Middleware::history($container);
 
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseMock->expects(self::once())
-            ->method('getBody')
-            ->willReturn($streamMock);
+        $responseMockHandler = new MockHandler(
+            [
+            new Response(200, [], json_encode([], JSON_THROW_ON_ERROR)),
+            ]
+        );
 
-        $clientMock = $this->createMock(Client::class);
-        $clientMock->expects(self::once())
-            ->method('__call')
-            ->with(
-                'post',
-                ['url', ['json' => ['postOptions'], 'auth' => ['username', 'password']]]
-            )
-            ->willReturn($responseMock);
+        $handlerStack = HandlerStack::create($responseMockHandler);
+        $handlerStack->push($historyMock);
+
+        $clientMock = new Client(['handler' => $handlerStack]);
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
@@ -79,29 +75,24 @@ class AtlassianHttpClientTest extends TestCase
             $clientMock
         );
 
-        self::assertEquals([], $atlassianHttpClient->post('url', ['postOptions']));
+        self::assertEquals([], $atlassianHttpClient->post('url', ['postOptions' => 'blub']));
+        self::assertEquals('url', $container[0]['request']->getUri()->__toString());
+        self::assertEquals(['username', 'password'], $container[0]['options']['auth']);
+        self::assertEquals(
+            json_encode(['postOptions' => 'blub'], JSON_THROW_ON_ERROR),
+            $container[0]['request']->getBody()->getContents()
+        );
     }
 
     public function testPostFunctionWithInvalidJsonResponseReturnsAnEmptyArray(): void
     {
-        $streamMock = $this->createMock(StreamInterface::class);
-        $streamMock->expects(self::once())
-            ->method('getContents')
-            ->willReturn('');
+        $mockHandler = new MockHandler(
+            [
+            new Response(200, [], 'invalid_json'),
+            ]
+        );
 
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseMock->expects(self::once())
-            ->method('getBody')
-            ->willReturn($streamMock);
-
-        $clientMock = $this->createMock(Client::class);
-        $clientMock->expects(self::once())
-            ->method('__call')
-            ->with(
-                'post',
-                ['url', ['json' => ['postOptions'], 'auth' => ['username', 'password']]]
-            )
-            ->willReturn($responseMock);
+        $clientMock = new Client(['handler' => $mockHandler]);
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
@@ -121,24 +112,19 @@ class AtlassianHttpClientTest extends TestCase
 
     public function testPutFunctionCallsGuzzleClient(): void
     {
-        $streamMock = $this->createMock(StreamInterface::class);
-        $streamMock->expects(self::once())
-            ->method('getContents')
-            ->willReturn('{}');
+        $container = [];
+        $historyMock = Middleware::history($container);
 
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseMock->expects(self::once())
-            ->method('getBody')
-            ->willReturn($streamMock);
+        $responseMockHandler = new MockHandler(
+            [
+            new Response(200, [], json_encode([], JSON_THROW_ON_ERROR)),
+            ]
+        );
 
-        $clientMock = $this->createMock(Client::class);
-        $clientMock->expects(self::once())
-            ->method('__call')
-            ->with(
-                'put',
-                ['url', ['json' => ['putOptions'], 'auth' => ['username', 'password']]]
-            )
-            ->willReturn($responseMock);
+        $handlerStack = HandlerStack::create($responseMockHandler);
+        $handlerStack->push($historyMock);
+
+        $clientMock = new Client(['handler' => $handlerStack]);
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
@@ -153,29 +139,26 @@ class AtlassianHttpClientTest extends TestCase
             $clientMock
         );
 
-        self::assertEquals([], $atlassianHttpClient->put('url', ['putOptions']));
+        $response = $atlassianHttpClient->put('url', ['putOptions' => 'blub']);
+
+        self::assertEquals([], $response);
+        self::assertEquals('url', $container[0]['request']->getUri()->__toString());
+        self::assertEquals(['username', 'password'], $container[0]['options']['auth']);
+        self::assertEquals(
+            json_encode(['putOptions' => 'blub'], JSON_THROW_ON_ERROR),
+            $container[0]['request']->getBody()->getContents()
+        );
     }
 
     public function testPutFunctionWithInvalidJsonResponseReturnsAnEmptyArray(): void
     {
-        $streamMock = $this->createMock(StreamInterface::class);
-        $streamMock->expects(self::once())
-            ->method('getContents')
-            ->willReturn('');
+        $mockHandler = new MockHandler(
+            [
+            new Response(200, [], 'invalid_json'),
+            ]
+        );
 
-        $responseMock = $this->createMock(ResponseInterface::class);
-        $responseMock->expects(self::once())
-            ->method('getBody')
-            ->willReturn($streamMock);
-
-        $clientMock = $this->createMock(Client::class);
-        $clientMock->expects(self::once())
-            ->method('__call')
-            ->with(
-                'put',
-                ['url', ['json' => ['putOptions'], 'auth' => ['username', 'password']]]
-            )
-            ->willReturn($responseMock);
+        $clientMock = new Client(['handler' => $mockHandler]);
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
