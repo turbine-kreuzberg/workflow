@@ -1,6 +1,6 @@
 <?php
 
-namespace Workflow\Exception;
+namespace Turbine\Workflow\Exception;
 
 use Exception;
 

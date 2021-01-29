@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 
 
-namespace Workflow\Workflow;
+namespace Turbine\Workflow\Workflow;
 
-use Workflow\Configuration;
+use Turbine\Workflow\Configuration;
 
 class TicketIdentifier
 {

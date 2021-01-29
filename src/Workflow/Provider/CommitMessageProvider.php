@@ -1,10 +1,9 @@
 <?php
 declare(strict_types = 1);
 
+namespace Turbine\Workflow\Workflow\Provider;
 
-namespace Workflow\Workflow\Provider;
-
-use Workflow\Client\GitClient;
+use Turbine\Workflow\Client\GitClient;
 
 class CommitMessageProvider
 {

@@ -5,8 +5,8 @@ declare(strict_types = 1);
 namespace Unit\Workflow\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Client\GitClient;
-use Workflow\Workflow\Provider\CommitMessageProvider;
+use Turbine\Workflow\Client\GitClient;
+use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
 
 class WorklogMessageProviderTest extends TestCase
 {

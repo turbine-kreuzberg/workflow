@@ -1,12 +1,12 @@
 <?php
 
-namespace Workflow\Workflow\Model;
+namespace Turbine\Workflow\Workflow\Model;
 
-use Workflow\Client\GitClient;
-use Workflow\Client\JiraClient;
-use Workflow\Configuration;
-use Workflow\Transfers\JiraIssueTransfer;
-use Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Client\GitClient;
+use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Workflow\Jira\IssueUpdater;
 
 class WorkOnTicket
 {

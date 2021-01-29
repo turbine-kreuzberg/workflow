@@ -3,8 +3,8 @@
 namespace Unit\Workflow\Jira\Mapper;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Transfers\JiraIssueTransfer;
-use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraIssueMapperTest extends TestCase
 {

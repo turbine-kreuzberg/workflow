@@ -1,8 +1,8 @@
 <?php
-namespace Workflow\Workflow\Provider;
+namespace Turbine\Workflow\Workflow\Provider;
 
-use Workflow\Configuration;
-use Workflow\Workflow\Jira\IssueReader;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
 
 class FavouriteTicketChoicesProvider
 {

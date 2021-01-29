@@ -1,17 +1,16 @@
 <?php
 
-namespace Workflow\Console;
+namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Workflow\Configuration;
-use Workflow\Exception\JiraNoWorklogException;
-use Workflow\Transfers\JiraWorklogEntryTransfer;
-use Workflow\Workflow\Exception\MalformedCommitMessageException;
-use Workflow\Workflow\WorkflowFactory;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Exception\JiraNoWorklogException;
+use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class BookTimeCommand extends Command
 {

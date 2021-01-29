@@ -1,11 +1,11 @@
 <?php
 
-namespace Workflow\Client\Http;
+namespace Turbine\Workflow\Client\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use JsonException;
-use Workflow\Configuration;
+use Turbine\Workflow\Configuration;
 
 class AtlassianHttpClient
 {

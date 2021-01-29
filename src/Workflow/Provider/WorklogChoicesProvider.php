@@ -1,8 +1,8 @@
 <?php
 
-namespace Workflow\Workflow\Provider;
+namespace Turbine\Workflow\Workflow\Provider;
 
-use Workflow\Workflow\Jira\IssueReader;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
 
 class WorklogChoicesProvider
 {

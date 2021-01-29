@@ -3,9 +3,9 @@
 namespace Unit\Workflow;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Client\GitClient;
-use Workflow\Workflow\TicketIdProvider;
-use Workflow\Workflow\TicketIdentifier;
+use Turbine\Workflow\Client\GitClient;
+use Turbine\Workflow\Workflow\TicketIdProvider;
+use Turbine\Workflow\Workflow\TicketIdentifier;
 
 class BookTimeTest extends TestCase
 {

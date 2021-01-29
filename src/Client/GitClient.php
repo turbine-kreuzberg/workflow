@@ -1,6 +1,6 @@
 <?php
 
-namespace Workflow\Client;
+namespace Turbine\Workflow\Client;
 
 class GitClient
 {

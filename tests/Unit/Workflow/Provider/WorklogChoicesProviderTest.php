@@ -3,10 +3,10 @@
 namespace Unit\Workflow\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Transfers\JiraWorklogEntryTransfer;
-use Workflow\Workflow\Jira\IssueReader;
-use Workflow\Workflow\Provider\CommitMessageProvider;
-use Workflow\Workflow\Provider\WorklogChoicesProvider;
+use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
+use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
+use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
 
 class WorklogChoicesProviderTest extends TestCase
 {

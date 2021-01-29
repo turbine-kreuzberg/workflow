@@ -1,12 +1,12 @@
 <?php
 
-namespace Workflow\Client;
+namespace Turbine\Workflow\Client;
 
 use GuzzleHttp\Client;
-use Workflow\Client\Http\AtlassianHttpClient;
-use Workflow\Client\Http\GitlabHttpClient;
-use Workflow\Configuration;
-use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
+use Turbine\Workflow\Client\Http\AtlassianHttpClient;
+use Turbine\Workflow\Client\Http\GitlabHttpClient;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class ClientFactory
 {

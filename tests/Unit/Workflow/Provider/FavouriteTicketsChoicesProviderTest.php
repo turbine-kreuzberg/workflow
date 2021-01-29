@@ -2,11 +2,11 @@
 namespace Unit\Workflow\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Configuration;
-use Workflow\Transfers\JiraIssueTransfer;
-use Workflow\Transfers\JiraIssueTransferCollection;
-use Workflow\Workflow\Jira\IssueReader;
-use Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Transfers\JiraIssueTransferCollection;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
+use Turbine\Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
 
 class FavouriteTicketsChoicesProviderTest extends TestCase
 {

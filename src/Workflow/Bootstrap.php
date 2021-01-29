@@ -1,14 +1,13 @@
 <?php
 
-namespace Workflow\Workflow;
+namespace Turbine\Workflow\Workflow;
 
 use Symfony\Component\Console\Application;
-use Workflow\Client\ClientFactory;
-use Workflow\Configuration;
-use Workflow\Console\BookTimeCommand;
-use Workflow\Console\CreateJiraIssueCommand;
-use Workflow\Console\CreateMergeRequestCommand;
-use Workflow\Console\WorkOnTicketCommand;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Console\BookTimeCommand;
+use Turbine\Workflow\Console\CreateJiraIssueCommand;
+use Turbine\Workflow\Console\CreateMergeRequestCommand;
+use Turbine\Workflow\Console\WorkOnTicketCommand;
 
 class Bootstrap
 {

@@ -1,14 +1,12 @@
 <?php
 declare(strict_types = 1);
 
-
 namespace Unit\Workflow\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Configuration;
-use Workflow\Workflow\Exception\MalformedCommitMessageException;
-use Workflow\Workflow\Provider\CommitMessageProvider;
-use Workflow\Workflow\Provider\FastWorklogProvider;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
+use Turbine\Workflow\Workflow\Provider\FastWorklogProvider;
 
 class FastWorklogProviderTest extends TestCase
 {

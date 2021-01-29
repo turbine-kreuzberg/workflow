@@ -1,12 +1,12 @@
 <?php
 
-namespace Workflow\Client\Http;
+namespace Turbine\Workflow\Client\Http;
 
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
-use Workflow\Configuration;
+use Turbine\Workflow\Configuration;
 
 class GitlabHttpClient
 {

@@ -3,10 +3,10 @@
 namespace Unit\Workflow\Jira;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Client\JiraClient;
-use Workflow\Configuration;
-use Workflow\Transfers\JiraIssueTransfer;
-use Workflow\Workflow\Jira\IssueCreator;
+use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Workflow\Jira\IssueCreator;
 
 class IssueCreatorTest extends TestCase
 {

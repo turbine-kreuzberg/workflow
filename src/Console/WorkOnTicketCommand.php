@@ -1,6 +1,6 @@
 <?php
 
-namespace Workflow\Console;
+namespace Turbine\Workflow\Console;
 
 use RuntimeException;
 use Symfony\Component\Console\Command\Command;
@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Workflow\Workflow\WorkflowFactory;
+use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class WorkOnTicketCommand extends Command
 {

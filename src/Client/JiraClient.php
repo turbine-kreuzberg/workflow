@@ -1,12 +1,12 @@
 <?php
 
-namespace Workflow\Client;
+namespace Turbine\Workflow\Client;
 
 use Exception;
-use Workflow\Client\Http\AtlassianHttpClient;
-use Workflow\Configuration;
-use Workflow\Transfers\JiraIssueTransfer;
-use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
+use Turbine\Workflow\Client\Http\AtlassianHttpClient;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraClient
 {

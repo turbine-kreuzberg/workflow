@@ -3,11 +3,11 @@
 namespace Unit\Client;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Client\Http\AtlassianHttpClient;
-use Workflow\Client\JiraClient;
-use Workflow\Configuration;
-use Workflow\Transfers\JiraIssueTransfer;
-use Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
+use Turbine\Workflow\Client\Http\AtlassianHttpClient;
+use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraClientTest extends TestCase
 {

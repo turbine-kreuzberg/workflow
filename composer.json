@@ -18,12 +18,12 @@
   },
     "autoload": {
     "psr-4": {
-      "Workflow\\": "src/"
+      "Turbine\\Workflow\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Workflow\\": "src/"
+      "Turbine\\Workflow\\": "src/"
     }
   },
   "bin": [

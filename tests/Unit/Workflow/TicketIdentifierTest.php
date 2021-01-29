@@ -4,8 +4,8 @@ namespace Unit\Workflow;
 
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Workflow\Configuration;
-use Workflow\Workflow\TicketIdentifier;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Workflow\TicketIdentifier;
 
 class TicketIdentifierTest extends TestCase
 {

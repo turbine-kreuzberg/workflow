@@ -1,6 +1,6 @@
 <?php
 
-namespace Workflow\Transfers;
+namespace Turbine\Workflow\Transfers;
 
 class MergeRequestParameterRequestTransfer
 {

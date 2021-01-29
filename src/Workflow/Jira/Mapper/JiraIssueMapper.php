@@ -1,8 +1,8 @@
 <?php
 
-namespace Workflow\Workflow\Jira\Mapper;
+namespace Turbine\Workflow\Workflow\Jira\Mapper;
 
-use Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
 
 class JiraIssueMapper
 {

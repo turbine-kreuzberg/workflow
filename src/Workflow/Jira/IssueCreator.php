@@ -1,10 +1,10 @@
 <?php
 
-namespace Workflow\Workflow\Jira;
+namespace Turbine\Workflow\Workflow\Jira;
 
-use Workflow\Client\JiraClient;
-use Workflow\Configuration;
-use Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
 
 class IssueCreator
 {

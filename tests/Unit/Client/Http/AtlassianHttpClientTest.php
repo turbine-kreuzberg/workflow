@@ -8,8 +8,8 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Workflow\Client\Http\AtlassianHttpClient;
-use Workflow\Configuration;
+use Turbine\Workflow\Client\Http\AtlassianHttpClient;
+use Turbine\Workflow\Configuration;
 
 class AtlassianHttpClientTest extends TestCase
 {

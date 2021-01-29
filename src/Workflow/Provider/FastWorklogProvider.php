@@ -1,12 +1,9 @@
 <?php
 declare(strict_types = 1);
 
+namespace Turbine\Workflow\Workflow\Provider;
 
-namespace Workflow\Workflow\Provider;
-
-
-use Workflow\Configuration;
-use Workflow\Workflow\Exception\MalformedCommitMessageException;
+use Turbine\Workflow\Configuration;
 
 class FastWorklogProvider
 {

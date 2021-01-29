@@ -1,12 +1,12 @@
 <?php
 
-namespace Workflow\Console;
+namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Workflow\Workflow\Model\MergeRequestCreator;
+use Turbine\Workflow\Workflow\Model\MergeRequestCreator;
 
 class CreateMergeRequestCommand extends Command
 {

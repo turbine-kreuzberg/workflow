@@ -5,9 +5,9 @@ namespace Unit\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
-use Workflow\Client\GitlabClient;
-use Workflow\Client\Http\GitlabHttpClient;
-use Workflow\Configuration;
+use Turbine\Workflow\Client\GitlabClient;
+use Turbine\Workflow\Client\Http\GitlabHttpClient;
+use Turbine\Workflow\Configuration;
 
 class GitlabClientTest extends TestCase
 {

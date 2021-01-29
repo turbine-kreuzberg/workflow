@@ -1,10 +1,10 @@
 <?php
-namespace Workflow\Workflow\Jira;
+namespace Turbine\Workflow\Workflow\Jira;
 
-use Workflow\Client\JiraClient;
-use Workflow\Exception\JiraNoWorklogException;
-use Workflow\Transfers\JiraIssueTransferCollection;
-use Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Exception\JiraNoWorklogException;
+use Turbine\Workflow\Transfers\JiraIssueTransferCollection;
+use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 
 class IssueReader
 {

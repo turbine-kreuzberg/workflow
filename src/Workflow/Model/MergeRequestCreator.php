@@ -1,13 +1,13 @@
 <?php
 
-namespace Workflow\Workflow\Model;
+namespace Turbine\Workflow\Workflow\Model;
 
-use Workflow\Client\GitClient;
-use Workflow\Client\GitlabClient;
-use Workflow\Client\JiraClient;
-use Workflow\Configuration;
-use Workflow\Workflow\Jira\IssueUpdater;
-use Workflow\Workflow\TicketIdProvider;
+use Turbine\Workflow\Client\GitClient;
+use Turbine\Workflow\Client\GitlabClient;
+use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Workflow\TicketIdProvider;
 
 class MergeRequestCreator
 {

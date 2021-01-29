@@ -1,18 +1,18 @@
 <?php
 
-namespace Workflow\Workflow;
+namespace Turbine\Workflow\Workflow;
 
-use Workflow\Client\ClientFactory;
-use Workflow\Configuration;
-use Workflow\Workflow\Jira\IssueCreator;
-use Workflow\Workflow\Jira\IssueReader;
-use Workflow\Workflow\Jira\IssueUpdater;
-use Workflow\Workflow\Model\MergeRequestCreator;
-use Workflow\Workflow\Model\WorkOnTicket;
-use Workflow\Workflow\Provider\CommitMessageProvider;
-use Workflow\Workflow\Provider\FastWorklogProvider;
-use Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
-use Workflow\Workflow\Provider\WorklogChoicesProvider;
+use Turbine\Workflow\Client\ClientFactory;
+use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Workflow\Jira\IssueCreator;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
+use Turbine\Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Workflow\Model\MergeRequestCreator;
+use Turbine\Workflow\Workflow\Model\WorkOnTicket;
+use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
+use Turbine\Workflow\Workflow\Provider\FastWorklogProvider;
+use Turbine\Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
+use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
 
 class WorkflowFactory
 {

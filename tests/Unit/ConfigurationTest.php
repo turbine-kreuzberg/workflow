@@ -3,7 +3,7 @@
 namespace Unit\Workflow;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Configuration;
+use Turbine\Workflow\Configuration;
 
 class ConfigurationTest extends TestCase
 {

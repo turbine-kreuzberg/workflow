@@ -3,9 +3,9 @@
 namespace Unit\Workflow\Jira;
 
 use PHPUnit\Framework\TestCase;
-use Workflow\Client\JiraClient;
-use Workflow\Exception\JiraStateNotFoundException;
-use Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Exception\JiraStateNotFoundException;
+use Turbine\Workflow\Workflow\Jira\IssueUpdater;
 
 class IssueUpdaterTest extends TestCase
 {

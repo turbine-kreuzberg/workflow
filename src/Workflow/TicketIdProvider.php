@@ -1,8 +1,8 @@
 <?php
 
-namespace Workflow\Workflow;
+namespace Turbine\Workflow\Workflow;
 
-use Workflow\Client\GitClient;
+use Turbine\Workflow\Client\GitClient;
 
 class TicketIdProvider
 {
