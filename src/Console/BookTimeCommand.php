@@ -81,6 +81,10 @@ class BookTimeCommand extends Command
 
         try {
             $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
+            if (!preg_match("/^[a-z]/i", $issue)) {
+                $issue = $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $issue;
+            }
+
             $worklogComment = $this->createWorklogComment($issue, $inputOutputStyle);
             $lastTicketWorklog = $this->workflowFactory->createJiraIssueReader()->getLastTicketWorklog($issue);
             $duration = $this->createWorklogDuration($lastTicketWorklog, $inputOutputStyle);
