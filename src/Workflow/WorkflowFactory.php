@@ -2,6 +2,9 @@
 
 namespace Turbine\Workflow\Workflow;
 
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Client\ClientFactory;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Workflow\Jira\IssueCreator;
@@ -23,6 +26,11 @@ class WorkflowFactory
     private ?IssueReader $issueReader = null;
 
     private ?IssueUpdater $issueUpdater = null;
+
+    public function createSymfonyStyle(InputInterface $input, OutputInterface $output): SymfonyStyle
+    {
+        return new SymfonyStyle($input, $output);
+    }
 
     public function getTicketIdProvider(): TicketIdProvider
     {

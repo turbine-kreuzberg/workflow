@@ -42,7 +42,8 @@ class CreateJiraIssueCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $inputOutputStyle = new SymfonyStyle($input, $output);
+        $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
+
         $summary = $inputOutputStyle->ask('Issue summary');
         $issue = $this->createIssue($input, $summary);
 
