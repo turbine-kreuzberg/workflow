@@ -18,7 +18,7 @@ class FastWorklogProvider
     {
         $lastCommitMessage = $this->commitMessageProvider->getLastCommitMessage();
         preg_match(
-            "/(?'issueNumber'[A-Z]{3}-\d{1,5}) (?'message'.*)$/",
+            "/(?'issueNumber'[A-Z]{3}-\d{1,5}).?\s(?'message'.*)$/i",
             $lastCommitMessage,
             $matches
         );
@@ -27,7 +27,7 @@ class FastWorklogProvider
             return [null, null];
         }
 
-        $issueNumber = $matches['issueNumber'];
+        $issueNumber = strtoupper($matches['issueNumber']);
         $message = $matches['message'];
 
         return [$issueNumber, $message];

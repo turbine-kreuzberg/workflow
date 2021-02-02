@@ -63,15 +63,20 @@ class FastWorklogProviderTest extends TestCase
     public function provideCommitMessages(): array
     {
         return [
-            [
+            'normal commit message with ticket number' => [
                 'commitMessage' => 'BCM-123 add test',
                 'expectedIssueNumber' => 'BCM-123',
                 'expectedMessage' => 'add test',
             ],
-            [
-                'commitMessage' => 'BCM-999 add even more tests',
+            'normal commit message with wrapped ticket number' => [
+                'commitMessage' => '[BCM-999] add test for wrapped ticket number',
                 'expectedIssueNumber' => 'BCM-999',
-                'expectedMessage' => 'add even more tests'
+                'expectedMessage' => 'add test for wrapped ticket number'
+            ],
+            'normal commit message with ticket number separated by colon' => [
+                'commitMessage' => 'bcm-999: add test with colon',
+                'expectedIssueNumber' => 'BCM-999',
+                'expectedMessage' => 'add test with colon'
             ],
         ];
     }
