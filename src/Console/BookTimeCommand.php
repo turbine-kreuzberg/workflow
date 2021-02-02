@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
@@ -74,6 +75,9 @@ class BookTimeCommand extends Command
                 . $worklogComment
                 . '" on '
                 . $issue
+                . "\nTotal booked time today: "
+                . $this->workflowFactory->createJiraIssueReader()->getWorklog()
+                . 'h'
             );
 
             return 0;
@@ -107,6 +111,9 @@ class BookTimeCommand extends Command
             . $worklogComment
             . '" on '
             . $issue
+            . "\nTotal booked time today: "
+            . $this->workflowFactory->createJiraIssueReader()->getWorklog()
+            . 'h'
         );
 
         return 0;

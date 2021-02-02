@@ -90,6 +90,22 @@ class JiraClient
         );
     }
 
+    public function getWorklogByDate(\DateTimeImmutable $date): float
+    {
+        $dateString = $date->format('Y-m-d');
+        $result = $this->jiraHttpClient->get(
+            self::BASE_URL .
+            "rest/tempo-timesheets/3/worklogs?dateFrom=$dateString&dateTo=$dateString"
+        );
+
+        $time = 0;
+        foreach ($result as $worklog) {
+            $time += (int)$worklog['timeSpentSeconds'];
+        }
+
+        return $time / 3600;
+    }
+
     private function mapResponseToJiraIssueTransfer(array $issue): JiraIssueTransfer
     {
         $jiraIssueTransfer = $this->jiraIssueMapper->map($issue);

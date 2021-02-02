@@ -1,6 +1,7 @@
 <?php
 namespace Turbine\Workflow\Workflow\Jira;
 
+use DateTimeImmutable;
 use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraIssueTransferCollection;
@@ -47,5 +48,10 @@ class IssueReader
         $jiraWorklogEntryTransfer->timeSpentSeconds = $workLogEntryData['timeSpentSeconds'];
 
         return $jiraWorklogEntryTransfer;
+    }
+
+    public function getWorklog(): float
+    {
+        return $this->jiraClient->getWorklogByDate(new \DateTimeImmutable());
     }
 }
