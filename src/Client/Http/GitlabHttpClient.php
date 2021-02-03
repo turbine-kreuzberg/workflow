@@ -6,23 +6,12 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use GuzzleHttp\RequestOptions;
-use Turbine\Workflow\Configuration;
 
 class GitlabHttpClient
 {
 
-    private Client $client;
-
-    public function __construct(private Configuration $configuration)
+    public function __construct(private Client $client)
     {
-        $this->client = new Client(
-            [
-            'headers' => [
-                'Private-Token' => $this->configuration->getConfiguration(Configuration::PERSONAL_ACCESS_TOKEN),
-                'Content-Type' => 'application/json',
-            ],
-            ]
-        );
     }
 
     public function post(string $uri, array $options = []): array
@@ -57,15 +46,5 @@ class GitlabHttpClient
         }
 
         return json_decode($gitlabResponse->getBody()->getContents(), true);
-    }
-
-    public function delete(string $uri): void
-    {
-        $this->client->delete($uri);
-    }
-
-    public function put(string $uri): void
-    {
-        $this->client->put($uri);
     }
 }

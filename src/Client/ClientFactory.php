@@ -21,9 +21,21 @@ class ClientFactory
     {
         return new GitlabClient(
             new GitlabHttpClient(
-                new Configuration(),
+                $this->createGitlabConfiguredGuzzleClient()
             ),
             new Configuration()
+        );
+    }
+
+    private function createGitlabConfiguredGuzzleClient(): Client
+    {
+        return new Client(
+            [
+                'headers' => [
+                    'Private-Token' => (new Configuration())->getConfiguration(Configuration::PERSONAL_ACCESS_TOKEN),
+                    'Content-Type' => 'application/json',
+                ],
+            ]
         );
     }
 
