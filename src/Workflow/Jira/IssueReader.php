@@ -52,6 +52,6 @@ class IssueReader
 
     public function getWorklog(): float
     {
-        return $this->jiraClient->getWorklogByDate(new \DateTimeImmutable());
+        return $this->jiraClient->getTimeSpentByDate(new \DateTimeImmutable());
     }
 }

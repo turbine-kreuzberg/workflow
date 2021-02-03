@@ -5,6 +5,7 @@ namespace Turbine\Workflow\Client;
 use Exception;
 use Turbine\Workflow\Client\Http\AtlassianHttpClient;
 use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Exception\JiraNoActiveSprintException;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
@@ -12,6 +13,7 @@ class JiraClient
 {
     private const BASE_URL = 'https://jira.votum.info:7443/';
     private const API_URL = self::BASE_URL . 'rest/api/latest/';
+    private const TEMPO_API_URL = "rest/tempo-timesheets/3";
     private const BROWSE_URL = self::BASE_URL . 'browse/';
     private const ISSUE_URL = self::API_URL . 'issue/';
     private const BOARD_URL = self::BASE_URL . 'rest/agile/1.0/board/';
@@ -41,7 +43,7 @@ class JiraClient
             }
         }
 
-        throw new Exception('No active sprint found.');
+        throw new JiraNoActiveSprintException('No active sprint found.');
     }
 
     public function getIssueTransitions(string $issue): array
@@ -90,20 +92,21 @@ class JiraClient
         );
     }
 
-    public function getWorklogByDate(\DateTimeImmutable $date): float
+    public function getTimeSpentByDate(\DateTimeImmutable $date): float
     {
         $dateString = $date->format('Y-m-d');
         $result = $this->jiraHttpClient->get(
             self::BASE_URL .
-            "rest/tempo-timesheets/3/worklogs?dateFrom=$dateString&dateTo=$dateString"
+            self::TEMPO_API_URL .
+            "/worklogs?dateFrom=$dateString&dateTo=$dateString"
         );
 
-        $time = 0;
+        $totalTimeSpentInSeconds = 0;
         foreach ($result as $worklog) {
-            $time += (int)$worklog['timeSpentSeconds'];
+            $totalTimeSpentInSeconds += (int)$worklog['timeSpentSeconds'];
         }
 
-        return $time / 3600;
+        return $totalTimeSpentInSeconds / 3600;
     }
 
     private function mapResponseToJiraIssueTransfer(array $issue): JiraIssueTransfer

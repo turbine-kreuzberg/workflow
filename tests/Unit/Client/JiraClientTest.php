@@ -2,10 +2,12 @@
 
 namespace Unit\Client;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Turbine\Workflow\Client\Http\AtlassianHttpClient;
 use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Exception\JiraNoActiveSprintException;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
@@ -224,5 +226,91 @@ class JiraClientTest extends TestCase
             ],
             $jiraClient->getActiveSprint()
         );
+    }
+    public function testGetActiveSprintReturnsThrowsExceptionIfNoActiveSprintForGivenBoardFound(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $configurationMock->expects(self::once())
+            ->method('getConfiguration')
+            ->with('JIRA_BOARD_ID')
+            ->willReturn('232');
+
+        $jiraHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'https://jira.votum.info:7443/rest/agile/1.0/board/232/sprint',
+            )
+            ->willReturn(
+                [
+                    'values' => [
+                        [
+                            'state' => 'not-active',
+                        ],
+                    ],
+                ]
+            );
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+        $this->expectException(JiraNoActiveSprintException::class);
+        $jiraClient->getActiveSprint();
+    }
+
+    /**
+     * @dataProvider provideWorklogsWithTimeSpent
+     */
+    public function testTimeSpentByDateSumsReturnedWorklogsTimeSpent(array $worklogs, float $expectedResult): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $jiraHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'https://jira.votum.info:7443/rest/tempo-timesheets/3/worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
+            )
+            ->willReturn($worklogs);
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+
+        $timeSpentInHours = $jiraClient->getTimeSpentByDate(new DateTimeImmutable('01.01.2020'));
+
+        self::assertEquals($expectedResult, $timeSpentInHours);
+    }
+
+    public function provideWorklogsWithTimeSpent(): array
+    {
+        return [
+            'no worklogs return no time spent' => [
+                'worklogs' => [],
+                'expectedResult ' => 0.0,
+            ],
+            'worklogs with no time spent return no time spent' => [
+                'worklogs' => [['timeSpentSeconds' => 0]],
+                'expectedResult ' => 0.0,
+            ],
+            'one worklog with time spent' => [
+                'worklogs' => [['timeSpentSeconds' => 7200]],
+                'expectedResult ' => 2.0,
+            ],
+            'multiple worklog with time spent' => [
+                'worklogs' => [
+                    ['timeSpentSeconds' => 7200],
+                    ['timeSpentSeconds' => 3600],
+                ],
+                'expectedResult ' => 3.0,
+            ],
+        ];
     }
 }
