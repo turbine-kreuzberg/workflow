@@ -31,6 +31,10 @@ book-time: ##@workflow book time on ticket
 	docker-compose exec php /var/www/bin/workflow workflow:book-time
 .PHONY: book-time
 
+list-bookings: ##@workflow list bookings
+	docker-compose exec php /var/www/bin/workflow workflow:list-bookings
+.PHONY: list-bookings
+
 fast-book-time: ##@workflow book time on ticket
 	docker-compose exec php /var/www/bin/workflow workflow:book-time --fast-worklog
 .PHONY: fast-book-time

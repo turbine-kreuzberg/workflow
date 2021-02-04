@@ -54,4 +54,9 @@ class IssueReader
     {
         return $this->jiraClient->getTimeSpentByDate(new \DateTimeImmutable());
     }
+
+    public function getCompleteWorklog(): array
+    {
+        return $this->jiraClient->getCompleteWorklogByDate(new \DateTimeImmutable());
+    }
 }
