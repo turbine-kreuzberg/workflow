@@ -7,6 +7,7 @@ use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\BookTimeCommand;
 use Turbine\Workflow\Console\CreateJiraIssueCommand;
 use Turbine\Workflow\Console\CreateMergeRequestCommand;
+use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
 
 class Bootstrap
@@ -15,6 +16,7 @@ class Bootstrap
     {
         $application = new Application();
         $application->add(new BookTimeCommand(configuration: new Configuration(), name: null));
+        $application->add(new ListBookingsCommand(configuration: new Configuration(), name: null));
         $workflowFactory = new WorkflowFactory();
         $application->add(new CreateJiraIssueCommand(workflowFactory: $workflowFactory, name: null));
         $application->add(new WorkOnTicketCommand(workflowFactory: $workflowFactory, name: null));

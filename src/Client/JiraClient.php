@@ -109,6 +109,32 @@ class JiraClient
         return $totalTimeSpentInSeconds / 3600;
     }
 
+    public function getCompleteWorklogByDate(\DateTimeImmutable $date): array
+    {
+        $dateString = $date->format('Y-m-d');
+        $result = $this->jiraHttpClient->get(
+            self::BASE_URL .
+            self::TEMPO_API_URL .
+            "/worklogs?dateFrom=$dateString&dateTo=$dateString"
+        );
+
+        $totalTimeSpentInSeconds = 0;
+        $filteredWorklog = [];
+        foreach ($result as $worklog) {
+            $filteredWorklog['tickets'][] = [
+                'number' => $worklog['issue']['key'],
+                'comment' => $worklog['comment'],
+                'bookedTime' => gmdate('H:i', $worklog['timeSpentSeconds'])
+            ];
+
+            $totalTimeSpentInSeconds += (int)$worklog['timeSpentSeconds'];
+        }
+
+        $filteredWorklog['totalBookedTime'] = gmdate('H:i', $totalTimeSpentInSeconds);
+
+        return $filteredWorklog;
+    }
+
     private function mapResponseToJiraIssueTransfer(array $issue): JiraIssueTransfer
     {
         $jiraIssueTransfer = $this->jiraIssueMapper->map($issue);
