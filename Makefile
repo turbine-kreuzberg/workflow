@@ -58,3 +58,10 @@ mr: ##@workflow create mr
 install-git-hooks: ##@development install git hooks
 	git config core.hooksPath .githooks
 .PHONY: install-git-hooks-include vendor/turbine/workflow/src/makefiles/Makefile
+
+get-ticket-data: ##@workflow get data of a jira ticket
+	docker-compose exec php /var/www/bin/workflow workflow:get:jira-issue $(filter-out $@,$(MAKECMDGOALS))
+.PHONY: get-ticket-data
+
+%:
+	@:

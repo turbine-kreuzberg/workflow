@@ -4,6 +4,7 @@ namespace Turbine\Workflow\Workflow\Jira;
 use DateTimeImmutable;
 use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Transfers\JiraIssueTransferCollection;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Transfers\JiraWorklogsTransfer;
@@ -59,5 +60,15 @@ class IssueReader
     public function getCompleteWorklog(): JiraWorklogsTransfer
     {
         return $this->jiraClient->getCompleteWorklogByDate(new \DateTimeImmutable());
+    }
+
+    /**
+     * @param string $issueKey
+     *
+     * @return \Turbine\Workflow\Transfers\JiraIssueTransfer
+     */
+    public function getIssue(string $issueKey): JiraIssueTransfer
+    {
+        return $this->jiraClient->getIssue($issueKey);
     }
 }

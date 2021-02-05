@@ -29,3 +29,10 @@ improvement-ticket: ##@workflow create a jira ticket
 improvement-ticket-for-sprint: ##@workflow create a jira ticket
 	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it workflow /var/www/vendor/bin/workflow workflow:create:jira-issue improvement --forSprint
 .PHONY: improvement-ticket
+
+get-ticket-data: ##@workflow get data of a jira ticket
+	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it workflow /var/www/vendor/bin/workflow workflow:get:jira-issue $(filter-out $@,$(MAKECMDGOALS))
+.PHONY: get-ticket-data
+
+%:
+	@:
