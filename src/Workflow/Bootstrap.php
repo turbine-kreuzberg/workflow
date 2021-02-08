@@ -16,8 +16,14 @@ class Bootstrap
     {
         $application = new Application();
         $application->add(new BookTimeCommand(configuration: new Configuration(), name: null));
-        $application->add(new ListBookingsCommand(configuration: new Configuration(), name: null));
         $workflowFactory = new WorkflowFactory();
+        $application->add(
+            new ListBookingsCommand(
+                configuration: new Configuration(),
+                jiraIssueReader: $workflowFactory->createJiraIssueReader(),
+                name: null
+            )
+        );
         $application->add(new CreateJiraIssueCommand(workflowFactory: $workflowFactory, name: null));
         $application->add(new WorkOnTicketCommand(workflowFactory: $workflowFactory, name: null));
         $application->add(

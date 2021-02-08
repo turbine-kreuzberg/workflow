@@ -50,7 +50,7 @@ class IssueReader
         return $jiraWorklogEntryTransfer;
     }
 
-    public function getWorklog(): float
+    public function getTimeSpentToday(): float
     {
         return $this->jiraClient->getTimeSpentByDate(new \DateTimeImmutable());
     }

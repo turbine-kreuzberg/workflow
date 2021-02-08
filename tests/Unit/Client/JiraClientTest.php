@@ -227,6 +227,7 @@ class JiraClientTest extends TestCase
             $jiraClient->getActiveSprint()
         );
     }
+
     public function testGetActiveSprintReturnsThrowsExceptionIfNoActiveSprintForGivenBoardFound(): void
     {
         $configurationMock = $this->createMock(Configuration::class);

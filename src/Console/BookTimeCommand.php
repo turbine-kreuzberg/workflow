@@ -76,7 +76,7 @@ class BookTimeCommand extends Command
                 . '" on '
                 . $issue
                 . "\nTotal booked time today: "
-                . $this->workflowFactory->createJiraIssueReader()->getWorklog()
+                . $this->workflowFactory->createJiraIssueReader()->getTimeSpentToday()
                 . 'h'
             );
 
@@ -112,7 +112,7 @@ class BookTimeCommand extends Command
             . '" on '
             . $issue
             . "\nTotal booked time today: "
-            . $this->workflowFactory->createJiraIssueReader()->getWorklog()
+            . $this->workflowFactory->createJiraIssueReader()->getTimeSpentToday()
             . 'h'
         );
 

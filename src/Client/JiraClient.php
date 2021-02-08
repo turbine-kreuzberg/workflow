@@ -94,12 +94,7 @@ class JiraClient
 
     public function getTimeSpentByDate(\DateTimeImmutable $date): float
     {
-        $dateString = $date->format('Y-m-d');
-        $result = $this->jiraHttpClient->get(
-            self::BASE_URL .
-            self::TEMPO_API_URL .
-            "/worklogs?dateFrom=$dateString&dateTo=$dateString"
-        );
+        $result = $this->getWorklogByDate($date);
 
         $totalTimeSpentInSeconds = 0;
         foreach ($result as $worklog) {
@@ -111,12 +106,7 @@ class JiraClient
 
     public function getCompleteWorklogByDate(\DateTimeImmutable $date): array
     {
-        $dateString = $date->format('Y-m-d');
-        $result = $this->jiraHttpClient->get(
-            self::BASE_URL .
-            self::TEMPO_API_URL .
-            "/worklogs?dateFrom=$dateString&dateTo=$dateString"
-        );
+        $result = $this->getWorklogByDate($date);
 
         $totalTimeSpentInSeconds = 0;
         $filteredWorklog = [];
@@ -130,6 +120,7 @@ class JiraClient
             $totalTimeSpentInSeconds += (int)$worklog['timeSpentSeconds'];
         }
 
+        $filteredWorklog['timeSpentSeconds'] = $totalTimeSpentInSeconds;
         $filteredWorklog['totalBookedTime'] = gmdate('H:i', $totalTimeSpentInSeconds);
 
         return $filteredWorklog;
@@ -146,5 +137,17 @@ class JiraClient
     private function getBoardId(): string
     {
         return $this->configuration->getConfiguration(Configuration::BOARD_ID);
+    }
+
+    private function getWorklogByDate(\DateTimeImmutable $date): array
+    {
+        $dateString = $date->format('Y-m-d');
+        $result = $this->jiraHttpClient->get(
+            self::BASE_URL .
+            self::TEMPO_API_URL .
+            "/worklogs?dateFrom=$dateString&dateTo=$dateString"
+        );
+
+        return $result;
     }
 }

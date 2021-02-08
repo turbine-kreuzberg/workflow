@@ -11,18 +11,19 @@ use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class ListBookingsCommand extends Command
 {
     private const COMMAND_NAME = 'workflow:list-bookings';
 
-    private WorkflowFactory $workflowFactory;
-
-    public function __construct(?string $name = null, private Configuration $configuration)
-    {
+    public function __construct(
+        ?string $name = null,
+        private Configuration $configuration,
+        private IssueReader $jiraIssueReader
+    ) {
         parent::__construct($name);
-        $this->workflowFactory = new WorkflowFactory();
     }
 
     protected function configure(): void
@@ -36,7 +37,7 @@ class ListBookingsCommand extends Command
         $inputOutputStyle = new SymfonyStyle($input, $output);
 
         $formattedBookings = '';
-        $completeWorklog = $this->workflowFactory->createJiraIssueReader()->getCompleteWorklog();
+        $completeWorklog = $this->jiraIssueReader->getCompleteWorklog();
         foreach ($completeWorklog['tickets'] as $worklog) {
             $formattedBookings .= sprintf(
                 "\n%s - %s (%s)",
