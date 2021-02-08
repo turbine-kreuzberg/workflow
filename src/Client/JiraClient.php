@@ -2,11 +2,13 @@
 
 namespace Turbine\Workflow\Client;
 
-use Exception;
 use Turbine\Workflow\Client\Http\AtlassianHttpClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoActiveSprintException;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Transfers\JiraWorklogEntryCollectionTransfer;
+use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Transfers\JiraWorklogsTransfer;
 use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraClient
@@ -104,26 +106,28 @@ class JiraClient
         return $totalTimeSpentInSeconds / 3600;
     }
 
-    public function getCompleteWorklogByDate(\DateTimeImmutable $date): array
+    public function getCompleteWorklogByDate(\DateTimeImmutable $date): JiraWorklogsTransfer
     {
         $result = $this->getWorklogByDate($date);
 
         $totalTimeSpentInSeconds = 0;
         $filteredWorklog = [];
         foreach ($result as $worklog) {
-            $filteredWorklog['tickets'][] = [
-                'number' => $worklog['issue']['key'],
-                'comment' => $worklog['comment'],
-                'bookedTime' => gmdate('H:i', $worklog['timeSpentSeconds'])
-            ];
+            $jiraWorklogEntryTransfer = new JiraWorklogEntryTransfer();
+            $jiraWorklogEntryTransfer->key = $worklog['issue']['key'];
+            $jiraWorklogEntryTransfer->comment = $worklog['comment'];
+            $jiraWorklogEntryTransfer->timeSpentSeconds = $worklog['timeSpentSeconds'];
+            $filteredWorklog[] = $jiraWorklogEntryTransfer;
 
             $totalTimeSpentInSeconds += (int)$worklog['timeSpentSeconds'];
         }
+        $jiraIssueTransferCollection = new JiraWorklogEntryCollectionTransfer($filteredWorklog);
 
-        $filteredWorklog['timeSpentSeconds'] = $totalTimeSpentInSeconds;
-        $filteredWorklog['totalBookedTime'] = gmdate('H:i', $totalTimeSpentInSeconds);
+        $jiraWorklogsTransfer = new JiraWorklogsTransfer();
+        $jiraWorklogsTransfer->jiraWorklogEntryCollection = $jiraIssueTransferCollection;
+        $jiraWorklogsTransfer->totalSpentTime = $totalTimeSpentInSeconds;
 
-        return $filteredWorklog;
+        return $jiraWorklogsTransfer;
     }
 
     private function mapResponseToJiraIssueTransfer(array $issue): JiraIssueTransfer

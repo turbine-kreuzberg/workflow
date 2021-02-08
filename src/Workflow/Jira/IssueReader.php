@@ -6,6 +6,7 @@ use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraIssueTransferCollection;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Transfers\JiraWorklogsTransfer;
 
 class IssueReader
 {
@@ -55,7 +56,7 @@ class IssueReader
         return $this->jiraClient->getTimeSpentByDate(new \DateTimeImmutable());
     }
 
-    public function getCompleteWorklog(): array
+    public function getCompleteWorklog(): JiraWorklogsTransfer
     {
         return $this->jiraClient->getCompleteWorklogByDate(new \DateTimeImmutable());
     }

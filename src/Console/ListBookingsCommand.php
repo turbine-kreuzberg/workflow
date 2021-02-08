@@ -4,15 +4,10 @@ namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
-use Turbine\Workflow\Exception\JiraNoWorklogException;
-use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
-use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class ListBookingsCommand extends Command
 {
@@ -38,17 +33,17 @@ class ListBookingsCommand extends Command
 
         $formattedBookings = '';
         $completeWorklog = $this->jiraIssueReader->getCompleteWorklog();
-        foreach ($completeWorklog['tickets'] as $worklog) {
+        foreach ($completeWorklog->jiraWorklogEntryCollection as $jiraWorklogEntryTransfer) {
             $formattedBookings .= sprintf(
                 "\n%s - %s (%s)",
-                str_pad($worklog['number'], 8),
-                $worklog['comment'],
-                $worklog['bookedTime']
+                str_pad($jiraWorklogEntryTransfer->key, 8),
+                $jiraWorklogEntryTransfer->comment,
+                gmdate('H:i', $jiraWorklogEntryTransfer->timeSpentSeconds)
             );
         }
 
         $inputOutputStyle->success(
-            'Daily Bookings: ' . $completeWorklog['totalBookedTime']
+            'Daily Bookings: ' . gmdate('H:i', $completeWorklog->totalSpentTime)
             . $formattedBookings
         );
 

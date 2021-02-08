@@ -9,4 +9,6 @@ class JiraWorklogEntryTransfer
     public int $timeSpentSeconds;
 
     public string $comment;
+
+    public string $key;
 }
