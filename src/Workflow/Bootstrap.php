@@ -7,8 +7,10 @@ use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\BookTimeCommand;
 use Turbine\Workflow\Console\CreateJiraIssueCommand;
 use Turbine\Workflow\Console\CreateMergeRequestCommand;
+use Turbine\Workflow\Console\GetJiraIssueDataCommand;
 use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
 
 class Bootstrap
 {
@@ -29,6 +31,12 @@ class Bootstrap
         $application->add(
             new CreateMergeRequestCommand(
                 mergeRequestCreator: $workflowFactory->createMergeRequestCreator()
+            )
+        );
+        $application->add(
+            new GetJiraIssueDataCommand(
+                workflowFactory: $workflowFactory,
+                configuration: new Configuration()
             )
         );
 

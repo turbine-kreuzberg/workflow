@@ -140,4 +140,24 @@ class IssueReaderTest extends TestCase
         $issuesCollection = $issueReader->getIssues(['BCM-12']);
         self::assertEquals(new JiraIssueTransferCollection([new JiraIssueTransfer()]), $issuesCollection);
     }
+
+    /**
+     * @return void
+     */
+    public function testGetIssueReturnsJiraIssueTransfer(): void
+    {
+        $testJiraIssueTransfer = new JiraIssueTransfer();
+        $testJiraIssueTransfer->key = 'KEY-123';
+
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::once())
+            ->method('getIssue')
+            ->with('KEY-123')
+            ->willReturn($testJiraIssueTransfer);
+
+        $issueReader = new IssueReader($jiraClientMock);
+
+        $returnJiraIssueTransfer = $issueReader->getIssue('KEY-123');
+        self::assertEquals($testJiraIssueTransfer, $returnJiraIssueTransfer);
+    }
 }
