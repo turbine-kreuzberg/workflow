@@ -4,6 +4,7 @@ namespace Unit\Workflow\Jira;
 
 use PHPUnit\Framework\TestCase;
 use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Transfers\JiraIssueTransferCollection;
@@ -29,8 +30,9 @@ class IssueReaderTest extends TestCase
             ->method('getWorkLog')
             ->with(self::ISSUE)
             ->willReturn([]);
+        $configurationMock = $this->createMock(Configuration::class);
 
-        $issueReader = new IssueReader($jiraClientMock);
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
 
         $this->expectException(JiraNoWorklogException::class);
         $issueReader->getLastTicketWorklog(self::ISSUE);
@@ -43,8 +45,9 @@ class IssueReaderTest extends TestCase
             ->method('getWorkLog')
             ->with(self::ISSUE)
             ->willReturn(['total' => 0]);
+        $configurationMock = $this->createMock(Configuration::class);
 
-        $issueReader = new IssueReader($jiraClientMock);
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
 
         $this->expectException(JiraNoWorklogException::class);
         $issueReader->getLastTicketWorklog(self::ISSUE);
@@ -68,7 +71,9 @@ class IssueReaderTest extends TestCase
                 ]
             );
 
-        $issueReader = new IssueReader($jiraClientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
 
         $lastTicketWorkLog = $issueReader->getLastTicketWorklog(self::ISSUE);
 
@@ -104,7 +109,9 @@ class IssueReaderTest extends TestCase
                 ]
             );
 
-        $issueReader = new IssueReader($jiraClientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
 
         $lastTicketWorkLog = $issueReader->getLastTicketWorklog(self::ISSUE);
 
@@ -122,7 +129,9 @@ class IssueReaderTest extends TestCase
         $jiraClientMock->expects(self::never())
             ->method('getIssue');
 
-        $issueReader = new IssueReader($jiraClientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
 
         $issuesCollection = $issueReader->getIssues([]);
         self::assertEquals(new JiraIssueTransferCollection([]), $issuesCollection);
@@ -135,7 +144,9 @@ class IssueReaderTest extends TestCase
             ->method('getIssue')
             ->willReturn(new JiraIssueTransfer());
 
-        $issueReader = new IssueReader($jiraClientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
 
         $issuesCollection = $issueReader->getIssues(['BCM-12']);
         self::assertEquals(new JiraIssueTransferCollection([new JiraIssueTransfer()]), $issuesCollection);
@@ -155,7 +166,9 @@ class IssueReaderTest extends TestCase
             ->with('KEY-123')
             ->willReturn($testJiraIssueTransfer);
 
-        $issueReader = new IssueReader($jiraClientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
 
         $returnJiraIssueTransfer = $issueReader->getIssue('KEY-123');
         self::assertEquals($testJiraIssueTransfer, $returnJiraIssueTransfer);

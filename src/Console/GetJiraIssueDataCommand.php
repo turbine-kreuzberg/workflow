@@ -7,7 +7,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -20,13 +19,9 @@ class GetJiraIssueDataCommand extends Command
      */
     protected static $defaultName = 'workflow:get:jira-issue';
 
-    /**
-     * @param \Turbine\Workflow\Workflow\WorkflowFactory $workflowFactory
-     * @param \Turbine\Workflow\Configuration $configuration
-     */
+
     public function __construct(
-        private WorkflowFactory $workflowFactory,
-        private Configuration $configuration
+        private WorkflowFactory $workflowFactory
     ) {
         parent::__construct();
     }
@@ -67,14 +62,10 @@ class GetJiraIssueDataCommand extends Command
             }
 
             try {
-                $issueData = $this->getJiraIssue($issueNumber);
+                $issueData = $this->workflowFactory->createJiraIssueReader()->getIssue($issueNumber);
             } catch (\Throwable $exception) {
                 $inputOutputStyle->error('Did you write the right ticket number? Try again!');
             }
-        }
-
-        if ($issueData === null) {
-            return Command::FAILURE;
         }
 
         $inputOutputStyle->title(
@@ -100,28 +91,6 @@ class GetJiraIssueDataCommand extends Command
         return Command::SUCCESS;
     }
 
-    /**
-     * @param string $issueNumber
-     *
-     * @return \Turbine\Workflow\Transfers\JiraIssueTransfer
-     */
-    private function getJiraIssue(string $issueNumber): JiraIssueTransfer
-    {
-        $issueKey = $issueNumber;
-
-        if (is_numeric($issueNumber)) {
-            $issueKey = $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $issueNumber;
-        }
-
-        return $this->workflowFactory->createJiraIssueReader()->getIssue($issueKey);
-    }
-
-    /**
-     * @param \Turbine\Workflow\Transfers\JiraIssueTransfer $issueData
-     * @param \Symfony\Component\Console\Style\SymfonyStyle $inputOutputStyle
-     *
-     * @return void
-     */
     private function outputIssueType(JiraIssueTransfer $issueData, SymfonyStyle $inputOutputStyle): void
     {
         $ticketType = $this->getFormattedTicketType($issueData->type);

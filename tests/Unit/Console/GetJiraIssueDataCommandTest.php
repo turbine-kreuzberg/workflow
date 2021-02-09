@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\GetJiraIssueDataCommand;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
@@ -14,9 +13,6 @@ use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class GetJiraIssueDataCommandTest extends TestCase
 {
-    /**
-     * @return void
-     */
     public function testGetTicketDataWithoutArgument(): void
     {
         $testJiraIssueTransfer = $this->createDummyJiraIssueTransfer();
@@ -30,7 +26,7 @@ class GetJiraIssueDataCommandTest extends TestCase
         $issueReaderMock = $this->createMock(IssueReader::class);
         $issueReaderMock->expects(self::once())
             ->method('getIssue')
-            ->with('TEST-12345')
+            ->with('12345')
             ->willReturn($testJiraIssueTransfer);
 
         $workflowFactoryMock = $this->createMock(WorkflowFactory::class);
@@ -42,15 +38,8 @@ class GetJiraIssueDataCommandTest extends TestCase
             ->method('createJiraIssueReader')
             ->willReturn($issueReaderMock);
 
-        $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::once())
-            ->method('getConfiguration')
-            ->with(Configuration::JIRA_PROJECT_KEY)
-            ->willReturn('TEST');
-
         $getJiraIssueDataCommand = new GetJiraIssueDataCommand(
             workflowFactory: $workflowFactoryMock,
-            configuration: $configurationMock
         );
 
         $inputMock = $this->createMock(InputInterface::class);
@@ -73,7 +62,7 @@ class GetJiraIssueDataCommandTest extends TestCase
         $issueReaderMock = $this->createMock(IssueReader::class);
         $issueReaderMock->expects(self::once())
             ->method('getIssue')
-            ->with('TEST-12345')
+            ->with('12345')
             ->willReturn($testJiraIssueTransfer);
 
         $workflowFactoryMock = $this->createMock(WorkflowFactory::class);
@@ -85,15 +74,8 @@ class GetJiraIssueDataCommandTest extends TestCase
             ->method('createJiraIssueReader')
             ->willReturn($issueReaderMock);
 
-        $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::once())
-            ->method('getConfiguration')
-            ->with(Configuration::JIRA_PROJECT_KEY)
-            ->willReturn('TEST');
-
         $getJiraIssueDataCommand = new GetJiraIssueDataCommand(
             workflowFactory: $workflowFactoryMock,
-            configuration: $configurationMock
         );
 
         $inputMock = $this->createMock(InputInterface::class);
@@ -107,13 +89,8 @@ class GetJiraIssueDataCommandTest extends TestCase
         $getJiraIssueDataCommand->run($inputMock, $outputMock);
     }
 
-    /**
-     * @return void
-     */
     public function testGetTicketDataExitsWhenExitKeyPressed(): void
     {
-        $testJiraIssueTransfer = $this->createDummyJiraIssueTransfer();
-
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
         $symfonyStyleMock->expects(self::once())
             ->method('ask')
@@ -132,13 +109,8 @@ class GetJiraIssueDataCommandTest extends TestCase
         $workflowFactoryMock->expects(self::never())
             ->method('createJiraIssueReader');
 
-        $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::never())
-            ->method('getConfiguration');
-
         $getJiraIssueDataCommand = new GetJiraIssueDataCommand(
             workflowFactory: $workflowFactoryMock,
-            configuration: $configurationMock
         );
 
         $inputMock = $this->createMock(InputInterface::class);
@@ -147,9 +119,6 @@ class GetJiraIssueDataCommandTest extends TestCase
         $getJiraIssueDataCommand->run($inputMock, $outputMock);
     }
 
-    /**
-     * @return void
-     */
     public function testGetTicketDataRepeatsTicketNumberQuestionIfTicketNotFound(): void
     {
         $testJiraIssueTransfer = $this->createDummyJiraIssueTransfer();
@@ -174,15 +143,8 @@ class GetJiraIssueDataCommandTest extends TestCase
             ->method('createJiraIssueReader')
             ->willReturn($issueReaderMock);
 
-        $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::exactly(2))
-            ->method('getConfiguration')
-            ->with(Configuration::JIRA_PROJECT_KEY)
-            ->willReturn('TEST');
-
         $getJiraIssueDataCommand = new GetJiraIssueDataCommand(
             workflowFactory: $workflowFactoryMock,
-            configuration: $configurationMock
         );
 
         $inputMock = $this->createMock(InputInterface::class);
@@ -191,9 +153,6 @@ class GetJiraIssueDataCommandTest extends TestCase
         $getJiraIssueDataCommand->run($inputMock, $outputMock);
     }
 
-    /**
-     * @return \Turbine\Workflow\Transfers\JiraIssueTransfer
-     */
     private function createDummyJiraIssueTransfer(): JiraIssueTransfer
     {
         $testJiraIssueTransfer = new JiraIssueTransfer();

@@ -49,7 +49,8 @@ class WorkflowFactory
     {
         if ($this->issueReader === null) {
             $this->issueReader = new IssueReader(
-                $this->getClientFactory()->getJiraClient()
+                $this->getClientFactory()->getJiraClient(),
+                $this->createConfiguration()
             );
         }
 

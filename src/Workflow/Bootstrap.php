@@ -36,7 +36,6 @@ class Bootstrap
         $application->add(
             new GetJiraIssueDataCommand(
                 workflowFactory: $workflowFactory,
-                configuration: new Configuration()
             )
         );
 

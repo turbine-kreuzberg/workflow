@@ -1,8 +1,9 @@
 <?php
+
 namespace Turbine\Workflow\Workflow\Jira;
 
-use DateTimeImmutable;
 use Turbine\Workflow\Client\JiraClient;
+use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Transfers\JiraIssueTransferCollection;
@@ -11,8 +12,10 @@ use Turbine\Workflow\Transfers\JiraWorklogsTransfer;
 
 class IssueReader
 {
-    public function __construct(private JiraClient $jiraClient)
-    {
+    public function __construct(
+        private JiraClient $jiraClient,
+        private Configuration $configuration
+    ) {
     }
 
     public function getLastTicketWorklog(string $issue): JiraWorklogEntryTransfer
@@ -62,13 +65,12 @@ class IssueReader
         return $this->jiraClient->getCompleteWorklogByDate(new \DateTimeImmutable());
     }
 
-    /**
-     * @param string $issueKey
-     *
-     * @return \Turbine\Workflow\Transfers\JiraIssueTransfer
-     */
     public function getIssue(string $issueKey): JiraIssueTransfer
     {
+        if (is_numeric($issueKey)) {
+            $issueKey = $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $issueKey;
+        }
+
         return $this->jiraClient->getIssue($issueKey);
     }
 }
