@@ -20,7 +20,7 @@ class GetJiraIssueDataCommandTest extends TestCase
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
         $symfonyStyleMock->expects(self::once())
             ->method('ask')
-            ->with('Ticket number (x to exit)')
+            ->with('Ticket number')
             ->willReturn('12345');
 
         $issueReaderMock = $this->createMock(IssueReader::class);
@@ -89,36 +89,6 @@ class GetJiraIssueDataCommandTest extends TestCase
         $getJiraIssueDataCommand->run($inputMock, $outputMock);
     }
 
-    public function testGetTicketDataExitsWhenExitKeyPressed(): void
-    {
-        $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
-        $symfonyStyleMock->expects(self::once())
-            ->method('ask')
-            ->with('Ticket number (x to exit)')
-            ->willReturn('x');
-
-        $issueReaderMock = $this->createMock(IssueReader::class);
-        $issueReaderMock->expects(self::never())
-            ->method('getIssue');
-
-        $workflowFactoryMock = $this->createMock(WorkflowFactory::class);
-        $workflowFactoryMock->expects(self::once())
-            ->method('createSymfonyStyle')
-            ->willReturn($symfonyStyleMock);
-
-        $workflowFactoryMock->expects(self::never())
-            ->method('createJiraIssueReader');
-
-        $getJiraIssueDataCommand = new GetJiraIssueDataCommand(
-            workflowFactory: $workflowFactoryMock,
-        );
-
-        $inputMock = $this->createMock(InputInterface::class);
-        $outputMock = $this->createMock(OutputInterface::class);
-
-        $getJiraIssueDataCommand->run($inputMock, $outputMock);
-    }
-
     public function testGetTicketDataRepeatsTicketNumberQuestionIfTicketNotFound(): void
     {
         $testJiraIssueTransfer = $this->createDummyJiraIssueTransfer();
@@ -126,7 +96,7 @@ class GetJiraIssueDataCommandTest extends TestCase
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
         $symfonyStyleMock->expects(self::exactly(2))
             ->method('ask')
-            ->with('Ticket number (x to exit)')
+            ->with('Ticket number')
             ->willReturnOnConsecutiveCalls('99999', '12345');
 
         $issueReaderMock = $this->createMock(IssueReader::class);

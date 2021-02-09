@@ -19,16 +19,12 @@ class GetJiraIssueDataCommand extends Command
      */
     protected static $defaultName = 'workflow:get:jira-issue';
 
-
     public function __construct(
         private WorkflowFactory $workflowFactory
     ) {
         parent::__construct();
     }
 
-    /**
-     * @return void
-     */
     protected function configure(): void
     {
         $this->setDescription('Get data from a jira issue.');
@@ -39,21 +35,11 @@ class GetJiraIssueDataCommand extends Command
         );
     }
 
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
-     * @return int
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
 
         $issueData = $this->getIssueData($input, $inputOutputStyle);
-
-        if ($issueData === null) {
-            return Command::FAILURE;
-        }
 
         $inputOutputStyle->title(
             sprintf('<options=bold>%s</> - %s', $issueData->key, $issueData->summary)
@@ -93,11 +79,6 @@ class GetJiraIssueDataCommand extends Command
         $inputOutputStyle->section('Type  ' . $ticketType);
     }
 
-    /**
-     * @param string|null $type
-     *
-     * @return string|null
-     */
     private function getFormattedTicketType(?string $type): ?string
     {
         if ($type === null) {
@@ -124,12 +105,6 @@ class GetJiraIssueDataCommand extends Command
         return sprintf('<fg=%s>%s</>', $color, $type);
     }
 
-    /**
-     * @param \Symfony\Component\Console\Style\SymfonyStyle $inputOutputStyle
-     * @param \Turbine\Workflow\Transfers\JiraIssueTransfer $issueData
-     *
-     * @return void
-     */
     private function outputInformationBlock(SymfonyStyle $inputOutputStyle, JiraIssueTransfer $issueData): void
     {
         $inputOutputStyle->section('Information');
@@ -141,12 +116,6 @@ class GetJiraIssueDataCommand extends Command
         );
     }
 
-    /**
-     * @param \Symfony\Component\Console\Style\SymfonyStyle $inputOutputStyle
-     * @param \Turbine\Workflow\Transfers\JiraIssueTransfer $issueData
-     *
-     * @return void
-     */
     private function outputSubTasks(SymfonyStyle $inputOutputStyle, JiraIssueTransfer $issueData): void
     {
         if (count($issueData->subTasks) === 0) {
@@ -169,20 +138,17 @@ class GetJiraIssueDataCommand extends Command
 
     private function getIssueData(InputInterface $input, SymfonyStyle $inputOutputStyle): JiraIssueTransfer
     {
-        $issueData = null;
-        $argumentTicketNumber = $input->getArgument(self::ARGUMENT_TICKET_NUMBER) ?? null;
+        $argumentTicketNumber = $input->getArgument(self::ARGUMENT_TICKET_NUMBER);
 
-        while ($issueData === null) {
+        while (true) {
             $issueNumber = $argumentTicketNumber ?: $inputOutputStyle->ask('Ticket number');
 
             try {
-                $issueData = $this->workflowFactory->createJiraIssueReader()->getIssue($issueNumber);
+                return $this->workflowFactory->createJiraIssueReader()->getIssue($issueNumber);
             } catch (\Throwable $exception) {
                 $argumentTicketNumber = null;
                 $inputOutputStyle->error('Did you write the right ticket number? Try again!');
             }
         }
-
-        return $issueData;
     }
 }
