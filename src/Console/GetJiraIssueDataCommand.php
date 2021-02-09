@@ -49,23 +49,10 @@ class GetJiraIssueDataCommand extends Command
     {
         $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
 
-        $issueData = null;
+        $issueData = $this->getIssueData($input, $inputOutputStyle);
 
-        while ($issueData === null) {
-            $issueNumber = $input->getArgument(
-                self::ARGUMENT_TICKET_NUMBER
-            ) ?: $inputOutputStyle->ask('Ticket number (x to exit)');
-
-            if ($issueNumber === 'x') {
-                $inputOutputStyle->success('Bye!');
-                return Command::SUCCESS;
-            }
-
-            try {
-                $issueData = $this->workflowFactory->createJiraIssueReader()->getIssue($issueNumber);
-            } catch (\Throwable $exception) {
-                $inputOutputStyle->error('Did you write the right ticket number? Try again!');
-            }
+        if ($issueData === null) {
+            return Command::FAILURE;
         }
 
         $inputOutputStyle->title(
@@ -178,5 +165,24 @@ class GetJiraIssueDataCommand extends Command
 
         $inputOutputStyle->section('Sub-tasks');
         $inputOutputStyle->listing($subtasks);
+    }
+
+    private function getIssueData(InputInterface $input, SymfonyStyle $inputOutputStyle): JiraIssueTransfer
+    {
+        $issueData = null;
+        $argumentTicketNumber = $input->getArgument(self::ARGUMENT_TICKET_NUMBER) ?? null;
+
+        while ($issueData === null) {
+            $issueNumber = $argumentTicketNumber ?: $inputOutputStyle->ask('Ticket number');
+
+            try {
+                $issueData = $this->workflowFactory->createJiraIssueReader()->getIssue($issueNumber);
+            } catch (\Throwable $exception) {
+                $argumentTicketNumber = null;
+                $inputOutputStyle->error('Did you write the right ticket number? Try again!');
+            }
+        }
+
+        return $issueData;
     }
 }
