@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/sh
 set -e
 
 # Change uid and gid of www-data to match current dir's owner
