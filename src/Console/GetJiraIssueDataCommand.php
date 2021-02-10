@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class GetJiraIssueDataCommand extends Command
@@ -20,7 +21,8 @@ class GetJiraIssueDataCommand extends Command
     protected static $defaultName = 'workflow:get:jira-issue';
 
     public function __construct(
-        private WorkflowFactory $workflowFactory
+        private WorkflowFactory $workflowFactory,
+        private IssueReader $issueReader
     ) {
         parent::__construct();
     }
@@ -144,7 +146,7 @@ class GetJiraIssueDataCommand extends Command
             $issueNumber = $argumentTicketNumber ?: $inputOutputStyle->ask('Ticket number');
 
             try {
-                return $this->workflowFactory->createJiraIssueReader()->getIssue($issueNumber);
+                return $this->issueReader->getIssue($issueNumber);
             } catch (\Throwable $exception) {
                 $argumentTicketNumber = null;
                 $inputOutputStyle->error('Did you write the right ticket number? Try again!');

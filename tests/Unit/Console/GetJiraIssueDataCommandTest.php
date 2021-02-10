@@ -34,12 +34,9 @@ class GetJiraIssueDataCommandTest extends TestCase
             ->method('createSymfonyStyle')
             ->willReturn($symfonyStyleMock);
 
-        $workflowFactoryMock->expects(self::once())
-            ->method('createJiraIssueReader')
-            ->willReturn($issueReaderMock);
-
         $getJiraIssueDataCommand = new GetJiraIssueDataCommand(
             workflowFactory: $workflowFactoryMock,
+            issueReader: $issueReaderMock
         );
 
         $inputMock = $this->createMock(InputInterface::class);
@@ -48,9 +45,6 @@ class GetJiraIssueDataCommandTest extends TestCase
         $getJiraIssueDataCommand->run($inputMock, $outputMock);
     }
 
-    /**
-     * @return void
-     */
     public function testGetTicketDataWithArgument(): void
     {
         $testJiraIssueTransfer = $this->createDummyJiraIssueTransfer();
@@ -70,12 +64,9 @@ class GetJiraIssueDataCommandTest extends TestCase
             ->method('createSymfonyStyle')
             ->willReturn($symfonyStyleMock);
 
-        $workflowFactoryMock->expects(self::once())
-            ->method('createJiraIssueReader')
-            ->willReturn($issueReaderMock);
-
         $getJiraIssueDataCommand = new GetJiraIssueDataCommand(
             workflowFactory: $workflowFactoryMock,
+            issueReader: $issueReaderMock
         );
 
         $inputMock = $this->createMock(InputInterface::class);
@@ -109,12 +100,9 @@ class GetJiraIssueDataCommandTest extends TestCase
             ->method('createSymfonyStyle')
             ->willReturn($symfonyStyleMock);
 
-        $workflowFactoryMock->expects(self::exactly(2))
-            ->method('createJiraIssueReader')
-            ->willReturn($issueReaderMock);
-
         $getJiraIssueDataCommand = new GetJiraIssueDataCommand(
             workflowFactory: $workflowFactoryMock,
+            issueReader: $issueReaderMock
         );
 
         $inputMock = $this->createMock(InputInterface::class);
