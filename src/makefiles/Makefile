@@ -1,5 +1,5 @@
-DOCKER_RUN=docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it workflow
-DOCKER_RUN_WORKFLOW=$(DOCKER_RUN) gosu www-data:www-data /var/www/vendor/bin/workflow
+DOCKER_RUN=docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it --user $(shell id -u):$(shell id -g) workflow
+DOCKER_RUN_WORKFLOW=$(DOCKER_RUN) /var/www/vendor/bin/workflow
 
 workflow-setup: ##@workflow setup turbine workflow
 	docker build -f vendor/turbine/workflow/images/php/Dockerfile vendor/turbine/workflow/images/php -t workflow
@@ -32,6 +32,10 @@ improvement-ticket: ##@workflow create a jira ticket
 improvement-ticket-for-sprint: ##@workflow create a jira ticket
 	$(DOCKER_RUN_WORKFLOW) workflow:create:jira-issue improvement --forSprint
 .PHONY: improvement-ticket
+
+list-bookings: ##@workflow list bookings
+	$(DOCKER_RUN_WORKFLOW) workflow:list-bookings
+.PHONY: list-bookings
 
 get-ticket-data: ##@workflow get data of a jira ticket
 	$(DOCKER_RUN_WORKFLOW) workflow:get:jira-issue $(filter-out $@,$(MAKECMDGOALS))
