@@ -27,7 +27,13 @@ class Bootstrap
             )
         );
         $application->add(new CreateJiraIssueCommand(workflowFactory: $workflowFactory, name: null));
-        $application->add(new WorkOnTicketCommand(workflowFactory: $workflowFactory, name: null));
+        $application->add(
+            new WorkOnTicketCommand(
+                name: null,
+                workflowFactory: $workflowFactory,
+                branchNameValidator: $workflowFactory->createBranchNameValidator()
+            )
+        );
         $application->add(
             new CreateMergeRequestCommand(
                 mergeRequestCreator: $workflowFactory->createMergeRequestCreator()

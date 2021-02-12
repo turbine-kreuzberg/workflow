@@ -40,11 +40,6 @@ class JiraIssueMapper
         return $jiraIssueTransfer;
     }
 
-    /**
-     * @param string|null $aggregateTimeSpent
-     *
-     * @return string|null
-     */
     private function toHumanReadableTime(?string $aggregateTimeSpent): ?string
     {
         if ($aggregateTimeSpent === null) {

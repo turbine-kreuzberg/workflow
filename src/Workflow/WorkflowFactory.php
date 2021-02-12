@@ -16,6 +16,7 @@ use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
 use Turbine\Workflow\Workflow\Provider\FastWorklogProvider;
 use Turbine\Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
 use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
+use Turbine\Workflow\Workflow\Validator\BranchNameValidator;
 
 class WorkflowFactory
 {
@@ -114,6 +115,11 @@ class WorkflowFactory
             $this->getTicketIdProvider(),
             $this->createJiraIssueUpdater()
         );
+    }
+
+    public function createBranchNameValidator(): BranchNameValidator
+    {
+        return new BranchNameValidator();
     }
 
     private function getClientFactory(): ClientFactory

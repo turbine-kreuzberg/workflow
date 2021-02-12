@@ -2,20 +2,23 @@
 
 namespace Turbine\Workflow\Console;
 
-use RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Turbine\Workflow\Workflow\Validator\BranchNameValidator;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class WorkOnTicketCommand extends Command
 {
     public const COMMAND_NAME = 'workflow:work-on-ticket';
 
-    public function __construct(?string $name = null, private WorkflowFactory $workflowFactory)
-    {
+    public function __construct(
+        ?string $name = null,
+        private WorkflowFactory $workflowFactory,
+        private BranchNameValidator $branchNameValidator
+    ) {
         parent::__construct($name);
     }
 
@@ -43,8 +46,8 @@ class WorkOnTicketCommand extends Command
         )
             ->setAutocompleterValues([$branchNameFromTicketCutAtFifty])
             ->setValidator(
-                function ($name) {
-                    return $this->validateInputBranchName($name);
+                function (string $name) {
+                    $this->branchNameValidator->validate($name);
                 }
             );
         $branchName = $inputOutputStyle->askQuestion($question);
@@ -59,20 +62,5 @@ class WorkOnTicketCommand extends Command
         );
 
         return 0;
-    }
-
-    private function validateInputBranchName(string $branchName): string
-    {
-        if (!preg_match('/^[a-z0-9-]+$/i', $branchName)) {
-            throw new RuntimeException(
-                'Invalid branch name (permitted are only lower case characters, numbers and the dash).'
-            );
-        }
-
-        if (strlen($branchName) > 50) {
-            throw new RuntimeException('Invalid branch name (maximal 50 characters).');
-        }
-
-        return $branchName;
     }
 }
