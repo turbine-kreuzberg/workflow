@@ -9,6 +9,9 @@ use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoActiveSprintException;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Transfers\JiraWorklogEntryCollectionTransfer;
+use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Transfers\JiraWorklogsTransfer;
 use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraClientTest extends TestCase
@@ -288,6 +291,131 @@ class JiraClientTest extends TestCase
         $timeSpentInHours = $jiraClient->getTimeSpentByDate(new DateTimeImmutable('01.01.2020'));
 
         self::assertEquals($expectedResult, $timeSpentInHours);
+    }
+
+    public function testCompleteWorklogByDateReturnsNoWorklogDataIfNoWorklogsLogged(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $jiraHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'https://jira.votum.info:7443/rest/tempo-timesheets/3/worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
+            )
+            ->willReturn([]);
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+        $jiraWorklogs = $jiraClient->getCompleteWorklogByDate(new DateTimeImmutable('01.01.2020'));
+        $expectedJiraWorkLogs = (new JiraWorklogsTransfer());
+        $expectedJiraWorkLogs->jiraWorklogEntryCollection = new JiraWorklogEntryCollectionTransfer([]);
+        $expectedJiraWorkLogs->totalSpentTime = 0;
+        self::assertEquals($expectedJiraWorkLogs, $jiraWorklogs);
+
+    }
+
+    public function testCompleteWorklogByDateReturnsWorklogData(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $jiraHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'https://jira.votum.info:7443/rest/tempo-timesheets/3/worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
+            )
+            ->willReturn(
+                [
+                [
+                    'issue' => ['key' => 'ABC'],
+                    'timeSpentSeconds' => 120,
+                    'comment' => 'issue comment',
+                ],
+                ]
+            );
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+
+        $jiraWorklogEntryTransfer = new JiraWorklogEntryTransfer();
+        $jiraWorklogEntryTransfer->key = 'ABC';
+        $jiraWorklogEntryTransfer->comment = 'issue comment';
+        $jiraWorklogEntryTransfer->timeSpentSeconds = 120;
+
+        $expectedJiraWorkLogs = new JiraWorklogsTransfer();
+        $expectedJiraWorkLogs->jiraWorklogEntryCollection = new JiraWorklogEntryCollectionTransfer(
+            [
+            $jiraWorklogEntryTransfer
+            ]
+        );
+        $expectedJiraWorkLogs->totalSpentTime = 120;
+
+        $jiraWorklogs = $jiraClient->getCompleteWorklogByDate(new DateTimeImmutable('01.01.2020'));
+        self::assertEquals($expectedJiraWorkLogs, $jiraWorklogs);
+    }
+
+    public function testCompleteWorklogByDateReturnsWorklogDataOfMultipleWorklogItems(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+
+        $jiraHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'https://jira.votum.info:7443/rest/tempo-timesheets/3/worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
+            )
+            ->willReturn(
+                [
+                [
+                    'issue' => ['key' => 'ABC'],
+                    'timeSpentSeconds' => 120,
+                    'comment' => 'issue comment',
+                ],
+                [
+                    'issue' => ['key' => 'CDE'],
+                    'timeSpentSeconds' => 90,
+                    'comment' => 'issue comment 2',
+                ],
+                ]
+            );
+
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+
+        $jiraWorklogEntryTransfer1 = new JiraWorklogEntryTransfer();
+        $jiraWorklogEntryTransfer1->key = 'ABC';
+        $jiraWorklogEntryTransfer1->comment = 'issue comment';
+        $jiraWorklogEntryTransfer1->timeSpentSeconds = 120;
+
+        $jiraWorklogEntryTransfer2 = new JiraWorklogEntryTransfer();
+        $jiraWorklogEntryTransfer2->key = 'CDE';
+        $jiraWorklogEntryTransfer2->comment = 'issue comment 2';
+        $jiraWorklogEntryTransfer2->timeSpentSeconds = 90;
+
+        $expectedJiraWorkLogs = new JiraWorklogsTransfer();
+        $expectedJiraWorkLogs->jiraWorklogEntryCollection = new JiraWorklogEntryCollectionTransfer(
+            [
+            $jiraWorklogEntryTransfer1,
+            $jiraWorklogEntryTransfer2,
+            ]
+        );
+        $expectedJiraWorkLogs->totalSpentTime = 210;
+
+        $jiraWorklogs = $jiraClient->getCompleteWorklogByDate(new DateTimeImmutable('01.01.2020'));
+        self::assertEquals($expectedJiraWorkLogs, $jiraWorklogs);
     }
 
     public function provideWorklogsWithTimeSpent(): array

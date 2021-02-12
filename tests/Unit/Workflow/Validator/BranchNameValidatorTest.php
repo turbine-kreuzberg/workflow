@@ -17,7 +17,7 @@ class BranchNameValidatorTest extends TestCase
         $branchNameValidator->validate($invalidBranchName);
     }
 
-    public function testBranchNameWithMoreExceptionThrowsException(): void
+    public function testBranchNameWithMoreThanFiftyCharactersThrowsException(): void
     {
         $branchNameValidator = new BranchNameValidator();
         $this->expectException(\LengthException::class);
