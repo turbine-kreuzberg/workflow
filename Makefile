@@ -19,11 +19,11 @@ phpstan: ##@development run phpstan
 	docker-compose exec -T php /var/www/vendor/bin/phpstan analyse ./src ./tests -l 8
 .PHONY: phpstan
 
-sniff-project: ##@dvelopment run code sniffer
+sniff-project: ##@development run code sniffer
 	docker-compose exec -T php /var/www/vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
 .PHONY: sniff-project
 
-sniff-fix-project: ##@dvelopment run code sniffer
+sniff-fix-project: ##@development run code sniffer
 	docker-compose exec -T php /var/www/vendor/bin/phpcbf src/ tests/ --standard=./config/codesniffer_ruleset.xml
 .PHONY: sniff-fix-project
 
@@ -63,9 +63,9 @@ get-ticket-data: ##@workflow get data of a jira ticket
 	docker-compose exec php /var/www/bin/workflow workflow:get:jira-issue $(filter-out $@,$(MAKECMDGOALS))
 .PHONY: get-ticket-data
 
-show-user: ##@workflow get data of a jira ticket
+show-user: ##@setup get user data
 	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it workflow ls -lah
-.PHONY: get-ticket-data
+.PHONY: show-user
 
 %:
 	@:
