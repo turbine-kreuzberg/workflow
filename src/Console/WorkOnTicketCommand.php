@@ -15,11 +15,10 @@ class WorkOnTicketCommand extends Command
     public const COMMAND_NAME = 'workflow:work-on-ticket';
 
     public function __construct(
-        ?string $name = null,
         private WorkflowFactory $workflowFactory,
         private BranchNameValidator $branchNameValidator
     ) {
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void

@@ -10,26 +10,23 @@ use Turbine\Workflow\Console\CreateMergeRequestCommand;
 use Turbine\Workflow\Console\GetJiraIssueDataCommand;
 use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
-use Turbine\Workflow\Workflow\Jira\IssueReader;
 
 class Bootstrap
 {
     public function run(): void
     {
         $application = new Application();
-        $application->add(new BookTimeCommand(configuration: new Configuration(), name: null));
+        $application->add(new BookTimeCommand(name: null, configuration: new Configuration()));
         $workflowFactory = new WorkflowFactory();
         $application->add(
             new ListBookingsCommand(
-                configuration: new Configuration(),
                 jiraIssueReader: $workflowFactory->createJiraIssueReader(),
-                name: null
+                workflowFactory: $workflowFactory
             )
         );
-        $application->add(new CreateJiraIssueCommand(workflowFactory: $workflowFactory, name: null));
+        $application->add(new CreateJiraIssueCommand(name: null, workflowFactory: $workflowFactory));
         $application->add(
             new WorkOnTicketCommand(
-                name: null,
                 workflowFactory: $workflowFactory,
                 branchNameValidator: $workflowFactory->createBranchNameValidator()
             )

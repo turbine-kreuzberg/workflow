@@ -5,20 +5,18 @@ namespace Turbine\Workflow\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
+use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class ListBookingsCommand extends Command
 {
     private const COMMAND_NAME = 'workflow:list-bookings';
 
     public function __construct(
-        ?string $name = null,
-        private Configuration $configuration,
-        private IssueReader $jiraIssueReader
+        private IssueReader $jiraIssueReader,
+        private WorkflowFactory $workflowFactory
     ) {
-        parent::__construct($name);
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -29,7 +27,7 @@ class ListBookingsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $inputOutputStyle = new SymfonyStyle($input, $output);
+        $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
 
         $formattedBookings = '';
         $completeWorklog = $this->jiraIssueReader->getCompleteWorklog();
