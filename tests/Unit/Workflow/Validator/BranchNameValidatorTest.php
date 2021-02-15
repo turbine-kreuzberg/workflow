@@ -24,6 +24,15 @@ class BranchNameValidatorTest extends TestCase
         $branchNameValidator->validate(\str_repeat('a', 51));
     }
 
+
+    public function testBranchNameWillBeReturned(): void
+    {
+        $branchNameValidator = new BranchNameValidator();
+        $branchName = $branchNameValidator->validate(\str_repeat('a-branch-1', 5));
+
+        self::assertEquals('a-branch-1a-branch-1a-branch-1a-branch-1a-branch-1', $branchName);
+    }
+
     public function provideInvalidBranchNames(): array
     {
         return [

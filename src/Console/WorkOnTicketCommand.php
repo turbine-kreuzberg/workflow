@@ -45,8 +45,8 @@ class WorkOnTicketCommand extends Command
         )
             ->setAutocompleterValues([$branchNameFromTicketCutAtFifty])
             ->setValidator(
-                function (string $name) {
-                    $this->branchNameValidator->validate($name);
+                function (string $name): string {
+                    return $this->branchNameValidator->validate($name);
                 }
             );
         $branchName = $inputOutputStyle->askQuestion($question);

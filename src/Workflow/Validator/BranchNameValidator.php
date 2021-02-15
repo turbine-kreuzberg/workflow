@@ -8,7 +8,7 @@ use UnexpectedValueException;
 class BranchNameValidator
 {
 
-    public function validate(string $branchName): void
+    public function validate(string $branchName): string
     {
         if (!preg_match('/^[a-z0-9-]+$/i', $branchName)) {
             throw new UnexpectedValueException(
@@ -19,5 +19,7 @@ class BranchNameValidator
         if (strlen($branchName) > 50) {
             throw new LengthException('Invalid branch name (maximal 50 characters).');
         }
+
+        return $branchName;
     }
 }
