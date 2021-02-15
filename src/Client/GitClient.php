@@ -12,7 +12,7 @@ class GitClient
 
     public function getLastCommitMessage() : string
     {
-        return (string)exec('git log -n 1 HEAD --format=%s');
+        return (string)exec('git log -n 1 --format=%s');
     }
 
     public function createBranchOnTopOf(string $sourceBranch, string $branchName): void
