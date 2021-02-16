@@ -28,17 +28,7 @@ class GitlabClient
         $mergeRequestData['approvals_before_merge'] = $this->getApprovalBeforeMerge($sourceBranch, $targetBranch);
         $mergeRequestData['remove_source_branch'] = $this->shouldRemoveSourceBranch($sourceBranch);
 
-        try {
-            $gitlabResponse = $this->gitlabHttpClient->post($mergeRequestUrl, $mergeRequestData);
-        } catch (BadResponseException $exception) {
-            if ($exception->getResponse()->getStatusCode() === 409) {
-                $gitlabResponse = $this->gitlabHttpClient->get($mergeRequestUrl, ['query' => $mergeRequestData]);
-
-                return $gitlabResponse[0]['web_url'];
-            }
-
-            throw $exception;
-        }
+        $gitlabResponse = $this->gitlabHttpClient->post($mergeRequestUrl, $mergeRequestData);
 
         return $gitlabResponse['web_url'];
     }
