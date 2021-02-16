@@ -63,9 +63,5 @@ get-ticket-data: ##@workflow get data of a jira ticket
 	docker-compose exec php /var/www/bin/workflow workflow:get:jira-issue $(filter-out $@,$(MAKECMDGOALS))
 .PHONY: get-ticket-data
 
-show-user: ##@setup get user data
-	docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it workflow ls -lah
-.PHONY: show-user
-
 %:
 	@:

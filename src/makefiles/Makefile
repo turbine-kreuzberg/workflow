@@ -1,4 +1,4 @@
-DOCKER_RUN=docker run --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it --user $(shell id -u):$(shell id -g) workflow
+DOCKER_RUN=docker run --rm --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it --user $(shell id -u):$(shell id -g) workflow
 DOCKER_RUN_WORKFLOW=$(DOCKER_RUN) /var/www/vendor/bin/workflow
 
 workflow-setup: ##@workflow setup turbine workflow
