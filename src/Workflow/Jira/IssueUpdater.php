@@ -17,7 +17,6 @@ class IssueUpdater
         float $duration,
         string $date
     ): float {
-
         if ($duration < 15) {
             $duration *= 60;
         }

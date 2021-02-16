@@ -16,8 +16,16 @@ class Bootstrap
     public function run(): void
     {
         $application = new Application();
-        $application->add(new BookTimeCommand(name: null, configuration: new Configuration()));
         $workflowFactory = new WorkflowFactory();
+        $application->add(
+            new BookTimeCommand(
+                configuration: new Configuration(),
+                workflowFactory: $workflowFactory,
+                fastWorklogProvider: $workflowFactory->createFastWorklogProvider(),
+                issueUpdater: $workflowFactory->createJiraIssueUpdater(),
+                issueReader: $workflowFactory->createJiraIssueReader()
+            )
+        );
         $application->add(
             new ListBookingsCommand(
                 jiraIssueReader: $workflowFactory->createJiraIssueReader(),

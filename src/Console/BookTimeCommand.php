@@ -7,10 +7,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
+use Turbine\Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Workflow\Provider\FastWorklogProvider;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class BookTimeCommand extends Command
@@ -21,12 +23,14 @@ class BookTimeCommand extends Command
     private const CUSTOM_INPUT = 'Custom input';
     private const FAST_WORKLOG = 'fast-worklog';
 
-    private WorkflowFactory $workflowFactory;
-
-    public function __construct(?string $name = null, private Configuration $configuration)
-    {
-        parent::__construct($name);
-        $this->workflowFactory = new WorkflowFactory();
+    public function __construct(
+        private Configuration $configuration,
+        private WorkflowFactory $workflowFactory,
+        private FastWorklogProvider $fastWorklogProvider,
+        private IssueUpdater $issueUpdater,
+        private IssueReader $issueReader
+    ) {
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -50,10 +54,10 @@ class BookTimeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $inputOutputStyle = new SymfonyStyle($input, $output);
+        $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
         $today = date('Y-m-d') . 'T12:00:00.000+0000';
 
-        [$issue, $worklogComment] = $this->workflowFactory->createFastWorklogProvider()->provide();
+        [$issue, $worklogComment] = $this->fastWorklogProvider->provide();
 
         if (isset($issue, $worklogComment)
             && (bool)$input->getOption(self::FAST_WORKLOG) === true
@@ -65,8 +69,7 @@ class BookTimeCommand extends Command
             );
             $duration = $inputOutputStyle->ask($questionFastWorklog);
             $bookedTimeInMinutes = $this
-                ->workflowFactory
-                ->createJiraIssueUpdater()
+                ->issueUpdater
                 ->bookTime($issue, $worklogComment, $duration, $today);
             $inputOutputStyle->success(
                 'Booked '
@@ -76,7 +79,7 @@ class BookTimeCommand extends Command
                 . '" on '
                 . $issue
                 . "\nTotal booked time today: "
-                . $this->workflowFactory->createJiraIssueReader()->getTimeSpentToday()
+                . $this->issueReader->getTimeSpentToday()
                 . 'h'
             );
 
