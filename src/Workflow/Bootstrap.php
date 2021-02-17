@@ -43,7 +43,8 @@ class Bootstrap
         );
         $application->add(
             new CreateMergeRequestCommand(
-                mergeRequestCreator: $workflowFactory->createMergeRequestCreator()
+                mergeRequestCreator: $workflowFactory->createMergeRequestCreator(),
+                workflowFactory: $workflowFactory
             )
         );
         $application->add(

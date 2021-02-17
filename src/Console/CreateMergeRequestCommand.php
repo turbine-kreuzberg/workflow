@@ -5,8 +5,8 @@ namespace Turbine\Workflow\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Workflow\Model\MergeRequestCreator;
+use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class CreateMergeRequestCommand extends Command
 {
@@ -14,6 +14,7 @@ class CreateMergeRequestCommand extends Command
 
     public function __construct(
         private MergeRequestCreator $mergeRequestCreator,
+        private WorkflowFactory $workflowFactory
     ) {
         parent::__construct(self::COMMAND_NAME);
     }
@@ -28,7 +29,7 @@ class CreateMergeRequestCommand extends Command
     {
         $mergeRequestUrl = $this->mergeRequestCreator->createForCurrentBranch();
 
-        $inputOutputStyle = new SymfonyStyle($input, $output);
+        $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
         $inputOutputStyle->success(
             [
                 'Created merge request: ' . $mergeRequestUrl,
