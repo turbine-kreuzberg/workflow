@@ -23,7 +23,9 @@ class Bootstrap
                 workflowFactory: $workflowFactory,
                 issueUpdater: $workflowFactory->createJiraIssueUpdater(),
                 issueReader: $workflowFactory->createJiraIssueReader(),
-                fastBookTimeConsole: $workflowFactory->createFastBookTimeConsole()
+                fastBookTimeConsole: $workflowFactory->createFastBookTimeConsole(),
+                ticketIdProvider: $workflowFactory->getTicketIdProvider(),
+                worklogChoicesProvider: $workflowFactory->createWorklogChoiceProvider()
             )
         );
         $application->add(

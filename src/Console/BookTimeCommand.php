@@ -13,6 +13,8 @@ use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
+use Turbine\Workflow\Workflow\TicketIdProvider;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class BookTimeCommand extends Command
@@ -28,7 +30,9 @@ class BookTimeCommand extends Command
         private WorkflowFactory $workflowFactory,
         private IssueUpdater $issueUpdater,
         private IssueReader $issueReader,
-        private FastBookTimeConsole $fastBookTimeConsole
+        private FastBookTimeConsole $fastBookTimeConsole,
+        private TicketIdProvider $ticketIdProvider,
+        private WorklogChoicesProvider $worklogChoicesProvider
     ) {
         parent::__construct();
     }
@@ -63,12 +67,13 @@ class BookTimeCommand extends Command
         }
 
         $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
-        try {
-            if (!preg_match("/^[a-z]/i", $issue)) {
-                $issue = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $issue;
-            }
+        if (!preg_match("/^[a-z]/i", $issue)) {
+            $issue = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $issue;
+        }
 
-            $worklogComment = $this->createWorklogComment($issue, $inputOutputStyle);
+        $worklogComment = $this->createWorklogComment($issue, $inputOutputStyle);
+
+        try {
             $lastTicketWorklog = $this->issueReader->getLastTicketWorklog($issue);
             $duration = $this->createWorklogDuration($lastTicketWorklog, $inputOutputStyle);
         } catch (JiraNoWorklogException $jiraNoWorklogException) {
@@ -102,7 +107,7 @@ class BookTimeCommand extends Command
         string $issueNumber,
         SymfonyStyle $inputOutputStyle
     ): string {
-        $worklogChoices = $this->workflowFactory->createWorklogChoiceProvider()->provide($issueNumber);
+        $worklogChoices = $this->worklogChoicesProvider->provide($issueNumber);
 
         $worklogChoices[] = self::CUSTOM_INPUT;
 
@@ -132,7 +137,7 @@ class BookTimeCommand extends Command
     private function getIssueTicketNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string
     {
         if ($input->getOption(self::FOR_CURRENT_BRANCH)) {
-            return $this->workflowFactory->getTicketIdProvider()->extractTicketIdFromCurrentBranch();
+            return $this->ticketIdProvider->extractTicketIdFromCurrentBranch();
         }
 
         $choices = $this->workflowFactory->createFavouriteTicketChoicesProvider()->provide();
