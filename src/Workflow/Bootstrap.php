@@ -21,9 +21,9 @@ class Bootstrap
             new BookTimeCommand(
                 configuration: new Configuration(),
                 workflowFactory: $workflowFactory,
-                fastWorklogProvider: $workflowFactory->createFastWorklogProvider(),
                 issueUpdater: $workflowFactory->createJiraIssueUpdater(),
-                issueReader: $workflowFactory->createJiraIssueReader()
+                issueReader: $workflowFactory->createJiraIssueReader(),
+                fastBookTimeConsole: $workflowFactory->createFastBookTimeConsole()
             )
         );
         $application->add(

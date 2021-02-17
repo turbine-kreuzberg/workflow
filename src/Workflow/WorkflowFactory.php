@@ -7,6 +7,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Client\ClientFactory;
 use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
 use Turbine\Workflow\Workflow\Jira\IssueCreator;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
@@ -120,6 +121,15 @@ class WorkflowFactory
     public function createBranchNameValidator(): BranchNameValidator
     {
         return new BranchNameValidator();
+    }
+
+    public function createFastBookTimeConsole(): FastBookTimeConsole
+    {
+        return new FastBookTimeConsole(
+            $this->createFastWorklogProvider(),
+            $this->createJiraIssueUpdater(),
+            $this->createJiraIssueReader()
+        );
     }
 
     private function getClientFactory(): ClientFactory

@@ -8,11 +8,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
-use Turbine\Workflow\Workflow\Provider\FastWorklogProvider;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class BookTimeCommand extends Command
@@ -26,9 +26,9 @@ class BookTimeCommand extends Command
     public function __construct(
         private Configuration $configuration,
         private WorkflowFactory $workflowFactory,
-        private FastWorklogProvider $fastWorklogProvider,
         private IssueUpdater $issueUpdater,
-        private IssueReader $issueReader
+        private IssueReader $issueReader,
+        private FastBookTimeConsole $fastBookTimeConsole
     ) {
         parent::__construct();
     }
@@ -51,56 +51,32 @@ class BookTimeCommand extends Command
         );
     }
 
-
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
         $today = date('Y-m-d') . 'T12:00:00.000+0000';
 
-        [$issue, $worklogComment] = $this->fastWorklogProvider->provide();
-
-        if (isset($issue, $worklogComment)
-            && (bool)$input->getOption(self::FAST_WORKLOG) === true
-        ) {
-            $questionFastWorklog = sprintf(
-                'How much time do you want to book on <fg=yellow>[%s]</> with message <fg=yellow>"%s"</>',
-                $issue,
-                $worklogComment
-            );
-            $duration = $inputOutputStyle->ask($questionFastWorklog);
-            $bookedTimeInMinutes = $this
-                ->issueUpdater
-                ->bookTime($issue, $worklogComment, $duration, $today);
-            $inputOutputStyle->success(
-                'Booked '
-                . $bookedTimeInMinutes
-                . ' minutes for "'
-                . $worklogComment
-                . '" on '
-                . $issue
-                . "\nTotal booked time today: "
-                . $this->issueReader->getTimeSpentToday()
-                . 'h'
-            );
-
-            return 0;
+        if ((bool)$input->getOption(self::FAST_WORKLOG)) {
+            if ($this->fastBookTimeConsole->execFastBooking($inputOutputStyle, $today)) {
+                return 0;
+            }
         }
 
+        $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
         try {
-            $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
             if (!preg_match("/^[a-z]/i", $issue)) {
                 $issue = $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $issue;
             }
 
             $worklogComment = $this->createWorklogComment($issue, $inputOutputStyle);
-            $lastTicketWorklog = $this->workflowFactory->createJiraIssueReader()->getLastTicketWorklog($issue);
+            $lastTicketWorklog = $this->issueReader->getLastTicketWorklog($issue);
             $duration = $this->createWorklogDuration($lastTicketWorklog, $inputOutputStyle);
         } catch (JiraNoWorklogException $jiraNoWorklogException) {
             $worklogComment = $inputOutputStyle->ask('What did you do');
             $duration = $inputOutputStyle->ask('For how long did you do it');
         }
 
-        $bookedTimeInMinutes = $this->workflowFactory->createJiraIssueUpdater()->bookTime(
+        $bookedTimeInMinutes = $this->issueUpdater->bookTime(
             $issue,
             $worklogComment,
             $duration,
@@ -115,7 +91,7 @@ class BookTimeCommand extends Command
             . '" on '
             . $issue
             . "\nTotal booked time today: "
-            . $this->workflowFactory->createJiraIssueReader()->getTimeSpentToday()
+            . $this->issueReader->getTimeSpentToday()
             . 'h'
         );
 
