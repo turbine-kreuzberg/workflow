@@ -6,7 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Style\SymfonyStyle;
+use Turbine\Workflow\Workflow\Model\WorkOnTicket;
 use Turbine\Workflow\Workflow\Validator\BranchNameValidator;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -16,7 +16,8 @@ class WorkOnTicketCommand extends Command
 
     public function __construct(
         private WorkflowFactory $workflowFactory,
-        private BranchNameValidator $branchNameValidator
+        private BranchNameValidator $branchNameValidator,
+        private WorkOnTicket $workOnTicket
     ) {
         parent::__construct();
     }
@@ -31,12 +32,10 @@ class WorkOnTicketCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $inputOutputStyle = new SymfonyStyle($input, $output);
-
-        $workOnTicket = $this->workflowFactory->createWorkOnTicket();
+        $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
 
         $ticketNumber = $inputOutputStyle->ask('Ticket number?');
-        $branchNameFromTicketCutAtFifty = substr($workOnTicket->getBranchNameFromTicket($ticketNumber), 0, 50);
+        $branchNameFromTicketCutAtFifty = substr($this->workOnTicket->getBranchNameFromTicket($ticketNumber), 0, 50);
 
         $question = (new Question(
             "Branch name?\n   $branchNameFromTicketCutAtFifty\n   " . str_repeat('-', 50) . "",
@@ -51,7 +50,7 @@ class WorkOnTicketCommand extends Command
             );
         $branchName = $inputOutputStyle->askQuestion($question);
 
-        $workOnTicket->workOnTicket($ticketNumber, $branchName);
+        $this->workOnTicket->workOnTicket($ticketNumber, $branchName);
 
         $inputOutputStyle->success(
             [

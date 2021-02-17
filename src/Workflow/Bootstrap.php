@@ -38,7 +38,8 @@ class Bootstrap
         $application->add(
             new WorkOnTicketCommand(
                 workflowFactory: $workflowFactory,
-                branchNameValidator: $workflowFactory->createBranchNameValidator()
+                branchNameValidator: $workflowFactory->createBranchNameValidator(),
+                workOnTicket: $workflowFactory->createWorkOnTicket()
             )
         );
         $application->add(
