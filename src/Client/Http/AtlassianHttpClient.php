@@ -46,8 +46,8 @@ class AtlassianHttpClient
     {
         return [
             'auth' => [
-                $this->configuration->getConfiguration(Configuration::JIRA_USERNAME),
-                $this->configuration->getConfiguration(Configuration::JIRA_PASSWORD),
+                $this->configuration->get(Configuration::JIRA_USERNAME),
+                $this->configuration->get(Configuration::JIRA_PASSWORD),
             ],
         ];
     }

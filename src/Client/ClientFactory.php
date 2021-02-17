@@ -32,7 +32,7 @@ class ClientFactory
         return new Client(
             [
                 'headers' => [
-                    'Private-Token' => (new Configuration())->getConfiguration(Configuration::PERSONAL_ACCESS_TOKEN),
+                    'Private-Token' => (new Configuration())->get(Configuration::PERSONAL_ACCESS_TOKEN),
                     'Content-Type' => 'application/json',
                 ],
             ]

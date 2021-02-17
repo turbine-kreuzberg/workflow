@@ -69,7 +69,7 @@ class JiraClient
 
     private function getUsername(): string
     {
-        return $this->configuration->getConfiguration(Configuration::JIRA_USERNAME);
+        return $this->configuration->get(Configuration::JIRA_USERNAME);
     }
 
     public function bookTime(string $issue, array $worklogEntry): void
@@ -140,7 +140,7 @@ class JiraClient
 
     private function getBoardId(): string
     {
-        return $this->configuration->getConfiguration(Configuration::BOARD_ID);
+        return $this->configuration->get(Configuration::BOARD_ID);
     }
 
     private function getWorklogByDate(\DateTimeImmutable $date): array

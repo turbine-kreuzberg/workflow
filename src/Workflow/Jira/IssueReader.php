@@ -68,7 +68,7 @@ class IssueReader
     public function getIssue(string $issueKey): JiraIssueTransfer
     {
         if (is_numeric($issueKey)) {
-            $issueKey = $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $issueKey;
+            $issueKey = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $issueKey;
         }
 
         return $this->jiraClient->getIssue($issueKey);

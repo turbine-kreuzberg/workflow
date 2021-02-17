@@ -34,7 +34,7 @@ class MergeRequestCreator
 
         $mergeRequestData = [
             'source_branch' => $currentBranchName,
-            'target_branch' => $this->configuration->getConfiguration(Configuration::BRANCH_DEVELOPMENT),
+            'target_branch' => $this->configuration->get(Configuration::BRANCH_DEVELOPMENT),
             'title' => '[' . $jiraIssueTransfer->key . '] ' . $jiraIssueTransfer->summary,
             'description' => $description,
             'remove_source_branch' => true,

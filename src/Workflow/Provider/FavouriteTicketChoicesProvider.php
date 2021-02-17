@@ -12,7 +12,7 @@ class FavouriteTicketChoicesProvider
 
     public function provide(): array
     {
-        $favouriteTicketsFromEnvironment = $this->configuration->getConfiguration(
+        $favouriteTicketsFromEnvironment = $this->configuration->get(
             Configuration::JIRA_FAVOURITE_TICKETS
         );
 

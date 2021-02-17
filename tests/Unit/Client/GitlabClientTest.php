@@ -15,7 +15,7 @@ class GitlabClientTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(3))
-            ->method('getConfiguration')
+            ->method('get')
             ->withConsecutive(
                 ['GITLAB_API_URL'],
                 ['REPOSITORY'],
@@ -64,7 +64,7 @@ class GitlabClientTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(3))
-            ->method('getConfiguration')
+            ->method('get')
             ->withConsecutive(
                 ['GITLAB_API_URL'],
                 ['REPOSITORY'],

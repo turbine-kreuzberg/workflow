@@ -35,9 +35,9 @@ class GitlabClient
 
     private function getProjectUrl(): string
     {
-        return $this->configuration->getConfiguration(Configuration::GITLAB_API_URL)
+        return $this->configuration->get(Configuration::GITLAB_API_URL)
             . 'projects/'
-            . urlencode($this->configuration->getConfiguration(Configuration::REPOSITORY))
+            . urlencode($this->configuration->get(Configuration::REPOSITORY))
             . '/';
     }
 
@@ -61,7 +61,7 @@ class GitlabClient
 
     private function isDevelopmentBranchToDeploymentBranchMergeRequest(string $sourceBranch, string $targetBranch): bool
     {
-        return $sourceBranch === $this->configuration->getConfiguration(Configuration::BRANCH_DEVELOPMENT) &&
-            $targetBranch === $this->configuration->getConfiguration(Configuration::BRANCH_DEPLOYMENT);
+        return $sourceBranch === $this->configuration->get(Configuration::BRANCH_DEVELOPMENT) &&
+            $targetBranch === $this->configuration->get(Configuration::BRANCH_DEPLOYMENT);
     }
 }

@@ -89,7 +89,7 @@ h1.Details
         return [
             'fields' => [
                 'project' => [
-                    'key' => $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY),
+                    'key' => $this->configuration->get(Configuration::JIRA_PROJECT_KEY),
                 ],
                 self::ACCOUNT_CUSTOM_FIELD => self::ACCOUNT_ID,
             ],

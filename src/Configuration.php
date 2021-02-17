@@ -18,7 +18,7 @@ class Configuration
     public const PERSONAL_ACCESS_TOKEN = 'GITLAB_PERSONAL_ACCESS_TOKEN';
 
 
-    public function getConfiguration(string $key): string
+    public function get(string $key): string
     {
         $configurationValue = (string)getenv($key);
         if (!$configurationValue) {
@@ -31,8 +31,8 @@ class Configuration
     public function getNonRemovableBranches(): array
     {
         return [
-            $this->getConfiguration(self::BRANCH_DEVELOPMENT),
-            $this->getConfiguration(self::BRANCH_DEPLOYMENT),
+            $this->get(self::BRANCH_DEVELOPMENT),
+            $this->get(self::BRANCH_DEPLOYMENT),
         ];
     }
 

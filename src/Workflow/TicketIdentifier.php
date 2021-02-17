@@ -16,7 +16,7 @@ class TicketIdentifier
     {
         $matches = [];
         preg_match(
-            sprintf("/(?'ticket'%s-\d{1,5})/", $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY)),
+            sprintf("/(?'ticket'%s-\d{1,5})/", $this->configuration->get(Configuration::JIRA_PROJECT_KEY)),
             $branchName,
             $matches
         );
@@ -32,7 +32,7 @@ class TicketIdentifier
         );
 
         if (isset($matches['ticket'])) {
-            return $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $matches['ticket'];
+            return $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $matches['ticket'];
         }
 
         throw new \RuntimeException(sprintf('Ticket number not found in branch name %s', $branchName));

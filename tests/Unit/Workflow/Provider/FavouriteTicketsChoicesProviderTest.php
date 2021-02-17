@@ -14,7 +14,7 @@ class FavouriteTicketsChoicesProviderTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_FAVOURITE_TICKETS')
             ->willReturn('');
 
@@ -31,7 +31,7 @@ class FavouriteTicketsChoicesProviderTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_FAVOURITE_TICKETS')
             ->willReturn('test-123,ticket-123');
         $issueReaderMock = $this->createMock(IssueReader::class);
@@ -49,7 +49,7 @@ class FavouriteTicketsChoicesProviderTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_FAVOURITE_TICKETS')
             ->willReturn('test-123,ticket-123');
 

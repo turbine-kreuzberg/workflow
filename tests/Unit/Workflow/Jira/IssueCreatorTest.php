@@ -42,7 +42,7 @@ issue-summary\n\nh1.How to reproduce\n\nh1.Expected Behavior\n\nh1.Details\n",
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_PROJECT_KEY')
             ->willReturn('BCM');
 
@@ -81,7 +81,7 @@ issue-summary\n\nh1.How to reproduce\n\nh1.Expected Behavior\n\nh1.Details\n",
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_PROJECT_KEY')
             ->willReturn('BCM');
 
@@ -135,7 +135,7 @@ issue-summary\n\nh1.How to reproduce\n\nh1.Expected Behavior\n\nh1.Details\n",
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_PROJECT_KEY')
             ->willReturn('BCM');
 

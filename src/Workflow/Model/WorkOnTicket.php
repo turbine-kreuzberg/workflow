@@ -23,10 +23,10 @@ class WorkOnTicket
 
     public function workOnTicket(string $ticketNumber, string $branchName): void
     {
-        $issueKey = $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $ticketNumber;
+        $issueKey = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $ticketNumber;
 
         $this->gitClient->createBranchOnTopOf(
-            $this->configuration->getConfiguration(Configuration::BRANCH_DEVELOPMENT),
+            $this->configuration->get(Configuration::BRANCH_DEVELOPMENT),
             $branchName
         );
         $this->jiraClient->assignJiraIssueToUser($issueKey);
@@ -50,7 +50,7 @@ class WorkOnTicket
 
     private function getJiraIssue(string $ticketNumber): JiraIssueTransfer
     {
-        $issueKey = $this->configuration->getConfiguration(Configuration::JIRA_PROJECT_KEY) . '-' . $ticketNumber;
+        $issueKey = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $ticketNumber;
         $jiraIssueTransfer = $this->jiraClient->getIssue($issueKey);
 
         return $jiraIssueTransfer;

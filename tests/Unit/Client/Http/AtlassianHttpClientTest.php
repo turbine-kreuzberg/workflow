@@ -31,7 +31,7 @@ class AtlassianHttpClientTest extends TestCase
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
-            ->method('getConfiguration')
+            ->method('get')
             ->withConsecutive(
                 ['JIRA_USERNAME'],
                 ['JIRA_PASSWORD'],
@@ -64,7 +64,7 @@ class AtlassianHttpClientTest extends TestCase
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
-            ->method('getConfiguration')
+            ->method('get')
             ->withConsecutive(
                 ['JIRA_USERNAME'],
                 ['JIRA_PASSWORD'],
@@ -96,7 +96,7 @@ class AtlassianHttpClientTest extends TestCase
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
-            ->method('getConfiguration')
+            ->method('get')
             ->withConsecutive(
                 ['JIRA_USERNAME'],
                 ['JIRA_PASSWORD'],
@@ -128,7 +128,7 @@ class AtlassianHttpClientTest extends TestCase
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
-            ->method('getConfiguration')
+            ->method('get')
             ->withConsecutive(
                 ['JIRA_USERNAME'],
                 ['JIRA_PASSWORD'],
@@ -162,7 +162,7 @@ class AtlassianHttpClientTest extends TestCase
 
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::exactly(2))
-            ->method('getConfiguration')
+            ->method('get')
             ->withConsecutive(
                 ['JIRA_USERNAME'],
                 ['JIRA_PASSWORD'],

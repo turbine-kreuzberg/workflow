@@ -121,7 +121,7 @@ class JiraClientTest extends TestCase
     {
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_USERNAME')
             ->willReturn('testUser');
 
@@ -195,7 +195,7 @@ class JiraClientTest extends TestCase
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
 
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_BOARD_ID')
             ->willReturn('232');
 
@@ -238,7 +238,7 @@ class JiraClientTest extends TestCase
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
 
         $configurationMock->expects(self::once())
-            ->method('getConfiguration')
+            ->method('get')
             ->with('JIRA_BOARD_ID')
             ->willReturn('232');
 
