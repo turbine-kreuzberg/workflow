@@ -5,7 +5,6 @@ namespace Turbine\Workflow\Workflow\Model;
 use Turbine\Workflow\Client\GitClient;
 use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
-use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
 
 class WorkOnTicket
@@ -31,28 +30,5 @@ class WorkOnTicket
         );
         $this->jiraClient->assignJiraIssueToUser($issueKey);
         $this->issueUpdater->moveIssueToStatus($issueKey, self::STATUS_IN_PROGRESS);
-    }
-
-    public function getBranchNameFromTicket(string $ticketNumber): string
-    {
-        $jiraIssueTransfer = $this->getJiraIssue($ticketNumber);
-
-        $description = preg_replace(
-            '/[^a-z0-9-]/',
-            '-',
-            strtolower($jiraIssueTransfer->summary)
-        );
-
-        $branchName = sprintf('%s-%s', $jiraIssueTransfer->key, $description);
-
-        return $branchName;
-    }
-
-    private function getJiraIssue(string $ticketNumber): JiraIssueTransfer
-    {
-        $issueKey = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $ticketNumber;
-        $jiraIssueTransfer = $this->jiraClient->getIssue($issueKey);
-
-        return $jiraIssueTransfer;
     }
 }

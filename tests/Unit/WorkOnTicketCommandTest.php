@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
 use Turbine\Workflow\Workflow\Model\WorkOnTicket;
+use Turbine\Workflow\Workflow\Provider\BranchNameProvider;
 use Turbine\Workflow\Workflow\Validator\BranchNameValidator;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -37,7 +38,9 @@ class WorkOnTicketCommandTest extends TestCase
         $branchNameValidatorMock = $this->createMock(BranchNameValidator::class);
 
         $workOnTicketMock = $this->createMock(WorkOnTicket::class);
-        $workOnTicketMock->expects(self::once())
+
+        $branchNameProviderMock = $this->createMock(BranchNameProvider::class);
+        $branchNameProviderMock->expects(self::once())
             ->method('getBranchNameFromTicket')
             ->with('ABC-134')
             ->willReturn('ABC-134-branch-name');
@@ -45,7 +48,8 @@ class WorkOnTicketCommandTest extends TestCase
         $workOnTicketCommand = new WorkOnTicketCommand(
             $workflowFactoryMock,
             $branchNameValidatorMock,
-            $workOnTicketMock
+            $workOnTicketMock,
+            $branchNameProviderMock
         );
 
         self::assertEquals(0, $workOnTicketCommand->run($inputMock, $outputMock));

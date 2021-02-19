@@ -13,6 +13,7 @@ use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
 use Turbine\Workflow\Workflow\Model\MergeRequestCreator;
 use Turbine\Workflow\Workflow\Model\WorkOnTicket;
+use Turbine\Workflow\Workflow\Provider\BranchNameProvider;
 use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
 use Turbine\Workflow\Workflow\Provider\FastWorklogProvider;
 use Turbine\Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
@@ -129,6 +130,14 @@ class WorkflowFactory
             $this->createFastWorklogProvider(),
             $this->createJiraIssueUpdater(),
             $this->createJiraIssueReader()
+        );
+    }
+
+    public function createBranchNameProvider(): BranchNameProvider
+    {
+        return new BranchNameProvider(
+            $this->getClientFactory()->getJiraClient(),
+            $this->createConfiguration()
         );
     }
 

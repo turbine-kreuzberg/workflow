@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Turbine\Workflow\Workflow\Model\WorkOnTicket;
+use Turbine\Workflow\Workflow\Provider\BranchNameProvider;
 use Turbine\Workflow\Workflow\Validator\BranchNameValidator;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -17,7 +18,8 @@ class WorkOnTicketCommand extends Command
     public function __construct(
         private WorkflowFactory $workflowFactory,
         private BranchNameValidator $branchNameValidator,
-        private WorkOnTicket $workOnTicket
+        private WorkOnTicket $workOnTicket,
+        private BranchNameProvider $branchNameProvider
     ) {
         parent::__construct();
     }
@@ -35,7 +37,9 @@ class WorkOnTicketCommand extends Command
         $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
 
         $ticketNumber = $inputOutputStyle->ask('Ticket number?');
-        $branchNameFromTicketCutAtFifty = substr($this->workOnTicket->getBranchNameFromTicket($ticketNumber), 0, 50);
+        $branchNameFromTicketCutAtFifty = substr(
+            $this->branchNameProvider->getBranchNameFromTicket($ticketNumber), 0, 50
+        );
 
         $question = (new Question(
             "Branch name?\n   $branchNameFromTicketCutAtFifty\n   " . str_repeat('-', 50) . "",
