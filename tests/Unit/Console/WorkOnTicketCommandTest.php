@@ -1,6 +1,6 @@
 <?php
 
-namespace Unit\Workflow;
+namespace Unit\Console;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
