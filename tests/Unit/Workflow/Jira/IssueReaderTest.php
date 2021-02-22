@@ -9,6 +9,7 @@ use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Transfers\JiraIssueTransferCollection;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
+use Turbine\Workflow\Transfers\JiraWorklogsTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 
 class IssueReaderTest extends TestCase
@@ -152,9 +153,6 @@ class IssueReaderTest extends TestCase
         self::assertEquals(new JiraIssueTransferCollection([new JiraIssueTransfer()]), $issuesCollection);
     }
 
-    /**
-     * @return void
-     */
     public function testGetIssueReturnsJiraIssueTransfer(): void
     {
         $testJiraIssueTransfer = new JiraIssueTransfer();
@@ -172,5 +170,56 @@ class IssueReaderTest extends TestCase
 
         $returnJiraIssueTransfer = $issueReader->getIssue('KEY-123');
         self::assertEquals($testJiraIssueTransfer, $returnJiraIssueTransfer);
+    }
+
+    public function testGetIssueCalledWithNumberReturnsJiraIssueTransfer(): void
+    {
+        $testJiraIssueTransfer = new JiraIssueTransfer();
+        $testJiraIssueTransfer->key = 'KEY-123';
+
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::once())
+            ->method('getIssue')
+            ->with('KEY-123')
+            ->willReturn($testJiraIssueTransfer);
+
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::once())
+            ->method('get')
+            ->with('JIRA_PROJECT_KEY')
+            ->willReturn('KEY');
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
+
+        $returnJiraIssueTransfer = $issueReader->getIssue('123');
+        self::assertEquals($testJiraIssueTransfer, $returnJiraIssueTransfer);
+    }
+
+    public function testGetTimeSpentToday(): void
+    {
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::once())
+            ->method('getTimeSpentByDate')
+            ->willReturn(3600.0);
+
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
+
+        self::assertEquals(3600.0, $issueReader->getTimeSpentToday());
+    }
+
+    public function testGetCompleteWorklog(): void
+    {
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::once())
+            ->method('getCompleteWorklogByDate')
+            ->willReturn(new JiraWorklogsTransfer());
+
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
+
+        self::assertEquals(new JiraWorklogsTransfer(), $issueReader->getCompleteWorklog());
     }
 }
