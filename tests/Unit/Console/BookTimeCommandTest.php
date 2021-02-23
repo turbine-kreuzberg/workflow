@@ -9,6 +9,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\BookTimeCommand;
 use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
+use Turbine\Workflow\Console\SubConsole\TicketNumberConsole;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
@@ -48,6 +49,8 @@ class BookTimeCommandTest extends TestCase
         $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
         $worklogChoicesProviderMock = $this->createMock(WorklogChoicesProvider::class);
 
+        $ticketNumberConsoleMock = $this->createMock(TicketNumberConsole::class);
+
         $bookTimeCommand = new BookTimeCommand(
             $configurationMock,
             $workflowFactoryMock,
@@ -55,7 +58,8 @@ class BookTimeCommandTest extends TestCase
             $issueReaderMock,
             $fastBookTimeConsoleMock,
             $ticketIdProviderMock,
-            $worklogChoicesProviderMock
+            $worklogChoicesProviderMock,
+            $ticketNumberConsoleMock
         );
 
         $bookTimeCommand->run($inputMock, $outputMock);
@@ -128,6 +132,8 @@ class BookTimeCommandTest extends TestCase
             ->with('ABC-134')
             ->willReturn([]);
 
+        $ticketNumberConsoleMock = $this->createMock(TicketNumberConsole::class);
+
         $bookTimeCommand = new BookTimeCommand(
             $configurationMock,
             $workflowFactoryMock,
@@ -135,7 +141,8 @@ class BookTimeCommandTest extends TestCase
             $issueReaderMock,
             $fastBookTimeConsoleMock,
             $ticketIdProviderMock,
-            $worklogChoicesProviderMock
+            $worklogChoicesProviderMock,
+            $ticketNumberConsoleMock
         );
 
         $bookTimeCommand->run($inputMock, $outputMock);

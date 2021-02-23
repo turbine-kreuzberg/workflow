@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
+use Turbine\Workflow\Console\SubConsole\TicketNumberConsole;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
@@ -32,7 +33,8 @@ class BookTimeCommand extends Command
         private IssueReader $issueReader,
         private FastBookTimeConsole $fastBookTimeConsole,
         private TicketIdProvider $ticketIdProvider,
-        private WorklogChoicesProvider $worklogChoicesProvider
+        private WorklogChoicesProvider $worklogChoicesProvider,
+        private TicketNumberConsole $ticketNumberConsole
     ) {
         parent::__construct();
     }
@@ -140,25 +142,7 @@ class BookTimeCommand extends Command
             return $this->ticketIdProvider->extractTicketIdFromCurrentBranch();
         }
 
-        $choices = $this->workflowFactory->createFavouriteTicketChoicesProvider()->provide();
-
-        if (empty($choices)) {
-            return $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
-        }
-
-        $choices[self::CUSTOM_INPUT_KEY] = self::CUSTOM_INPUT;
-
-        $choice = $inputOutputStyle->choice(
-            'What ticket do you want to book time on',
-            $choices,
-            self::CUSTOM_INPUT_KEY
-        );
-
-        if ($choice !== self::CUSTOM_INPUT_KEY) {
-            return $choice;
-        }
-
-        return $inputOutputStyle->ask('What ticket do you want to book time on? Ticket number');
+        return $this->ticketNumberConsole->getIssueTicketNumber($inputOutputStyle);
     }
 
 }
