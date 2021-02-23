@@ -18,9 +18,10 @@ class IssueReader
     ) {
     }
 
-    public function getLastTicketWorklog(string $issue): JiraWorklogEntryTransfer
+    public function getLastTicketWorklog(string $issueKey): JiraWorklogEntryTransfer
     {
-        $completeWorklog = $this->jiraClient->getWorkLog($issue);
+        $issueKey = $this->buildIssueKey($issueKey);
+        $completeWorklog = $this->jiraClient->getWorkLog($issueKey);
 
         return $this->getLastWorkLogEntry($completeWorklog);
     }
@@ -67,10 +68,17 @@ class IssueReader
 
     public function getIssue(string $issueKey): JiraIssueTransfer
     {
-        if (is_numeric($issueKey)) {
-            $issueKey = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $issueKey;
-        }
+        $issueKey = $this->buildIssueKey($issueKey);
 
         return $this->jiraClient->getIssue($issueKey);
+    }
+
+    private function buildIssueKey(string $issueKey): string
+    {
+        if (is_numeric($issueKey)) {
+            return $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $issueKey;
+        }
+
+        return $issueKey;
     }
 }

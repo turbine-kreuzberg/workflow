@@ -68,10 +68,6 @@ class BookTimeCommand extends Command
         }
 
         $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
-        if (!preg_match("/^[a-z]/i", $issue)) {
-            $issue = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $issue;
-        }
-
         $worklogComment = $this->createWorklogComment($issue, $inputOutputStyle);
 
         try {
