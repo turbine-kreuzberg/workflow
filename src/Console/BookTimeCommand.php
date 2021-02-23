@@ -22,7 +22,6 @@ class BookTimeCommand extends Command
 {
     private const COMMAND_NAME = 'workflow:book-time';
     private const FOR_CURRENT_BRANCH = 'forCurrentBranch';
-    private const CUSTOM_INPUT_KEY = 'custom';
     private const CUSTOM_INPUT = 'Custom input';
     private const FAST_WORKLOG = 'fast-worklog';
 
