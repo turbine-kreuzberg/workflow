@@ -27,6 +27,7 @@
       <file>../src/Workflow/WorkflowFactory.php</file>
       <file>../src/Workflow/Bootstrap.php</file>
       <file>../src/Client/ClientFactory.php</file>
+      <directory>../src/Transfers</directory>
     </exclude>
   </coverage>
 </phpunit>
