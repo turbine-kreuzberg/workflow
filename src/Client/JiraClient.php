@@ -2,6 +2,7 @@
 
 namespace Turbine\Workflow\Client;
 
+use DateTimeImmutable;
 use Turbine\Workflow\Client\Http\AtlassianHttpClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoActiveSprintException;
@@ -50,11 +51,15 @@ class JiraClient
 
     public function getIssueTransitions(string $issue): array
     {
+        $issue = $this->normalizeIssueNumber($issue);
+
         return $this->jiraHttpClient->get(static::ISSUE_URL . $issue . '/' . 'transitions');
     }
 
     public function transitionJiraIssue(string $issue, string $transitionId): void
     {
+        $issue = $this->normalizeIssueNumber($issue);
+
         $transitionData = ['transition' => ['id' => $transitionId]];
         $transitionUrl = self::ISSUE_URL . $issue . '/transitions';
         $this->jiraHttpClient->post($transitionUrl, $transitionData);
@@ -63,7 +68,7 @@ class JiraClient
     public function assignJiraIssueToUser(string $issue): void
     {
         $assigneeData = ['name' => $this->getUsername()];
-        $issueUrl = self::ISSUE_URL . $issue . '/assignee';
+        $issueUrl = self::ISSUE_URL . $this->normalizeIssueNumber($issue) . '/assignee';
         $this->jiraHttpClient->put($issueUrl, $assigneeData);
     }
 
@@ -87,14 +92,14 @@ class JiraClient
 
     public function getIssue(string $issue): JiraIssueTransfer
     {
-        $issueCall = self::ISSUE_URL . $issue;
+        $issueCall = self::ISSUE_URL . $this->normalizeIssueNumber($issue);;
 
         return $this->mapResponseToJiraIssueTransfer(
             $this->jiraHttpClient->get($issueCall)
         );
     }
 
-    public function getTimeSpentByDate(\DateTimeImmutable $date): float
+    public function getTimeSpentByDate(DateTimeImmutable $date): float
     {
         $result = $this->getWorklogByDate($date);
 
@@ -106,7 +111,7 @@ class JiraClient
         return $totalTimeSpentInSeconds / 3600;
     }
 
-    public function getCompleteWorklogByDate(\DateTimeImmutable $date): JiraWorklogsTransfer
+    public function getCompleteWorklogByDate(DateTimeImmutable $date): JiraWorklogsTransfer
     {
         $result = $this->getWorklogByDate($date);
 
@@ -143,7 +148,7 @@ class JiraClient
         return $this->configuration->get(Configuration::BOARD_ID);
     }
 
-    private function getWorklogByDate(\DateTimeImmutable $date): array
+    private function getWorklogByDate(DateTimeImmutable $date): array
     {
         $dateString = $date->format('Y-m-d');
         $result = $this->jiraHttpClient->get(
@@ -153,5 +158,14 @@ class JiraClient
         );
 
         return $result;
+    }
+
+    private function normalizeIssueNumber(string $issueNumber): string
+    {
+        if (is_numeric($issueNumber)) {
+            $issueNumber = $this->configuration->get(Configuration::JIRA_PROJECT_KEY) . '-' . $issueNumber;
+        }
+
+        return $issueNumber;
     }
 }

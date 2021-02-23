@@ -2,6 +2,7 @@
 
 namespace Turbine\Workflow\Workflow\Jira;
 
+use DateTimeImmutable;
 use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
@@ -58,12 +59,12 @@ class IssueReader
 
     public function getTimeSpentToday(): float
     {
-        return $this->jiraClient->getTimeSpentByDate(new \DateTimeImmutable());
+        return $this->jiraClient->getTimeSpentByDate(new DateTimeImmutable());
     }
 
     public function getCompleteWorklog(): JiraWorklogsTransfer
     {
-        return $this->jiraClient->getCompleteWorklogByDate(new \DateTimeImmutable());
+        return $this->jiraClient->getCompleteWorklogByDate(new DateTimeImmutable());
     }
 
     public function getIssue(string $issueKey): JiraIssueTransfer
@@ -80,5 +81,10 @@ class IssueReader
         }
 
         return $issueKey;
+    }
+
+    public function getIssueTransitions(string $issueKey): array
+    {
+        return $this->jiraClient->getIssueTransitions($issueKey);
     }
 }

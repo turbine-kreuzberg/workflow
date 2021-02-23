@@ -18,14 +18,13 @@ use Turbine\Workflow\Workflow\Provider\BranchNameProvider;
 use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
 use Turbine\Workflow\Workflow\Provider\FastWorklogProvider;
 use Turbine\Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
+use Turbine\Workflow\Workflow\Provider\TicketTransitionStatusChoicesProvider;
 use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
 use Turbine\Workflow\Workflow\Validator\BranchNameValidator;
 
 class WorkflowFactory
 {
     private ?Configuration $configuration = null;
-
-    private ?ClientFactory $clientFactory = null;
 
     private ?IssueReader $issueReader = null;
 
@@ -130,6 +129,13 @@ class WorkflowFactory
         return new FastBookTimeConsole(
             $this->createFastWorklogProvider(),
             $this->createJiraIssueUpdater(),
+            $this->createJiraIssueReader()
+        );
+    }
+
+    public function createTicketTransitionStatusChoicesProvider(): TicketTransitionStatusChoicesProvider
+    {
+        return new TicketTransitionStatusChoicesProvider(
             $this->createJiraIssueReader()
         );
     }

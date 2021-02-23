@@ -21,4 +21,5 @@ Available commands:
   workflow:create:jira-issue     Create a jira issue.
   workflow:get:jira-issue        Get data from a jira issue.
   workflow:list-bookings         List bookings of the day.
+  workflow:move:jira-issue       Transition the status of a jira issue.
   workflow:work-on-ticket        creates a new feature branch for the given ticket and assigns the task to the developer

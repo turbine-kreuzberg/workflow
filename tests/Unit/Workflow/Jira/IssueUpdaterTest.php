@@ -125,4 +125,18 @@ class IssueUpdaterTest extends TestCase
 
         $issueUpdater->moveIssueToStatus('BCM-12', 'unknownState');
     }
+
+    public function testAssignJiraIssueToUserCallsJiraClient(): void
+    {
+        $testIssueNumber = '666';
+
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::once())->method('assignJiraIssueToUser')->with($testIssueNumber);
+
+        $issueUpdater = new IssueUpdater(
+            $jiraClientMock,
+        );
+
+        $issueUpdater->assignJiraIssueToUser($testIssueNumber);
+    }
 }

@@ -63,5 +63,9 @@ get-ticket-data: ##@workflow get data of a jira ticket
 	docker-compose exec php /var/www/bin/workflow workflow:get:jira-issue $(filter-out $@,$(MAKECMDGOALS))
 .PHONY: get-ticket-data
 
+move-ticket: ##@workflow transition the status of a jira ticket.
+	docker-compose exec php /var/www/bin/workflow workflow:move:jira-issue $(filter-out $@,$(MAKECMDGOALS))
+.PHONY: move-ticket
+
 %:
 	@:

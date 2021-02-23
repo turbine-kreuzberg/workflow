@@ -9,6 +9,7 @@ use Turbine\Workflow\Console\CreateJiraIssueCommand;
 use Turbine\Workflow\Console\CreateMergeRequestCommand;
 use Turbine\Workflow\Console\GetJiraIssueDataCommand;
 use Turbine\Workflow\Console\ListBookingsCommand;
+use Turbine\Workflow\Console\MoveJiraIssueCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
 
 class Bootstrap
@@ -54,6 +55,13 @@ class Bootstrap
             new GetJiraIssueDataCommand(
                 workflowFactory: $workflowFactory,
                 issueReader: $workflowFactory->createJiraIssueReader(),
+            )
+        );
+
+        $application->add(
+            new MoveJiraIssueCommand(
+                workflowFactory: $workflowFactory,
+                issueUpdater: $workflowFactory->createJiraIssueUpdater(),
             )
         );
 

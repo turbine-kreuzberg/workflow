@@ -31,6 +31,7 @@ class IssueUpdater
 
         return $duration;
     }
+
     public function moveIssueToStatus(string $issue, string $targetState): void
     {
         $transitions = $this->jiraClient->getIssueTransitions($issue);
@@ -43,5 +44,10 @@ class IssueUpdater
         }
 
         throw new JiraStateNotFoundException(sprintf('target state "%s" not available for issue', $targetState));
+    }
+
+    public function assignJiraIssueToUser(string $issue): void
+    {
+        $this->jiraClient->assignJiraIssueToUser($issue);
     }
 }
