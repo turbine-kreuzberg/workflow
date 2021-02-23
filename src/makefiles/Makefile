@@ -6,7 +6,7 @@ workflow-setup: ##@workflow setup turbine workflow
 .PHONY: workflow-setup
 
 book-time: ##@workflow book time on ticket
-	$(DOCKER_RUN_WORKFLOW) workflow:book-time
+	$(DOCKER_RUN_WORKFLOW) workflow:book-time $(filter-out $@,$(MAKECMDGOALS))
 .PHONY: book-time
 
 fast-book-time: ##@workflow book time on ticket

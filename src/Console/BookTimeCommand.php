@@ -3,6 +3,7 @@
 namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,6 +22,7 @@ use Turbine\Workflow\Workflow\WorkflowFactory;
 class BookTimeCommand extends Command
 {
     private const COMMAND_NAME = 'workflow:book-time';
+    private const ARGUMENT_TICKET_NUMBER = 'ticket number';
     private const FOR_CURRENT_BRANCH = 'forCurrentBranch';
     private const CUSTOM_INPUT = 'Custom input';
     private const FAST_WORKLOG = 'fast-worklog';
@@ -53,6 +55,11 @@ class BookTimeCommand extends Command
             null,
             InputOption::VALUE_NONE,
             'Use this option to enable fast worklog'
+        );
+        $this->addArgument(
+            self::ARGUMENT_TICKET_NUMBER,
+            InputArgument::OPTIONAL,
+            'You can provide the ticket number directly'
         );
     }
 
@@ -135,6 +142,11 @@ class BookTimeCommand extends Command
     {
         if ($input->getOption(self::FOR_CURRENT_BRANCH)) {
             return $this->ticketIdProvider->extractTicketIdFromCurrentBranch();
+        }
+
+        $argumentTicketNumber = $input->getArgument(self::ARGUMENT_TICKET_NUMBER);
+        if (is_numeric($argumentTicketNumber)) {
+            return $argumentTicketNumber;
         }
 
         return $this->ticketNumberConsole->getIssueTicketNumber($inputOutputStyle);

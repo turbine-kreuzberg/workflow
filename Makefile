@@ -28,7 +28,7 @@ sniff-fix-project: ##@development run code sniffer
 .PHONY: sniff-fix-project
 
 book-time: ##@workflow book time on ticket
-	docker-compose exec php /var/www/bin/workflow workflow:book-time
+	docker-compose exec php /var/www/bin/workflow workflow:book-time $(filter-out $@,$(MAKECMDGOALS))
 .PHONY: book-time
 
 list-bookings: ##@workflow list bookings

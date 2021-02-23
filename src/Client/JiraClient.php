@@ -79,6 +79,8 @@ class JiraClient
 
     public function bookTime(string $issue, array $worklogEntry): void
     {
+        $issue = $this->normalizeIssueNumber($issue);
+
         $bookTimeCall = self::ISSUE_URL . $issue . '/worklog';
         $this->jiraHttpClient->post($bookTimeCall, $worklogEntry);
     }
