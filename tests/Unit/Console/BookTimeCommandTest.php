@@ -10,11 +10,11 @@ use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\BookTimeCommand;
 use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
 use Turbine\Workflow\Console\SubConsole\TicketNumberConsole;
+use Turbine\Workflow\Console\SubConsole\WorklogCommentConsole;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
-use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
 use Turbine\Workflow\Workflow\TicketIdProvider;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -48,19 +48,19 @@ class BookTimeCommandTest extends TestCase
         $issueUpdaterMock = $this->createMock(IssueUpdater::class);
         $issueReaderMock = $this->createMock(IssueReader::class);
         $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
-        $worklogChoicesProviderMock = $this->createMock(WorklogChoicesProvider::class);
+        $worklogCommentConsoleMock = $this->createMock(WorklogCommentConsole::class);
 
         $ticketNumberConsoleMock = $this->createMock(TicketNumberConsole::class);
 
         $bookTimeCommand = new BookTimeCommand(
-            $configurationMock,
-            $workflowFactoryMock,
-            $issueUpdaterMock,
-            $issueReaderMock,
-            $fastBookTimeConsoleMock,
-            $ticketIdProviderMock,
-            $worklogChoicesProviderMock,
-            $ticketNumberConsoleMock
+            configuration: $configurationMock,
+            workflowFactory: $workflowFactoryMock,
+            issueUpdater: $issueUpdaterMock,
+            issueReader: $issueReaderMock,
+            fastBookTimeConsole: $fastBookTimeConsoleMock,
+            ticketIdProvider: $ticketIdProviderMock,
+            ticketNumberConsole: $ticketNumberConsoleMock,
+            worklogCommentConsole: $worklogCommentConsoleMock
         );
 
         $bookTimeCommand->run($inputMock, $outputMock);
@@ -77,10 +77,6 @@ class BookTimeCommandTest extends TestCase
         $outputMock = $this->createMock(OutputInterface::class);
 
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
-        $symfonyStyleMock->expects(self::once())
-            ->method('choice')
-            ->with('Choose your worklog comment')
-            ->willReturn('message');
 
         $symfonyStyleMock->expects(self::once())
             ->method('ask')
@@ -127,23 +123,23 @@ class BookTimeCommandTest extends TestCase
             ->method('extractTicketIdFromCurrentBranch')
             ->willReturn('ABC-134');
 
-        $worklogChoicesProviderMock = $this->createMock(WorklogChoicesProvider::class);
-        $worklogChoicesProviderMock->expects(self::once())
-            ->method('provide')
-            ->with('ABC-134')
-            ->willReturn([]);
-
         $ticketNumberConsoleMock = $this->createMock(TicketNumberConsole::class);
 
+        $worklogCommentConsoleMock = $this->createMock(WorklogCommentConsole::class);
+        $worklogCommentConsoleMock->expects(self::once())
+            ->method('createWorklogComment')
+            ->with('ABC-134', $symfonyStyleMock)
+            ->willReturn('message');
+
         $bookTimeCommand = new BookTimeCommand(
-            $configurationMock,
-            $workflowFactoryMock,
-            $issueUpdaterMock,
-            $issueReaderMock,
-            $fastBookTimeConsoleMock,
-            $ticketIdProviderMock,
-            $worklogChoicesProviderMock,
-            $ticketNumberConsoleMock
+            configuration: $configurationMock,
+            workflowFactory: $workflowFactoryMock,
+            issueUpdater: $issueUpdaterMock,
+            issueReader: $issueReaderMock,
+            fastBookTimeConsole: $fastBookTimeConsoleMock,
+            ticketIdProvider: $ticketIdProviderMock,
+            ticketNumberConsole: $ticketNumberConsoleMock,
+            worklogCommentConsole: $worklogCommentConsoleMock
         );
 
         $bookTimeCommand->run($inputMock, $outputMock);
@@ -160,10 +156,6 @@ class BookTimeCommandTest extends TestCase
         $outputMock = $this->createMock(OutputInterface::class);
 
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
-        $symfonyStyleMock->expects(self::once())
-            ->method('choice')
-            ->with('Choose your worklog comment')
-            ->willReturn('message');
 
         $symfonyStyleMock->expects(self::once())
             ->method('ask')
@@ -207,27 +199,27 @@ class BookTimeCommandTest extends TestCase
 
         $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
 
-        $worklogChoicesProviderMock = $this->createMock(WorklogChoicesProvider::class);
-        $worklogChoicesProviderMock->expects(self::once())
-            ->method('provide')
-            ->with('ABC-134')
-            ->willReturn([]);
-
         $ticketNumberConsoleMock = $this->createMock(TicketNumberConsole::class);
         $ticketNumberConsoleMock->expects(self::once())
             ->method('getIssueTicketNumber')
             ->with($symfonyStyleMock)
             ->willReturn('ABC-134');
 
+        $worklogCommentConsoleMock = $this->createMock(WorklogCommentConsole::class);
+        $worklogCommentConsoleMock->expects(self::once())
+            ->method('createWorklogComment')
+            ->with('ABC-134', $symfonyStyleMock)
+            ->willReturn('message');
+
         $bookTimeCommand = new BookTimeCommand(
-            $configurationMock,
-            $workflowFactoryMock,
-            $issueUpdaterMock,
-            $issueReaderMock,
-            $fastBookTimeConsoleMock,
-            $ticketIdProviderMock,
-            $worklogChoicesProviderMock,
-            $ticketNumberConsoleMock
+            configuration: $configurationMock,
+            workflowFactory: $workflowFactoryMock,
+            issueUpdater: $issueUpdaterMock,
+            issueReader: $issueReaderMock,
+            fastBookTimeConsole: $fastBookTimeConsoleMock,
+            ticketIdProvider: $ticketIdProviderMock,
+            ticketNumberConsole: $ticketNumberConsoleMock,
+            worklogCommentConsole: $worklogCommentConsoleMock
         );
 
         $bookTimeCommand->run($inputMock, $outputMock);
@@ -249,10 +241,6 @@ class BookTimeCommandTest extends TestCase
         $outputMock = $this->createMock(OutputInterface::class);
 
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
-        $symfonyStyleMock->expects(self::once())
-            ->method('choice')
-            ->with('Choose your worklog comment')
-            ->willReturn('new worklog message');
 
         $symfonyStyleMock->expects(self::exactly(2))
             ->method('ask')
@@ -378,27 +366,23 @@ class BookTimeCommandTest extends TestCase
 
         $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
 
-        $worklogChoicesProviderMock = $this->createMock(WorklogChoicesProvider::class);
-        $worklogChoicesProviderMock->expects(self::once())
-            ->method('provide')
-            ->with('ABC-134')
-            ->willReturn([]);
-
         $ticketNumberConsoleMock = $this->createMock(TicketNumberConsole::class);
         $ticketNumberConsoleMock->expects(self::once())
             ->method('getIssueTicketNumber')
             ->with($symfonyStyleMock)
             ->willReturn('ABC-134');
 
+        $worklogCommentConsoleMock = $this->createMock(WorklogCommentConsole::class);
+
         $bookTimeCommand = new BookTimeCommand(
-            $configurationMock,
-            $workflowFactoryMock,
-            $issueUpdaterMock,
-            $issueReaderMock,
-            $fastBookTimeConsoleMock,
-            $ticketIdProviderMock,
-            $worklogChoicesProviderMock,
-            $ticketNumberConsoleMock
+            configuration: $configurationMock,
+            workflowFactory: $workflowFactoryMock,
+            issueUpdater: $issueUpdaterMock,
+            issueReader: $issueReaderMock,
+            fastBookTimeConsole: $fastBookTimeConsoleMock,
+            ticketIdProvider: $ticketIdProviderMock,
+            ticketNumberConsole: $ticketNumberConsoleMock,
+            worklogCommentConsole: $worklogCommentConsoleMock
         );
 
         $bookTimeCommand->run($inputMock, $outputMock);

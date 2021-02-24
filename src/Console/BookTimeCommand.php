@@ -11,11 +11,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
 use Turbine\Workflow\Console\SubConsole\TicketNumberConsole;
+use Turbine\Workflow\Console\SubConsole\WorklogCommentConsole;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
-use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
 use Turbine\Workflow\Workflow\TicketIdProvider;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -24,7 +24,6 @@ class BookTimeCommand extends Command
     private const COMMAND_NAME = 'workflow:book-time';
     private const ARGUMENT_TICKET_NUMBER = 'ticket number';
     private const FOR_CURRENT_BRANCH = 'forCurrentBranch';
-    private const CUSTOM_INPUT = 'Custom input';
     private const FAST_WORKLOG = 'fast-worklog';
 
     public function __construct(
@@ -34,8 +33,8 @@ class BookTimeCommand extends Command
         private IssueReader $issueReader,
         private FastBookTimeConsole $fastBookTimeConsole,
         private TicketIdProvider $ticketIdProvider,
-        private WorklogChoicesProvider $worklogChoicesProvider,
-        private TicketNumberConsole $ticketNumberConsole
+        private TicketNumberConsole $ticketNumberConsole,
+        private WorklogCommentConsole $worklogCommentConsole
     ) {
         parent::__construct();
     }
@@ -75,7 +74,7 @@ class BookTimeCommand extends Command
         }
 
         $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
-        $worklogComment = $this->createWorklogComment($issue, $inputOutputStyle);
+        $worklogComment = $this->worklogCommentConsole->createWorklogComment($issue, $inputOutputStyle);
 
         try {
             $lastTicketWorklog = $this->issueReader->getLastTicketWorklog($issue);
@@ -105,28 +104,6 @@ class BookTimeCommand extends Command
         );
 
         return 0;
-    }
-
-    private function createWorklogComment(
-        string $issueNumber,
-        SymfonyStyle $inputOutputStyle
-    ): string {
-        $worklogChoices = $this->worklogChoicesProvider->provide($issueNumber);
-
-        $worklogChoices[] = self::CUSTOM_INPUT;
-
-        $commentChoice = $inputOutputStyle->choice(
-            'Choose your worklog comment',
-            $worklogChoices,
-            $worklogChoices[0]
-        );
-
-        $summary = $commentChoice;
-        if ($commentChoice === self::CUSTOM_INPUT) {
-            $summary = $inputOutputStyle->ask('What did you do');
-        }
-
-        return $summary;
     }
 
     private function createWorklogDuration(

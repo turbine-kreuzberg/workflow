@@ -9,6 +9,7 @@ use Turbine\Workflow\Client\ClientFactory;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
 use Turbine\Workflow\Console\SubConsole\TicketNumberConsole;
+use Turbine\Workflow\Console\SubConsole\WorklogCommentConsole;
 use Turbine\Workflow\Workflow\Jira\IssueCreator;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
@@ -153,6 +154,13 @@ class WorkflowFactory
         return new TicketNumberConsole(
             $this->getTicketIdProvider(),
             $this->createFavouriteTicketChoicesProvider()
+        );
+    }
+
+    public function createWorklogCommentConsole(): WorklogCommentConsole
+    {
+        return new WorklogCommentConsole(
+            $this->createWorklogChoiceProvider()
         );
     }
 
