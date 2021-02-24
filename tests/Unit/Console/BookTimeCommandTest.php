@@ -233,6 +233,93 @@ class BookTimeCommandTest extends TestCase
         $bookTimeCommand->run($inputMock, $outputMock);
     }
 
+    public function testBookTimeWithUsingTicketNumberFromInput(): void
+    {
+        $inputMock = $this->createMock(InputInterface::class);
+        $inputMock->expects(self::exactly(2))
+            ->method('getOption')
+            ->withConsecutive(['fast-worklog'], ['forCurrentBranch'])
+            ->willReturnOnConsecutiveCalls(false, false);
+
+        $inputMock->expects(self::once())
+            ->method('getArgument')
+            ->with('ticket number')
+            ->willReturn('ABC-134');
+
+        $outputMock = $this->createMock(OutputInterface::class);
+
+        $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
+        $symfonyStyleMock->expects(self::once())
+            ->method('choice')
+            ->with('Choose your worklog comment')
+            ->willReturn('new worklog message');
+
+        $symfonyStyleMock->expects(self::exactly(2))
+            ->method('ask')
+            ->withConsecutive(['What did you do'], ['For how long did you do it'])
+            ->willReturnOnConsecutiveCalls('new worklog message', 100.0);
+
+        $symfonyStyleMock->expects(self::once())
+            ->method('success')
+            ->with("Booked 3600 minutes for \"new worklog message\" on ABC-134\nTotal booked time today: 8.5h");
+
+        $workflowFactoryMock = $this->createMock(WorkflowFactory::class);
+        $workflowFactoryMock->expects(self::once())
+            ->method('createSymfonyStyle')
+            ->with($inputMock, $outputMock)
+            ->willReturn($symfonyStyleMock);
+
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $fastBookTimeConsoleMock = $this->createMock(FastBookTimeConsole::class);
+
+        $jiraWorklogEntry = new JiraWorklogEntryTransfer();
+        $jiraWorklogEntry->timeSpentSeconds = 100;
+        $jiraWorklogEntry->key = 'ABC-134';
+
+        $issueUpdaterMock = $this->createMock(IssueUpdater::class);
+        $issueUpdaterMock->expects(self::once())
+            ->method('bookTime')
+            ->with('ABC-134', 'new worklog message', 100,  date('Y-m-d') . 'T12:00:00.000+0000')
+            ->willReturn(3600.0);
+
+
+        $issueReaderMock = $this->createMock(IssueReader::class);
+        $issueReaderMock->expects(self::once())
+            ->method('getLastTicketWorklog')
+            ->with('ABC-134')
+            ->willThrowException(new JiraNoWorklogException());
+
+        $issueReaderMock->expects(self::once())
+            ->method('getTimeSpentToday')
+            ->willReturn(8.5);
+
+        $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
+
+        $worklogChoicesProviderMock = $this->createMock(WorklogChoicesProvider::class);
+        $worklogChoicesProviderMock->expects(self::once())
+            ->method('provide')
+            ->with('ABC-134')
+            ->willReturn([]);
+
+        $ticketNumberConsoleMock = $this->createMock(TicketNumberConsole::class);
+        $ticketNumberConsoleMock->expects(self::never())
+            ->method('getIssueTicketNumber');
+
+        $bookTimeCommand = new BookTimeCommand(
+            $configurationMock,
+            $workflowFactoryMock,
+            $issueUpdaterMock,
+            $issueReaderMock,
+            $fastBookTimeConsoleMock,
+            $ticketIdProviderMock,
+            $worklogChoicesProviderMock,
+            $ticketNumberConsoleMock
+        );
+
+        $bookTimeCommand->run($inputMock, $outputMock);
+    }
+
     public function testBookTimeWithoutExistentWorklog(): void
     {
         $inputMock = $this->createMock(InputInterface::class);

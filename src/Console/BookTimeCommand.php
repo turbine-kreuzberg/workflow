@@ -145,7 +145,7 @@ class BookTimeCommand extends Command
         }
 
         $argumentTicketNumber = $input->getArgument(self::ARGUMENT_TICKET_NUMBER);
-        if (is_numeric($argumentTicketNumber)) {
+        if ($argumentTicketNumber !== null && is_string($argumentTicketNumber)) {
             return $argumentTicketNumber;
         }
 
