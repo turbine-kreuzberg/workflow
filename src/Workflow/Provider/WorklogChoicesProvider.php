@@ -2,6 +2,7 @@
 
 namespace Turbine\Workflow\Workflow\Provider;
 
+use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 
 class WorklogChoicesProvider
@@ -13,12 +14,14 @@ class WorklogChoicesProvider
 
     public function provide(string $issue): array
     {
-        $jiraWorklogEntryTransfer = $this->issueReader->getLastTicketWorklog($issue);
+        $worklogChoices = [];
+        try {
+            $jiraWorklogEntryTransfer = $this->issueReader->getLastTicketWorklog($issue);
+            $worklogChoices[] = $jiraWorklogEntryTransfer->comment;
+        } catch (JiraNoWorklogException $jiraNoWorklogException) {
+        }
 
-        $worklogChoices = [
-            $jiraWorklogEntryTransfer->comment,
-            $this->commitMessageProvider->getLastCommitMessage()
-        ];
+        $worklogChoices[] = $this->commitMessageProvider->getLastCommitMessage();
 
         return $worklogChoices;
     }

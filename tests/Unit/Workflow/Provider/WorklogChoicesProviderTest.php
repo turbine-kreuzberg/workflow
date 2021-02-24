@@ -3,6 +3,7 @@
 namespace Unit\Workflow\Provider;
 
 use PHPUnit\Framework\TestCase;
+use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
@@ -34,6 +35,29 @@ class WorklogChoicesProviderTest extends TestCase
             [
                 'jira worklog',
                 'last git Commit',
+            ],
+            $worklogChoicesProvider->provide('issue')
+        );
+    }
+
+    public function testNoWorklogFoundReturnsOnlyLastCommit(): void
+    {
+        $issueReaderMock = $this->createMock(IssueReader::class);
+        $issueReaderMock->expects(self::once())
+            ->method('getLastTicketWorklog')
+            ->with('issue')
+            ->willThrowException(new JiraNoWorklogException());
+
+        $commitMessageProviderMock = $this->createMock(CommitMessageProvider::class);
+        $commitMessageProviderMock->expects(self::once())
+            ->method('getLastCommitMessage')
+            ->willReturn('last git Commit');
+
+        $worklogChoicesProvider = new WorklogChoicesProvider($issueReaderMock, $commitMessageProviderMock);
+
+        self::assertEquals(
+            [
+                'last git Commit'
             ],
             $worklogChoicesProvider->provide('issue')
         );
