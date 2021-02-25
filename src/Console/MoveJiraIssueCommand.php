@@ -15,9 +15,6 @@ class MoveJiraIssueCommand extends Command
 {
     private const ARGUMENT_TICKET_NUMBER = 'ticket number';
 
-    /**
-     * @var string
-     */
     protected static $defaultName = 'workflow:move:jira-issue';
 
     public function __construct(

@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\MoveJiraIssueCommand;
+use Turbine\Workflow\Exception\JiraStateNotFoundException;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
 use Turbine\Workflow\Workflow\Provider\TicketTransitionStatusChoicesProvider;
 use Turbine\Workflow\Workflow\WorkflowFactory;
@@ -249,4 +250,60 @@ class MoveJiraIssueCommandTest extends TestCase
 
         $moveJiraIssueCommand->run($inputMock, $outputMock);
     }
+
+    public function testMoveTicketWithNoneExistingTargetStateWillShowAnError(): void
+    {
+        $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
+        $symfonyStyleMock
+            ->expects(self::once())
+            ->method('ask')
+            ->with('Ticket number')
+            ->willReturn('12345');
+        $symfonyStyleMock
+            ->expects(self::once())
+            ->method('choice')
+            ->willReturn('Choice 2');
+
+        $symfonyStyleMock
+            ->expects(self::once())
+            ->method('error')
+            ->with('An error occurred moving ticket "12345" to status "Choice 2"');
+
+        $issueUpdaterMock = $this->createMock(IssueUpdater::class);
+        $issueUpdaterMock
+            ->expects(self::once())
+            ->method('moveIssueToStatus')
+            ->with('12345', 'Choice 2')
+            ->willThrowException(new JiraStateNotFoundException());
+
+        $ticketTransitionsStatusProviderMock = $this->createMock(TicketTransitionStatusChoicesProvider::class);
+        $ticketTransitionsStatusProviderMock
+            ->expects(self::once())
+            ->method('provide')
+            ->willReturn(['Choice 1', 'Choice 2']);
+
+        $workflowFactoryMock = $this->createMock(WorkflowFactory::class);
+        $workflowFactoryMock->expects(self::once())
+            ->method('createSymfonyStyle')
+            ->willReturn($symfonyStyleMock);
+        $workflowFactoryMock->expects(self::once())
+            ->method('createTicketTransitionStatusChoicesProvider')
+            ->willReturn($ticketTransitionsStatusProviderMock);
+
+        $moveJiraIssueCommand = new MoveJiraIssueCommand(
+            workflowFactory: $workflowFactoryMock,
+            issueUpdater: $issueUpdaterMock
+        );
+
+        $inputMock = $this->createMock(InputInterface::class);
+        $inputMock
+            ->expects(self::once())
+            ->method('getArgument')
+            ->with('ticket number')
+            ->willReturn(null);
+        $outputMock = $this->createMock(OutputInterface::class);
+
+        $moveJiraIssueCommand->run($inputMock, $outputMock);
+    }
+
 }
