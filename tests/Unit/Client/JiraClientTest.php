@@ -81,6 +81,42 @@ class JiraClientTest extends TestCase
         self::assertEquals($expectedJiraIssueTransfer, $jiraIssueTransfer);
     }
 
+    public function testGetIssueWithNumericInputAddProjectKey(): void
+    {
+        $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
+        $jiraHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with('https://jira.votum.info:7443/rest/api/latest/issue/ProjectKey-12')
+            ->willReturn(['some-response']);
+
+        $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
+        $jiraIssueTransfer = (new JiraIssueTransfer());
+        $jiraIssueTransfer->key = 'ProjectKey-12';
+
+        $jiraIssueMapperMock
+            ->expects(self::once())
+            ->method('map')
+            ->willReturn($jiraIssueTransfer);
+
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::once())
+            ->method('get')
+            ->with('JIRA_PROJECT_KEY')
+            ->willReturn('ProjectKey');
+        $jiraClient = new JiraClient(
+            $jiraHttpClientMock,
+            $configurationMock,
+            $jiraIssueMapperMock
+        );
+        $jiraIssueTransfer = $jiraClient->getIssue(issue: '12');
+
+        $expectedJiraIssueTransfer = new JiraIssueTransfer();
+        $expectedJiraIssueTransfer->key = 'ProjectKey-12';
+        $expectedJiraIssueTransfer->url = 'https://jira.votum.info:7443/browse/ProjectKey-12';
+
+        self::assertEquals($expectedJiraIssueTransfer, $jiraIssueTransfer);
+    }
+
     public function testCreateIssueUsesHttpClientToCallJiraIssueEndpoint(): void
     {
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);

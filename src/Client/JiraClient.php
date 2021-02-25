@@ -94,7 +94,7 @@ class JiraClient
 
     public function getIssue(string $issue): JiraIssueTransfer
     {
-        $issueCall = self::ISSUE_URL . $this->normalizeIssueNumber($issue);;
+        $issueCall = self::ISSUE_URL . $this->normalizeIssueNumber($issue);
 
         return $this->mapResponseToJiraIssueTransfer(
             $this->jiraHttpClient->get($issueCall)
