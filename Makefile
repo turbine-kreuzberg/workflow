@@ -67,5 +67,9 @@ move-ticket: ##@workflow transition the status of a jira ticket.
 	docker-compose exec php /var/www/bin/workflow workflow:move:jira-issue $(filter-out $@,$(MAKECMDGOALS))
 .PHONY: move-ticket
 
+infection: ##@workflow transition the status of a jira ticket.
+	docker-compose exec php bash
+.PHONY: move-ticket
+
 %:
 	@:

@@ -1,0 +1,21 @@
+{
+    "source": {
+        "directories": [
+            "src/Transfers/"
+        ],
+        "excludes": [
+            "src/Workflow/Configuration.php"
+        ]
+    },
+    "phpUnit": {
+        "configDir": "tests"
+    },
+    "logs": {
+        "text": "tests/output/infection/infection.log",
+        "summary": "tests/output/infection/summary.log",
+        "json": "tests/output/infection/infection-log.json"
+    },
+    "mutators": {
+        "@default": true
+    }
+}
