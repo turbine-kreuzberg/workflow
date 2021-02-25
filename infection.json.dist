@@ -1,10 +1,7 @@
 {
     "source": {
         "directories": [
-            "src/Transfers/"
-        ],
-        "excludes": [
-            "src/Workflow/Configuration.php"
+            "src/Workflow/Jira"
         ]
     },
     "phpUnit": {
