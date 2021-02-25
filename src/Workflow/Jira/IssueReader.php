@@ -74,6 +74,12 @@ class IssueReader
         return $this->jiraClient->getIssue($issueKey);
     }
 
+
+    public function getIssueTransitions(string $issueKey): array
+    {
+        return $this->jiraClient->getIssueTransitions($issueKey);
+    }
+
     private function buildIssueKey(string $issueKey): string
     {
         if (is_numeric($issueKey)) {
@@ -81,10 +87,5 @@ class IssueReader
         }
 
         return $issueKey;
-    }
-
-    public function getIssueTransitions(string $issueKey): array
-    {
-        return $this->jiraClient->getIssueTransitions($issueKey);
     }
 }

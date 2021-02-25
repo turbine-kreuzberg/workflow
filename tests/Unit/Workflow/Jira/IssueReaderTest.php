@@ -222,4 +222,19 @@ class IssueReaderTest extends TestCase
 
         self::assertEquals(new JiraWorklogsTransfer(), $issueReader->getCompleteWorklog());
     }
+
+    public function testGetIssueTransitions(): void
+    {
+        $jiraClientMock = $this->createMock(JiraClient::class);
+        $jiraClientMock->expects(self::once())
+            ->method('getIssueTransitions')
+            ->with('issueKey')
+            ->willReturn([]);
+
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $issueReader = new IssueReader($jiraClientMock, $configurationMock);
+
+        self::assertEquals([], $issueReader->getIssueTransitions('issueKey'));
+    }
 }
