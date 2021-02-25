@@ -19,15 +19,20 @@ class BranchNameProviderTest extends TestCase
         $jiraClientMock = $this->createMock(JiraClient::class);
         $jiraClientMock->expects(self::once())
             ->method('getIssue')
+            ->with('ABC-145')
             ->willReturn($testJiraIssueTransfer);
+
         $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->method('get')
+            ->with('JIRA_PROJECT_KEY')
+            ->willReturn('ABC');
 
         $branchNameProvider = new BranchNameProvider(
             $jiraClientMock,
             $configurationMock
         );
 
-        $branchName = $branchNameProvider->getBranchNameFromTicket('ABC-145');
+        $branchName = $branchNameProvider->getBranchNameFromTicket('145');
         self::assertSame('ABC-145-jira-issue-summary', $branchName);
     }
 }

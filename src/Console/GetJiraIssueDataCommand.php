@@ -57,9 +57,9 @@ class GetJiraIssueDataCommand extends Command
         $this->outputInformationBlock($inputOutputStyle, $issueData);
 
         $this->outputSubTasks($inputOutputStyle, $issueData);
-
-        $inputOutputStyle
-            ->writeln('<href=' . $issueData->url . '>\<Click here to open in browser></>');
+        $inputOutputStyle->writeln(
+            sprintf('<href=%s>\<Click here to open in browser></>', $issueData->url)
+        );
 
         $inputOutputStyle->newLine();
 
@@ -81,10 +81,10 @@ class GetJiraIssueDataCommand extends Command
         $inputOutputStyle->section('Type  ' . $ticketType);
     }
 
-    private function getFormattedTicketType(?string $type): ?string
+    private function getFormattedTicketType(?string $type): string
     {
         if ($type === null) {
-            return null;
+            $type = '';
         }
 
         switch (strtolower($type)) {
