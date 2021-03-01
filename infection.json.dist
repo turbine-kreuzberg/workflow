@@ -1,8 +1,12 @@
 {
     "source": {
         "directories": [
-            "src/Workflow/Jira"
-        ]
+            "src/Client",
+            "src/Workflow",
+            "src/Console",
+            "src/Transfers"
+        ],
+        "excludes": ["/Factory\\.php/", "/Bootstrap\\.php/"]
     },
     "phpUnit": {
         "configDir": "tests"

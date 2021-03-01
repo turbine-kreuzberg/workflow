@@ -3,7 +3,6 @@
 namespace Unit\Workflow;
 
 use PHPUnit\Framework\TestCase;
-use Turbine\Workflow\Workflow\Bootstrap;
 
 class BootstrapTest extends TestCase
 {
