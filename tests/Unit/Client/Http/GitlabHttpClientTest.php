@@ -56,6 +56,9 @@ class GitlabHttpClientTest extends TestCase
 
         $atlassianHttpClient = new GitlabHttpClient($clientMock);
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
+        );
         self::assertEquals([], $atlassianHttpClient->get('gitlab-url'));
     }
 
@@ -125,6 +128,9 @@ class GitlabHttpClientTest extends TestCase
 
         $atlassianHttpClient = new GitlabHttpClient($clientMock);
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
+        );
         self::assertEquals([], $atlassianHttpClient->post('gitlab-url'));
     }
 

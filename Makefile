@@ -71,5 +71,9 @@ infection: ##@workflow transition the status of a jira ticket.
 	docker-compose exec php /var/www/vendor/bin/infection --threads=4 --show-mutations
 .PHONY: move-ticket
 
+test: ##
+	docker-compose exec php sh -c "php -i"
+.PHONY: test
+
 %:
 	@:
