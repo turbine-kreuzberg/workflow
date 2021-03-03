@@ -57,7 +57,7 @@ mr: ##@workflow create mr
 
 install-git-hooks: ##@development install git hooks
 	git config core.hooksPath .githooks
-.PHONY: install-git-hooks-include vendor/turbine/workflow/src/makefiles/Makefile
+.PHONY: install-git-hooks-include
 
 get-ticket-data: ##@workflow get data of a jira ticket
 	docker-compose exec php /var/www/bin/workflow workflow:get:jira-issue $(filter-out $@,$(MAKECMDGOALS))
@@ -69,7 +69,7 @@ move-ticket: ##@workflow transition the status of a jira ticket.
 
 infection: ##@workflow transition the status of a jira ticket.
 	docker-compose exec php /var/www/vendor/bin/infection --threads=4 --show-mutations
-.PHONY: move-ticket
+.PHONY: infection
 
 %:
 	@:
