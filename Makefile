@@ -71,5 +71,15 @@ infection: ##@development run php infection to discover test flaws
 	docker-compose exec php /var/www/vendor/bin/infection --threads=4 --show-mutations
 .PHONY: infection
 
+enable-xdebug: ##@development Enable xdebug
+	docker-compose exec php ln -snf /etc/php/8/mods-available/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+	docker-compose restart -t0 php
+.PHONY: enable-xdebug
+
+disable-xdebug: ##@development Disable xdebug
+	docker-compose exec php rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+	docker-compose restart -t0 php
+.PHONY: disable-xdebug
+
 %:
 	@:
