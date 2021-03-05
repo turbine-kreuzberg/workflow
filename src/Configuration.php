@@ -16,6 +16,7 @@ class Configuration
     public const REPOSITORY = 'REPOSITORY';
     public const GITLAB_API_URL = 'GITLAB_API_URL';
     public const PERSONAL_ACCESS_TOKEN = 'GITLAB_PERSONAL_ACCESS_TOKEN';
+    public const FAVOURITE_WORKLOG_COMMENTS = 'FAVOURITE_WORKLOG_COMMENTS';
 
 
     public function get(string $key): string

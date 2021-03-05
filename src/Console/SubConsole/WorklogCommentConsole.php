@@ -3,21 +3,27 @@
 namespace Turbine\Workflow\Console\SubConsole;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Turbine\Workflow\Workflow\Provider\FavouriteWorklogCommentChoicesProvider;
 use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
 
 class WorklogCommentConsole
 {
     private const CUSTOM_INPUT = 'Custom input';
 
-    public function __construct(private WorklogChoicesProvider $worklogChoicesProvider)
-    {
+    public function __construct(
+        private WorklogChoicesProvider $worklogChoicesProvider,
+        private FavouriteWorklogCommentChoicesProvider $favouriteWorklogCommentChoicesProvider
+    ) {
     }
 
     public function createWorklogComment(
         string $issueNumber,
         SymfonyStyle $inputOutputStyle
     ): string {
-        $worklogChoices = $this->worklogChoicesProvider->provide($issueNumber);
+        $worklogChoices = array_merge(
+            $this->worklogChoicesProvider->provide($issueNumber),
+            $this->favouriteWorklogCommentChoicesProvider->provide()
+        );
 
         $worklogChoices[] = self::CUSTOM_INPUT;
 

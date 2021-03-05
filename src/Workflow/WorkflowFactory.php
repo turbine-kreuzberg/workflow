@@ -19,6 +19,7 @@ use Turbine\Workflow\Workflow\Provider\BranchNameProvider;
 use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
 use Turbine\Workflow\Workflow\Provider\FastWorklogProvider;
 use Turbine\Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
+use Turbine\Workflow\Workflow\Provider\FavouriteWorklogCommentChoicesProvider;
 use Turbine\Workflow\Workflow\Provider\TicketTransitionStatusChoicesProvider;
 use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
 use Turbine\Workflow\Workflow\Validator\BranchNameValidator;
@@ -160,7 +161,8 @@ class WorkflowFactory
     public function createWorklogCommentConsole(): WorklogCommentConsole
     {
         return new WorklogCommentConsole(
-            $this->createWorklogChoiceProvider()
+            $this->createWorklogChoiceProvider(),
+            $this->createFavouriteWorklogCommentChoicesProvider()
         );
     }
 
@@ -181,5 +183,10 @@ class WorkflowFactory
     private function getCommitMessageProvider(): CommitMessageProvider
     {
         return new CommitMessageProvider($this->getClientFactory()->getGitClient());
+    }
+
+    private function createFavouriteWorklogCommentChoicesProvider(): FavouriteWorklogCommentChoicesProvider
+    {
+        return new FavouriteWorklogCommentChoicesProvider($this->createConfiguration());
     }
 }

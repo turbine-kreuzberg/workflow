@@ -5,6 +5,7 @@ namespace Unit\Console\SubConsole;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\SubConsole\WorklogCommentConsole;
+use Turbine\Workflow\Workflow\Provider\FavouriteWorklogCommentChoicesProvider;
 use Turbine\Workflow\Workflow\Provider\WorklogChoicesProvider;
 
 class WorklogCommentConsoleTest extends TestCase
@@ -22,18 +23,30 @@ class WorklogCommentConsoleTest extends TestCase
                 ]
             );
 
-        $worklogCommentConsole = new WorklogCommentConsole($worklogChoicesProviderMock);
+        $favouriteWorklogCommentChoicesProviderMock = $this->createMock(FavouriteWorklogCommentChoicesProvider::class);
+        $favouriteWorklogCommentChoicesProviderMock
+            ->expects($this->once())
+            ->method('provide')
+            ->willReturn(['best-comment', 'test-comment']);
 
+        $worklogCommentConsole = new WorklogCommentConsole(
+            $worklogChoicesProviderMock,
+            $favouriteWorklogCommentChoicesProviderMock
+        );
+
+        $expectedChoices = [
+            'provided worklog',
+            'last git commit',
+            'best-comment',
+            'test-comment',
+            'Custom input',
+        ];
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
         $symfonyStyleMock->expects(self::once())
             ->method('choice')
             ->with(
                 'Choose your worklog comment',
-                [
-                    'provided worklog',
-                    'last git commit',
-                    'Custom input',
-                ],
+                $expectedChoices,
                 'provided worklog'
             )
             ->willReturn('last git commit');
@@ -57,7 +70,16 @@ class WorklogCommentConsoleTest extends TestCase
                 ]
             );
 
-        $worklogCommentConsole = new WorklogCommentConsole($worklogChoicesProviderMock);
+        $favouriteWorklogCommentChoicesProviderMock = $this->createMock(FavouriteWorklogCommentChoicesProvider::class);
+        $favouriteWorklogCommentChoicesProviderMock
+            ->expects($this->once())
+            ->method('provide')
+            ->willReturn([]);
+
+        $worklogCommentConsole = new WorklogCommentConsole(
+            $worklogChoicesProviderMock,
+            $favouriteWorklogCommentChoicesProviderMock
+        );
 
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
         $symfonyStyleMock->expects(self::once())
