@@ -20,9 +20,11 @@ class WorklogCommentConsole
         string $issueNumber,
         SymfonyStyle $inputOutputStyle
     ): string {
-        $worklogChoices = array_merge(
-            $this->worklogChoicesProvider->provide($issueNumber),
-            $this->favouriteWorklogCommentChoicesProvider->provide()
+        $worklogChoices = array_unique(
+            array_merge(
+                $this->worklogChoicesProvider->provide($issueNumber),
+                $this->favouriteWorklogCommentChoicesProvider->provide()
+            )
         );
 
         $worklogChoices[] = self::CUSTOM_INPUT;
