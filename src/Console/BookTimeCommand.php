@@ -80,7 +80,6 @@ class BookTimeCommand extends Command
             $lastTicketWorklog = $this->issueReader->getLastTicketWorklog($issue);
             $duration = $this->createWorklogDuration($lastTicketWorklog, $inputOutputStyle);
         } catch (JiraNoWorklogException $jiraNoWorklogException) {
-            $worklogComment = $inputOutputStyle->ask('What did you do');
             $duration = $inputOutputStyle->ask('For how long did you do it');
         }
 

@@ -242,10 +242,10 @@ class BookTimeCommandTest extends TestCase
 
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
 
-        $symfonyStyleMock->expects(self::exactly(2))
+        $symfonyStyleMock->expects(self::once())
             ->method('ask')
-            ->withConsecutive(['What did you do'], ['For how long did you do it'])
-            ->willReturnOnConsecutiveCalls('new worklog message', 100.0);
+            ->with('For how long did you do it')
+            ->willReturn(100.0);
 
         $symfonyStyleMock->expects(self::once())
             ->method('success')
@@ -289,6 +289,9 @@ class BookTimeCommandTest extends TestCase
             ->method('getIssueTicketNumber');
 
         $worklogCommentConsoleMock = $this->createMock(WorklogCommentConsole::class);
+        $worklogCommentConsoleMock->expects(self::once())
+            ->method('createWorklogComment')
+            ->willReturn('new worklog message');
 
         $bookTimeCommand = new BookTimeCommand(
             configuration: $configurationMock,
@@ -316,10 +319,10 @@ class BookTimeCommandTest extends TestCase
 
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
 
-        $symfonyStyleMock->expects(self::exactly(2))
+        $symfonyStyleMock->expects(self::once())
             ->method('ask')
-            ->withConsecutive(['What did you do'], ['For how long did you do it'])
-            ->willReturnOnConsecutiveCalls('new worklog message', 100.0);
+            ->with('For how long did you do it')
+            ->willReturn(100.0);
 
         $symfonyStyleMock->expects(self::once())
             ->method('success')
@@ -365,6 +368,9 @@ class BookTimeCommandTest extends TestCase
             ->willReturn('ABC-134');
 
         $worklogCommentConsoleMock = $this->createMock(WorklogCommentConsole::class);
+        $worklogCommentConsoleMock->expects(self::once())
+            ->method('createWorklogComment')
+            ->willReturn('new worklog message');
 
         $bookTimeCommand = new BookTimeCommand(
             configuration: $configurationMock,
