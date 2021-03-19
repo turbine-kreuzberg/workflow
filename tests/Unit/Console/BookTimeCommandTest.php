@@ -12,6 +12,7 @@ use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
 use Turbine\Workflow\Console\SubConsole\TicketNumberConsole;
 use Turbine\Workflow\Console\SubConsole\WorklogCommentConsole;
 use Turbine\Workflow\Exception\JiraNoWorklogException;
+use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
@@ -79,6 +80,10 @@ class BookTimeCommandTest extends TestCase
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
 
         $symfonyStyleMock->expects(self::once())
+            ->method('title')
+            ->with('Book time on ticket: ABC-134 - issue summary');
+
+        $symfonyStyleMock->expects(self::once())
             ->method('ask')
             ->with('For how long did you do it')
             ->willReturn(100.0);
@@ -109,6 +114,15 @@ class BookTimeCommandTest extends TestCase
 
 
         $issueReaderMock = $this->createMock(IssueReader::class);
+
+        $jiraIssueTransfer = new JiraIssueTransfer();
+        $jiraIssueTransfer->key = 'ABC-134';
+        $jiraIssueTransfer->summary = 'issue summary';
+
+        $issueReaderMock->expects(self::once())
+            ->method('getIssue')
+            ->willReturn($jiraIssueTransfer);
+
         $issueReaderMock->expects(self::once())
             ->method('getLastTicketWorklog')
             ->with('ABC-134')
@@ -158,6 +172,10 @@ class BookTimeCommandTest extends TestCase
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
 
         $symfonyStyleMock->expects(self::once())
+            ->method('title')
+            ->with('Book time on ticket: ABC-134 - issue summary');
+
+        $symfonyStyleMock->expects(self::once())
             ->method('ask')
             ->with('For how long did you do it')
             ->willReturn(100.0);
@@ -196,6 +214,14 @@ class BookTimeCommandTest extends TestCase
         $issueReaderMock->expects(self::once())
             ->method('getTimeSpentToday')
             ->willReturn(8.5);
+
+        $jiraIssueTransfer = new JiraIssueTransfer();
+        $jiraIssueTransfer->key = 'ABC-134';
+        $jiraIssueTransfer->summary = 'issue summary';
+
+        $issueReaderMock->expects(self::once())
+            ->method('getIssue')
+            ->willReturn($jiraIssueTransfer);
 
         $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
 
@@ -243,6 +269,10 @@ class BookTimeCommandTest extends TestCase
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
 
         $symfonyStyleMock->expects(self::once())
+            ->method('title')
+            ->with('Book time on ticket: ABC-134 - issue summary');
+
+        $symfonyStyleMock->expects(self::once())
             ->method('ask')
             ->with('For how long did you do it')
             ->willReturn(100.0);
@@ -273,6 +303,15 @@ class BookTimeCommandTest extends TestCase
 
 
         $issueReaderMock = $this->createMock(IssueReader::class);
+
+        $jiraIssueTransfer = new JiraIssueTransfer();
+        $jiraIssueTransfer->key = 'ABC-134';
+        $jiraIssueTransfer->summary = 'issue summary';
+
+        $issueReaderMock->expects(self::once())
+            ->method('getIssue')
+            ->willReturn($jiraIssueTransfer);
+
         $issueReaderMock->expects(self::once())
             ->method('getLastTicketWorklog')
             ->with('ABC-134')
@@ -320,6 +359,10 @@ class BookTimeCommandTest extends TestCase
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
 
         $symfonyStyleMock->expects(self::once())
+            ->method('title')
+            ->with('Book time on ticket: ABC-134 - issue summary');
+
+        $symfonyStyleMock->expects(self::once())
             ->method('ask')
             ->with('For how long did you do it')
             ->willReturn(100.0);
@@ -350,6 +393,15 @@ class BookTimeCommandTest extends TestCase
 
 
         $issueReaderMock = $this->createMock(IssueReader::class);
+
+        $jiraIssueTransfer = new JiraIssueTransfer();
+        $jiraIssueTransfer->key = 'ABC-134';
+        $jiraIssueTransfer->summary = 'issue summary';
+
+        $issueReaderMock->expects(self::once())
+            ->method('getIssue')
+            ->willReturn($jiraIssueTransfer);
+
         $issueReaderMock->expects(self::once())
             ->method('getLastTicketWorklog')
             ->with('ABC-134')

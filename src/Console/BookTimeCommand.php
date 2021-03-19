@@ -73,18 +73,22 @@ class BookTimeCommand extends Command
             }
         }
 
-        $issue = $this->getIssueTicketNumber($input, $inputOutputStyle);
-        $worklogComment = $this->worklogCommentConsole->createWorklogComment($issue, $inputOutputStyle);
+        $issueNumber = $this->getIssueTicketNumber($input, $inputOutputStyle);
+
+        $issue = $this->issueReader->getIssue($issueNumber);
+        $inputOutputStyle->title(\sprintf('Book time on ticket: %s - %s', $issue->key, $issue->summary));
+
+        $worklogComment = $this->worklogCommentConsole->createWorklogComment($issueNumber, $inputOutputStyle);
 
         try {
-            $lastTicketWorklog = $this->issueReader->getLastTicketWorklog($issue);
+            $lastTicketWorklog = $this->issueReader->getLastTicketWorklog($issueNumber);
             $duration = $this->createWorklogDuration($lastTicketWorklog, $inputOutputStyle);
         } catch (JiraNoWorklogException $jiraNoWorklogException) {
             $duration = $inputOutputStyle->ask('For how long did you do it');
         }
 
         $bookedTimeInMinutes = $this->issueUpdater->bookTime(
-            $issue,
+            $issueNumber,
             $worklogComment,
             $duration,
             $today
@@ -96,7 +100,7 @@ class BookTimeCommand extends Command
             . ' minutes for "'
             . $worklogComment
             . '" on '
-            . $issue
+            . $issueNumber
             . "\nTotal booked time today: "
             . $this->issueReader->getTimeSpentToday()
             . 'h'
