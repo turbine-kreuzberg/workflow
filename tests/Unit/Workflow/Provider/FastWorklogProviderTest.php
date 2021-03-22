@@ -28,7 +28,6 @@ class FastWorklogProviderTest extends TestCase
         [$issue, $message] = $fastWorklogProvider->provide();
         self::assertNull($issue);
         self::assertNull($message);
-
     }
 
     public function provideMalformedCommitMessages(): array
@@ -36,6 +35,7 @@ class FastWorklogProviderTest extends TestCase
         return [
             ['commitMessage' => 'BCM -999 i am not well formed'],
             ['commitMessage' => '999 i am not well formed'],
+            ['commitMessage' => 'BCM-999'],
         ];
     }
 

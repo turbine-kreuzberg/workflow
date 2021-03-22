@@ -23,7 +23,7 @@ class FastWorklogProvider
             $matches
         );
 
-        if (!isset($matches['issueNumber']) || !isset($matches['message'])) {
+        if (count($matches) === 0) {
             return [null, null];
         }
 
