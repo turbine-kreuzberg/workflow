@@ -45,7 +45,7 @@ class MoveJiraIssueCommand extends Command
         if (empty($choices)) {
             $inputOutputStyle->writeln('There are no transitions possible for this ticket.');
 
-            return Command::SUCCESS;
+            return 0;
         }
 
         $choice = $inputOutputStyle->choice(
@@ -60,7 +60,7 @@ class MoveJiraIssueCommand extends Command
                 sprintf('An error occurred moving ticket "%s" to status "%s"', $issueNumber, $choice)
             );
 
-            return Command::SUCCESS;
+            return 0;
         }
 
         $inputOutputStyle->success('Ticket moved successfully to status ' . $choice);
@@ -73,7 +73,7 @@ class MoveJiraIssueCommand extends Command
 
         $inputOutputStyle->success('Bye!!');
 
-        return Command::SUCCESS;
+        return 0;
     }
 
     private function getIssueNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string

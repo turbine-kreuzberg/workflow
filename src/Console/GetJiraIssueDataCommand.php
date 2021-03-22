@@ -63,7 +63,7 @@ class GetJiraIssueDataCommand extends Command
 
         $inputOutputStyle->newLine();
 
-        return Command::SUCCESS;
+        return 0;
     }
 
     private function outputIssueType(JiraIssueTransfer $issueData, SymfonyStyle $inputOutputStyle): void
