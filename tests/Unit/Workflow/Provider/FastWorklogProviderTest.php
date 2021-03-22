@@ -35,7 +35,7 @@ class FastWorklogProviderTest extends TestCase
         return [
             ['commitMessage' => 'BCM -999 i am not well formed'],
             ['commitMessage' => '999 i am not well formed'],
-            ['commitMessage' => 'BCM-999'],
+            ['commitMessage' => 'BCM-999 '],
         ];
     }
 
