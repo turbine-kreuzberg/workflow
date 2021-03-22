@@ -12,7 +12,7 @@ class BranchNameValidator
     {
         if (!preg_match('/^[a-z0-9-]+$/i', $branchName)) {
             throw new UnexpectedValueException(
-                'Invalid branch name (permitted are only lower case characters, numbers and the dash).'
+                'Invalid branch name (permitted are characters, numbers and the dash).'
             );
         }
 
