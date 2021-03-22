@@ -1,4 +1,5 @@
 <?php
+
 namespace Unit\Workflow\Provider;
 
 use PHPUnit\Framework\TestCase;
@@ -51,20 +52,37 @@ class FavouriteTicketsChoicesProviderTest extends TestCase
         $configurationMock->expects(self::once())
             ->method('get')
             ->with('JIRA_FAVOURITE_TICKETS')
-            ->willReturn('test-123,ticket-123');
+            ->willReturn('ticket-1,ticket-2');
 
         $issueReaderMock = $this->createMock(IssueReader::class);
         $jiraIssueTransfer = (new JiraIssueTransfer());
-        $jiraIssueTransfer->key = 'test-123';
-        $jiraIssueTransfer->summary = 'test-123-summary';
+        $jiraIssueTransfer->key = 'ticket-1';
+        $jiraIssueTransfer->summary = 'ticket-1-summary';
+
+        $jiraIssueTransfer2 = (new JiraIssueTransfer());
+        $jiraIssueTransfer2->key = 'ticket-2';
+        $jiraIssueTransfer2->summary = 'ticket-2-summary';
 
         $issueReaderMock->expects(self::once())
             ->method('getIssues')
-            ->with(['test-123', 'ticket-123'])
-            ->willReturn(new JiraIssueTransferCollection([$jiraIssueTransfer]));
+            ->with(['ticket-1', 'ticket-2'])
+            ->willReturn(
+                new JiraIssueTransferCollection(
+                    [
+                        $jiraIssueTransfer,
+                        $jiraIssueTransfer2,
+                    ]
+                )
+            );
 
         $favouriteTicketProvider = new FavouriteTicketChoicesProvider($configurationMock, $issueReaderMock);
 
-        self::assertEquals(['test-123' => 'test-123-summary'], $favouriteTicketProvider->provide());
+        self::assertEquals(
+            [
+                'ticket-1' => 'ticket-1-summary',
+                'ticket-2' => 'ticket-2-summary',
+            ],
+            $favouriteTicketProvider->provide()
+        );
     }
 }
