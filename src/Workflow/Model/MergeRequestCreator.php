@@ -56,8 +56,7 @@ class MergeRequestCreator
     {
         $gitLog = $this->gitClient->getGitLog();
 
-        $description = '';
-        $description .= $gitLog . PHP_EOL;
+        $description = $gitLog . PHP_EOL;
         $description .= 'Closes ' . $currentIssue . PHP_EOL;
 
         return $description;
