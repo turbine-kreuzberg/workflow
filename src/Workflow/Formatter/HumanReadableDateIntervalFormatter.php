@@ -8,16 +8,14 @@ class HumanReadableDateIntervalFormatter
 {
     public function format(string $timeInSeconds): string
     {
+        if ($timeInSeconds === '') {
+            return '';
+        }
+
         $dateTime = new DateTime('@' . $timeInSeconds);
         $timeDiff = date_diff(new DateTime('@0'), $dateTime, true);
 
         $result = [];
-        if ($timeDiff->y) {
-            $result[] = $timeDiff->format("%yy");
-        }
-        if ($timeDiff->m) {
-            $result[] = $timeDiff->format("%mmon");
-        }
         if ($timeDiff->d) {
             $result[] = $timeDiff->format("%dd");
         }
