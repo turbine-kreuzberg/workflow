@@ -4,6 +4,7 @@ namespace Unit\Workflow\Jira\Mapper;
 
 use PHPUnit\Framework\TestCase;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Workflow\Formatter\HumanReadableDateIntervalFormatter;
 use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraIssueMapperTest extends TestCase
@@ -20,7 +21,30 @@ class JiraIssueMapperTest extends TestCase
         array $jiraResponse,
         JiraIssueTransfer $expectedJiraIssueTransfer
     ): void {
-        $mapper = new JiraIssueMapper();
+        $humanReadableDateIntervalFormatterMock = $this->createMock(HumanReadableDateIntervalFormatter::class);
+        $mapper = new JiraIssueMapper($humanReadableDateIntervalFormatterMock);
+        self::assertEquals($expectedJiraIssueTransfer, $mapper->map($jiraResponse));
+    }
+
+    /**
+     * @dataProvider jiraIssueDataProviderWithAggregateTimeSpent
+     *
+     * @param array $jiraResponse
+     * @param \Turbine\Workflow\Transfers\JiraIssueTransfer $expectedJiraIssueTransfer
+     *
+     * @return void
+     */
+    public function testMapIssueMapsJiraResponseArrayToJiraIssueTransferUsingDateInterFormatter(
+        array $jiraResponse,
+        JiraIssueTransfer $expectedJiraIssueTransfer
+    ): void {
+        $humanReadableDateIntervalFormatterMock = $this->createMock(HumanReadableDateIntervalFormatter::class);
+        $humanReadableDateIntervalFormatterMock->expects(self::once())
+            ->method('format')
+            ->with($jiraResponse['fields']['aggregatetimespent'])
+            ->willReturn($expectedJiraIssueTransfer->aggregateTimeSpent);
+
+        $mapper = new JiraIssueMapper($humanReadableDateIntervalFormatterMock);
         self::assertEquals($expectedJiraIssueTransfer, $mapper->map($jiraResponse));
     }
 
@@ -31,8 +55,16 @@ class JiraIssueMapperTest extends TestCase
     {
         return [
             $this->getTestCase1Data(),
-            $this->getTestCase2Data(),
             $this->getTestCase3Data(),
+        ];
+    }
+    /**
+     * @return array[]
+     */
+    public function jiraIssueDataProviderWithAggregateTimeSpent(): array
+    {
+        return [
+            $this->getTestCaseWithAggregateTimeSpent(),
         ];
     }
 
@@ -82,7 +114,7 @@ class JiraIssueMapperTest extends TestCase
     /**
      * @return array
      */
-    private function getTestCase2Data(): array
+    private function getTestCaseWithAggregateTimeSpent(): array
     {
         $jiraResponseData = [
             'key' => 'ABC-567',

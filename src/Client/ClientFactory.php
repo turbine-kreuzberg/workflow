@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use Turbine\Workflow\Client\Http\AtlassianHttpClient;
 use Turbine\Workflow\Client\Http\GitlabHttpClient;
 use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Workflow\Formatter\HumanReadableDateIntervalFormatter;
 use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class ClientFactory
@@ -45,7 +46,9 @@ class ClientFactory
             $this->jiraClient = new JiraClient(
                 new AtlassianHttpClient(new Configuration(), new Client()),
                 new Configuration(),
-                new JiraIssueMapper()
+                new JiraIssueMapper(
+                    new HumanReadableDateIntervalFormatter()
+                )
             );
         }
 

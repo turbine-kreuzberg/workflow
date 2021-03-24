@@ -2,11 +2,15 @@
 
 namespace Turbine\Workflow\Workflow\Jira\Mapper;
 
-use DateTime;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
+use Turbine\Workflow\Workflow\Formatter\HumanReadableDateIntervalFormatter;
 
 class JiraIssueMapper
 {
+    public function __construct(
+        private HumanReadableDateIntervalFormatter $humanReadableDateIntervalFormatter
+    ) {
+    }
 
     public function map(array $jiraResponse): JiraIssueTransfer
     {
@@ -40,25 +44,12 @@ class JiraIssueMapper
         return $jiraIssueTransfer;
     }
 
-    private function toHumanReadableTime(?string $aggregateTimeSpent): ?string
+    private function toHumanReadableTime(?string $timeInSeconds): ?string
     {
-        if ($aggregateTimeSpent === null) {
+        if ($timeInSeconds === null) {
             return null;
         }
 
-        $timeDiff = date_diff(new DateTime('@0'), new DateTime('@' . $aggregateTimeSpent), true);
-
-        $humanReadableTime = [];
-        foreach ((array)$timeDiff as $timeKey => $value) {
-            if ($value > 0) {
-                if ($timeKey === 'i') {
-                    $timeKey = 'm';
-                }
-
-                $humanReadableTime[] = $value . $timeKey;
-            }
-        }
-
-        return implode(' ', $humanReadableTime);
+        return $this->humanReadableDateIntervalFormatter->format($timeInSeconds);
     }
 }
