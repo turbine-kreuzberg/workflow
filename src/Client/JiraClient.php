@@ -107,7 +107,7 @@ class JiraClient
 
         $totalTimeSpentInSeconds = 0;
         foreach ($result as $worklog) {
-            $totalTimeSpentInSeconds += (int)$worklog['timeSpentSeconds'];
+            $totalTimeSpentInSeconds += $worklog['timeSpentSeconds'];
         }
 
         return $totalTimeSpentInSeconds / 3600;
@@ -126,7 +126,7 @@ class JiraClient
             $jiraWorklogEntryTransfer->timeSpentSeconds = $worklog['timeSpentSeconds'];
             $filteredWorklog[] = $jiraWorklogEntryTransfer;
 
-            $totalTimeSpentInSeconds += (int)$worklog['timeSpentSeconds'];
+            $totalTimeSpentInSeconds += $worklog['timeSpentSeconds'];
         }
         $jiraIssueTransferCollection = new JiraWorklogEntryCollectionTransfer($filteredWorklog);
 
