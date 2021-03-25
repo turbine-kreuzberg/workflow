@@ -9,6 +9,8 @@ use Turbine\Workflow\Configuration;
 
 class AtlassianHttpClient
 {
+    private const DEPTH = 512;
+
     public function __construct(private Configuration $configuration, private Client $client)
     {
     }
@@ -17,7 +19,7 @@ class AtlassianHttpClient
     {
         $response = $this->client->get($uri, $this->getDefaultConfig());
 
-        return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+        return json_decode($response->getBody()->getContents(), true, self::DEPTH, JSON_THROW_ON_ERROR);
     }
 
     public function post(string $uri, array $options = []): array
@@ -25,7 +27,7 @@ class AtlassianHttpClient
         $options = array_merge([RequestOptions::JSON => $options], $this->getDefaultConfig());
         $response = $this->client->post($uri, $options);
         try {
-            return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+            return json_decode($response->getBody()->getContents(), true, self::DEPTH, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             return [];
         }
@@ -36,7 +38,7 @@ class AtlassianHttpClient
         $options = array_merge([RequestOptions::JSON => $options], $this->getDefaultConfig());
         $response = $this->client->put($uri, $options);
         try {
-            return json_decode($response->getBody()->getContents(), true, 512, JSON_THROW_ON_ERROR);
+            return json_decode($response->getBody()->getContents(), true, self::DEPTH, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
             return [];
         }
