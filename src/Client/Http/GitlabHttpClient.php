@@ -28,7 +28,7 @@ class GitlabHttpClient
             throw $exception;
         }
 
-        return json_decode((string)$gitlabResponse->getBody(), true);
+        return json_decode($gitlabResponse->getBody()->getContents(), true);
     }
 
     public function get(string $uri, array $options = []): array
