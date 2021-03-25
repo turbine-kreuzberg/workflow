@@ -38,7 +38,7 @@ class GitlabHttpClient
         } catch (BadResponseException $exception) {
             if ($exception->getResponse()->getStatusCode() === 401) {
                 throw new Exception(
-                    'Gitlab answered with 401 Unauthorized: Please check your personal acccess token in your .env file.'
+                    'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
                 );
             }
 
