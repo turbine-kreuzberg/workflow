@@ -41,7 +41,7 @@ class IssueUpdaterTest extends TestCase
                 'issue', [
                     'comment' => 'comment',
                     'started' => 'now',
-                    'timeSpentSeconds' => 930,
+                    'timeSpentSeconds' => 900,
                 ]
             );
 
@@ -50,11 +50,11 @@ class IssueUpdaterTest extends TestCase
         $bookedTime = $issueUpdater->bookTime(
             'issue',
             'comment',
-            15.5,
+            15,
             'now'
         );
 
-        self::assertEquals(15.5, $bookedTime);
+        self::assertEquals(15, $bookedTime);
     }
 
     public function testUseHttpClientToMoveIssueToStatus(): void
