@@ -1,10 +1,7 @@
 {
     "source": {
         "directories": [
-            "src/Client",
-            "src/Workflow",
-            "src/Console",
-            "src/Transfers"
+            "src/Console"
         ],
         "excludes": ["/Factory\\.php/", "/Bootstrap\\.php/"]
     },

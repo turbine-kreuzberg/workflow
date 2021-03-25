@@ -20,6 +20,7 @@ class WorklogCommentConsoleTest extends TestCase
                 [
                     'provided worklog',
                     'last git commit',
+                    'test-comment',
                 ]
             );
 
@@ -27,7 +28,7 @@ class WorklogCommentConsoleTest extends TestCase
         $favouriteWorklogCommentChoicesProviderMock
             ->expects($this->once())
             ->method('provide')
-            ->willReturn(['best-comment', 'test-comment']);
+            ->willReturn(['another-comment', 'test-comment']);
 
         $worklogCommentConsole = new WorklogCommentConsole(
             $worklogChoicesProviderMock,
@@ -37,8 +38,8 @@ class WorklogCommentConsoleTest extends TestCase
         $expectedChoices = [
             'provided worklog',
             'last git commit',
-            'best-comment',
             'test-comment',
+            'another-comment',
             'Custom input',
         ];
         $symfonyStyleMock = $this->createMock(SymfonyStyle::class);
