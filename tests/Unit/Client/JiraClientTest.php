@@ -248,6 +248,14 @@ class JiraClientTest extends TestCase
                         ],
                         [
                             'state' => 'active',
+                            'id' => 1,
+                            'self' => 'https://jira.example.info:1234/rest/agile/1.0/sprint/123',
+                            'name' => 'sprintName',
+                            'startDate' => '2021-03-10T15:45:00.000+01:00',
+                            'endDate' => '2021-03-10T15:45:00.000+01:00',
+                            'activatedDate' => '2021-03-10T15:45:00.000+01:00',
+                            'originBoardId' => 132,
+                            'goal' => 'sprint goal ...',
                         ],
                     ],
                 ]
@@ -262,6 +270,14 @@ class JiraClientTest extends TestCase
         self::assertEquals(
             [
                 'state' => 'active',
+                'id' => 1,
+                'self' => 'https://jira.example.info:1234/rest/agile/1.0/sprint/123',
+                'name' => 'sprintName',
+                'startDate' => '2021-03-10T15:45:00.000+01:00',
+                'endDate' => '2021-03-10T15:45:00.000+01:00',
+                'activatedDate' => '2021-03-10T15:45:00.000+01:00',
+                'originBoardId' => 132,
+                'goal' => 'sprint goal ...',
             ],
             $jiraClient->getActiveSprint()
         );
