@@ -21,7 +21,7 @@ class JiraIssueMapper
         $jiraIssueFields = $jiraResponse['fields'];
 
         $jiraIssueTransfer->summary = $jiraIssueFields['summary'];
-        $jiraIssueTransfer->isSubTask = (bool)$jiraIssueFields['issuetype']['subtask'];
+        $jiraIssueTransfer->isSubTask = $jiraIssueFields['issuetype']['subtask'];
         $jiraIssueTransfer->labels = $jiraIssueFields['labels'] ?? [];
 
         $jiraIssueTransfer->type = $jiraIssueFields['issuetype']['name'];
