@@ -74,7 +74,7 @@ class IssueUpdaterTest extends TestCase
                         ],
                         [
                             'to' => [
-                                'name' => 'targetState',
+                                'name' => 'targetStateWithÖToTestMultibyte',
                             ],
                             'id' => 'transitionId',
                         ],
@@ -91,7 +91,7 @@ class IssueUpdaterTest extends TestCase
 
         $issueUpdater = new IssueUpdater($jiraClientMock);
 
-        $issueUpdater->moveIssueToStatus('BCM-12', 'targetState');
+        $issueUpdater->moveIssueToStatus('BCM-12', 'targetStateWithÖToTestMultibyte');
     }
 
     public function testMoveTicketToStatusThrowsExceptionForNotFoundTargetState(): void
