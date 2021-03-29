@@ -1,19 +1,26 @@
 stages:
-  - test
-  - build
-  - deploy
+  - image:build
+  - statistics
 
-test:
-  stage: test
-  script: echo "Running tests"
+variables:
+    PHP_IMAGE:                  ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php:${CI_COMMIT_SHA}
+    PHP_IMAGE_CACHE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php:cache
 
-build:
-  stage: build
-  script: echo "Building the app"
-
-deploy_staging:
-  stage: deploy
+buildkit:
+  stage: image:build
+  image: ${BUILDKIT_IMAGE}
+  timeout: 5m
   script:
-    - echo "Deploy to staging server"
-  only:
-    - main
+    - ${BUILDKIT_SCRIPT}
+      --tag=${PHP_IMAGE}
+      --cache-repo=${PHP_IMAGE_CACHE}
+      --context=.
+      --file=./images/php/pipeline/Dockerfile
+
+statistics:
+  stage: statistics
+  image: ${PHP_IMAGE}
+  timeout: 5m
+  script:
+    - composer install --no-scripts --no-dev
+    - bin/workflow workflow:deployment:statistics:update
