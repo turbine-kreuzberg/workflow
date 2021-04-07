@@ -7,6 +7,7 @@ use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\BookTimeCommand;
 use Turbine\Workflow\Console\CreateJiraIssueCommand;
 use Turbine\Workflow\Console\CreateMergeRequestCommand;
+use Turbine\Workflow\Console\DeploymentStatisticsCommand;
 use Turbine\Workflow\Console\GetJiraIssueDataCommand;
 use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\MoveJiraIssueCommand;
@@ -64,6 +65,7 @@ class Bootstrap
                 issueUpdater: $workflowFactory->createJiraIssueUpdater(),
             )
         );
+        $application->add(new DeploymentStatisticsCommand());
 
         /**
          * $application->add(new CheckBranchStatusCommand());

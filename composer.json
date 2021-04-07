@@ -4,7 +4,8 @@
   "license": "MIT",
   "require": {
     "symfony/console": "^3|^4|^5",
-    "guzzlehttp/guzzle": "^6.5.0|^7"
+    "guzzlehttp/guzzle": "^6.5.0|^7",
+    "influxdata/influxdb-client-php": "^1"
   },
   "require-dev": {
     "php": ">=8.0",

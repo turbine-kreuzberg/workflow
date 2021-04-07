@@ -13,13 +13,14 @@ Options:
   -v|vv|vvv, --verbose  Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
 
 Available commands:
-  help                           Displays help for a command
-  list                           Lists commands
+  help                                   Display help for a command
+  list                                   List commands
  workflow
-  workflow:book-time             Book time for a jira issue.
-  workflow:create-merge-request  Create merge request for current branch to develop.
-  workflow:create:jira-issue     Create a jira issue.
-  workflow:get:jira-issue        Get data from a jira issue.
-  workflow:list-bookings         List bookings of the day.
-  workflow:move:jira-issue       Transition the status of a jira issue.
-  workflow:work-on-ticket        creates a new feature branch for the given ticket and assigns the task to the developer
+  workflow:book-time                     Book time for a jira issue.
+  workflow:create-merge-request          Create merge request for current branch to develop.
+  workflow:create:jira-issue             Create a jira issue.
+  workflow:deployment:statistics:update  Update deployment statistics.
+  workflow:get:jira-issue                Get data from a jira issue.
+  workflow:list-bookings                 List bookings of the day.
+  workflow:move:jira-issue               Transition the status of a jira issue.
+  workflow:work-on-ticket                creates a new feature branch for the given ticket and assigns the task to the developer
