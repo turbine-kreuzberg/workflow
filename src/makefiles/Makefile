@@ -45,5 +45,13 @@ move-ticket: ##@workflow transition the status of a jira ticket.
 	$(DOCKER_RUN_WORKFLOW) workflow:move:jira-issue $(filter-out $@,$(MAKECMDGOALS))
 .PHONY: move-ticket
 
+deployment-statistics-update: ##@workflow update deployment statistics
+	docker-compose exec php /var/www/bin/workflow workflow:deployment:statistics:update
+.PHONY: deployment-statistics-update
+
+deployment-statistics-update-hotfix: ##@workflow update deployment statistics for hotfix deployments
+	docker-compose exec php /var/www/bin/workflow workflow:deployment:statistics:update --hotfix
+.PHONY: deployment-statistics-update-hotfix
+
 %:
 	@:
