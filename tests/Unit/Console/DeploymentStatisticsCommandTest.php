@@ -10,7 +10,26 @@ use Turbine\Workflow\Deployment\DeploymentStatisticsUpdater;
 
 class DeploymentStatisticsCommandTest extends TestCase
 {
-    public function testUpdateDeployment(): void
+    public function testUpdateDeploymentWithRegularDeploy(): void
+    {
+        $deploymentStatisticsUpdaterMock = $this->createMock(DeploymentStatisticsUpdater::class);
+        $deploymentStatisticsUpdaterMock->expects(self::once())
+            ->method('update')
+            ->with('regular');
+        $deploymentStatisticsCommand = new DeploymentStatisticsCommand($deploymentStatisticsUpdaterMock);
+
+        $inputMock = $this->createMock(InputInterface::class);
+        $inputMock->expects(self::once())
+            ->method('getOption')
+            ->with()
+            ->willReturn(false);
+
+        $outputMock = $this->createMock(OutputInterface::class);
+
+        self::assertSame(0, $deploymentStatisticsCommand->run($inputMock, $outputMock));
+    }
+
+    public function testUpdateDeploymentWithHotfixDeploy(): void
     {
         $deploymentStatisticsUpdaterMock = $this->createMock(DeploymentStatisticsUpdater::class);
         $deploymentStatisticsUpdaterMock->expects(self::once())
@@ -19,6 +38,11 @@ class DeploymentStatisticsCommandTest extends TestCase
         $deploymentStatisticsCommand = new DeploymentStatisticsCommand($deploymentStatisticsUpdaterMock);
 
         $inputMock = $this->createMock(InputInterface::class);
+        $inputMock->expects(self::once())
+            ->method('getOption')
+            ->with()
+            ->willReturn(true);
+
         $outputMock = $this->createMock(OutputInterface::class);
 
         self::assertSame(0, $deploymentStatisticsCommand->run($inputMock, $outputMock));

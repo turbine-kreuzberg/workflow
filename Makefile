@@ -71,6 +71,10 @@ deployment-statistics-update: ##@workflow update deployment statistics
 	docker-compose exec php /var/www/bin/workflow workflow:deployment:statistics:update
 .PHONY: deployment-statistics-update
 
+deployment-statistics-update-hotfix: ##@workflow update deployment statistics
+	docker-compose exec php /var/www/bin/workflow workflow:deployment:statistics:update --hotfix
+.PHONY: deployment-statistics-update-hotfix
+
 infection: ##@development run php infection to discover test flaws
 	docker-compose exec php /var/www/vendor/bin/infection --threads=4 --show-mutations
 .PHONY: infection
