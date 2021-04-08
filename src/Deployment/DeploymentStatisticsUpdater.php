@@ -5,23 +5,22 @@ namespace Turbine\Workflow\Deployment;
 use InfluxDB2\Client;
 use InfluxDB2\Model\WritePrecision;
 use InfluxDB2\Point;
+use Turbine\Workflow\Configuration;
 
 class DeploymentStatisticsUpdater
 {
-    public function __construct(private Client $client)
-    {
+    private const ORG = 'Turbine Kreuzberg';
+    private const BUCKET = 'devops-metrics';
+
+    public function __construct(
+        private Client $client,
+        private Configuration $configuration
+    ) {
     }
 
-
-    public function update(): void
+    public function update(string $deploymentType): void
     {
-        // constants
-        $org = 'Turbine Kreuzberg';
-        $bucket = 'devops-metrics';
-
-
-        $projectName = "Simplicity";
-        $deploymentType = "hotfix";
+        $projectName = $this->configuration->get(Configuration::PROJECT_NAME);
 
         $data = "deployments,project=" . $projectName . ",type=" . $deploymentType . " deployment=1";
         $writeApi = $this->client->createWriteApi();
@@ -32,6 +31,6 @@ class DeploymentStatisticsUpdater
             ->addField('deployment', 1)
             ->time(microtime(true));
 
-        $writeApi->write($data, WritePrecision::S, $bucket, $org);
+        $writeApi->write($data, WritePrecision::S, self::BUCKET, self::ORG);
     }
 }

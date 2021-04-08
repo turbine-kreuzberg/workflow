@@ -5,6 +5,7 @@ namespace Unit\Deployment;
 use InfluxDB2\Client;
 use InfluxDB2\WriteApi;
 use PHPUnit\Framework\TestCase;
+use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Deployment\DeploymentStatisticsUpdater;
 
 class DeploymentStatisticsUpdaterTest extends TestCase
@@ -14,16 +15,28 @@ class DeploymentStatisticsUpdaterTest extends TestCase
         $writeApiMock = $this->createMock(WriteApi::class);
         $writeApiMock->expects(self::once())
             ->method('write')
-            ->with('deployments,project=Simplicity,type=hotfix deployment=1');
-        
+            ->with(
+                'deployments,project=projectName,type=deploymentType deployment=1',
+                's',
+                'devops-metrics',
+                'Turbine Kreuzberg'
+            );
+
         $clientMock = $this->createMock(Client::class);
         $clientMock->expects(self::once())
             ->method('createWriteApi')
             ->willReturn($writeApiMock);
+
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::once())
+            ->method('get')
+            ->with('PROJECT_NAME')
+            ->willReturn('projectName');
         $deploymentStatisticsUpdater = new DeploymentStatisticsUpdater(
-            $clientMock
+            $clientMock,
+            $configurationMock
         );
 
-        $deploymentStatisticsUpdater->update();
+        $deploymentStatisticsUpdater->update('deploymentType');
     }
 }
