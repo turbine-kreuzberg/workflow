@@ -12,6 +12,7 @@ use Turbine\Workflow\Console\GetJiraIssueDataCommand;
 use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\MoveJiraIssueCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
+use Turbine\Workflow\Deployment\DeploymentFactory;
 
 class Bootstrap
 {
@@ -19,6 +20,7 @@ class Bootstrap
     {
         $application = new Application();
         $workflowFactory = new WorkflowFactory();
+        $deploymentFactory = new DeploymentFactory();
         $application->add(
             new BookTimeCommand(
                 configuration: new Configuration(),
@@ -65,7 +67,7 @@ class Bootstrap
                 issueUpdater: $workflowFactory->createJiraIssueUpdater(),
             )
         );
-        $application->add(new DeploymentStatisticsCommand());
+        $application->add(new DeploymentStatisticsCommand($deploymentFactory->createDeploymentStatisticsUpdater()));
 
         /**
          * $application->add(new CheckBranchStatusCommand());

@@ -1,10 +1,9 @@
 <?php
 
-namespace Deployment;
+namespace Turbine\Workflow\Deployment;
 
 use InfluxDB2\Client;
 use Turbine\Workflow\Configuration;
-use Turbine\Workflow\Deployment\DeploymentStatisticsUpdater;
 
 class DeploymentFactory
 {
