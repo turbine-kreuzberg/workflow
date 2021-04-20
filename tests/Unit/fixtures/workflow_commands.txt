@@ -16,6 +16,7 @@ Available commands:
   help                                   Display help for a command
   list                                   List commands
  workflow
+  workflow:announce-merge-request        Announces merge request on slack
   workflow:book-time                     Book time for a jira issue.
   workflow:create-merge-request          Create merge request for current branch to develop.
   workflow:create:jira-issue             Create a jira issue.

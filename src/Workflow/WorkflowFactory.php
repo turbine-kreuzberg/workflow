@@ -13,7 +13,9 @@ use Turbine\Workflow\Console\SubConsole\WorklogCommentConsole;
 use Turbine\Workflow\Workflow\Jira\IssueCreator;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Workflow\Model\MergeRequestAnnouncementBuilder;
 use Turbine\Workflow\Workflow\Model\MergeRequestCreator;
+use Turbine\Workflow\Workflow\Model\SlackMessageSender;
 use Turbine\Workflow\Workflow\Model\WorkOnTicket;
 use Turbine\Workflow\Workflow\Provider\BranchNameProvider;
 use Turbine\Workflow\Workflow\Provider\CommitMessageProvider;
@@ -146,6 +148,7 @@ class WorkflowFactory
     {
         return new BranchNameProvider(
             $this->getClientFactory()->getJiraClient(),
+            $this->getClientFactory()->getGitClient(),
             $this->createConfiguration()
         );
     }
@@ -163,6 +166,22 @@ class WorkflowFactory
         return new WorklogCommentConsole(
             $this->createWorklogChoiceProvider(),
             $this->createFavouriteWorklogCommentChoicesProvider()
+        );
+    }
+
+    public function createSlackMessageSender(): SlackMessageSender
+    {
+        return new SlackMessageSender(
+            $this->getClientFactory()->getSlackClient()
+        );
+    }
+
+    public function createMergeRequestAnnouncementBuilder(): MergeRequestAnnouncementBuilder
+    {
+        return new MergeRequestAnnouncementBuilder(
+            $this->createBranchNameProvider(),
+            $this->getClientFactory()->getGitLabClient(),
+            $this->createConfiguration()
         );
     }
 

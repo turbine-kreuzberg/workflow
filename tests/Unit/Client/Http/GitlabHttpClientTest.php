@@ -32,9 +32,9 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $atlassianHttpClient = new GitlabHttpClient($clientMock);
-        self::assertEquals([], $atlassianHttpClient->get('gitlab-url'));
-        self::assertEquals(['blub' => 'content'], $atlassianHttpClient->get('gitlab-url'));
+        $gitlabHttpClient = new GitlabHttpClient($clientMock);
+        self::assertEquals([], $gitlabHttpClient->get('gitlab-url'));
+        self::assertEquals(['blub' => 'content'], $gitlabHttpClient->get('gitlab-url'));
         self::assertEquals('gitlab-url', $container[0]['request']->getUri()->__toString());
     }
 
@@ -54,13 +54,13 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $atlassianHttpClient = new GitlabHttpClient($clientMock);
+        $gitlabHttpClient = new GitlabHttpClient($clientMock);
         $this->expectExceptionObject(
             new Exception(
                 'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
             )
         );
-        self::assertEquals([], $atlassianHttpClient->get('gitlab-url'));
+        self::assertEquals([], $gitlabHttpClient->get('gitlab-url'));
     }
 
     public function testGetFunctionCallsGuzzleClientWithUnknownReasonErrorThrowsException(): void
@@ -79,9 +79,9 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $atlassianHttpClient = new GitlabHttpClient($clientMock);
+        $gitlabHttpClient = new GitlabHttpClient($clientMock);
         $this->expectException(Exception::class);
-        self::assertEquals([], $atlassianHttpClient->get('gitlab-url'));
+        self::assertEquals([], $gitlabHttpClient->get('gitlab-url'));
     }
 
     public function testPostFunctionCallsGuzzleClient(): void
@@ -101,9 +101,9 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $atlassianHttpClient = new GitlabHttpClient($clientMock);
-        self::assertEquals([], $atlassianHttpClient->post('gitlab-url'));
-        self::assertEquals(['blub' => 'content'], $atlassianHttpClient->post('gitlab-url', ['postOptions' => 'blub']));
+        $gitlabHttpClient = new GitlabHttpClient($clientMock);
+        self::assertEquals([], $gitlabHttpClient->post('gitlab-url'));
+        self::assertEquals(['blub' => 'content'], $gitlabHttpClient->post('gitlab-url', ['postOptions' => 'blub']));
         self::assertEquals('gitlab-url', $container[0]['request']->getUri()->__toString());
         self::assertEquals(
             json_encode(['postOptions' => 'blub'], JSON_THROW_ON_ERROR),
@@ -127,13 +127,13 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $atlassianHttpClient = new GitlabHttpClient($clientMock);
+        $gitlabHttpClient = new GitlabHttpClient($clientMock);
         $this->expectExceptionObject(
             new Exception(
                 'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
             )
         );
-        self::assertEquals([], $atlassianHttpClient->post('gitlab-url'));
+        self::assertEquals([], $gitlabHttpClient->post('gitlab-url'));
     }
 
     public function testPostFunctionCallsGuzzleClientWithUnknownReasonErrorThrowsException(): void
@@ -152,8 +152,8 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $atlassianHttpClient = new GitlabHttpClient($clientMock);
+        $gitlabHttpClient = new GitlabHttpClient($clientMock);
         $this->expectException(Exception::class);
-        self::assertEquals([], $atlassianHttpClient->post('gitlab-url'));
+        self::assertEquals([], $gitlabHttpClient->post('gitlab-url'));
     }
 }

@@ -53,5 +53,9 @@ deployment-statistics-update-hotfix: ##@workflow update deployment statistics fo
 	$(DOCKER_RUN_WORKFLOW) workflow:deployment:statistics:update --hotfix
 .PHONY: deployment-statistics-update-hotfix
 
+announce-merge-request: ##@workflow announce a merge request in slack
+	$(DOCKER_RUN_WORKFLOW) workflow:announce-merge-request
+.PHONY: announce-merge-request
+
 %:
 	@:

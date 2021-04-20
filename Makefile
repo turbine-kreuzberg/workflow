@@ -51,6 +51,10 @@ work-on-ticket: ##@workflow create a git branch and move ticket to in progress
 	docker-compose exec php /var/www/bin/workflow workflow:work-on-ticket
 .PHONY: work-on-ticket
 
+announce-merge-request: ##@workflow announce a merge request in slack
+	docker-compose exec php /var/www/bin/workflow workflow:announce-merge-request
+.PHONY: announce-merge-request
+
 mr: ##@workflow create mr
 	docker-compose exec php /var/www/bin/workflow workflow:create-merge-request
 .PHONY: mr
