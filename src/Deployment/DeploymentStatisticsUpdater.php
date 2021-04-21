@@ -21,6 +21,7 @@ class DeploymentStatisticsUpdater
     public function update(string $deploymentType): void
     {
         $projectName = $this->configuration->get(Configuration::DEPLOYMENT_PROJECT_NAME);
+        $deploymentBucket = $this->configuration->get(Configuration::DEPLOYMENT_BUCKET);
 
         $writeApi = $this->client->createWriteApi();
 
@@ -29,6 +30,6 @@ class DeploymentStatisticsUpdater
             ->addTag('type', $deploymentType)
             ->addField('deployment', 1);
 
-        $writeApi->write($point, WritePrecision::S, self::BUCKET, self::ORG);
+        $writeApi->write($point, WritePrecision::S, $deploymentBucket, self::ORG);
     }
 }

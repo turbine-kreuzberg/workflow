@@ -24,7 +24,7 @@ class DeploymentStatisticsUpdaterTest extends TestCase
             ->with(
                 $point,
                 's',
-                'devops-metrics',
+                'deployment_bucket',
                 'Turbine Kreuzberg'
             );
 
@@ -34,10 +34,10 @@ class DeploymentStatisticsUpdaterTest extends TestCase
             ->willReturn($writeApiMock);
 
         $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::once())
+        $configurationMock->expects(self::exactly(2))
             ->method('get')
-            ->with('DEPLOYMENT_PROJECT_NAME')
-            ->willReturn('projectName');
+            ->withConsecutive(['DEPLOYMENT_PROJECT_NAME'], ['DEPLOYMENT_BUCKET'])
+            ->willReturnOnConsecutiveCalls('projectName', 'deployment_bucket');
         $deploymentStatisticsUpdater = new DeploymentStatisticsUpdater(
             $clientMock,
             $configurationMock

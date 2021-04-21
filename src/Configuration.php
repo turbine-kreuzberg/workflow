@@ -10,6 +10,7 @@ class Configuration
     public const JIRA_USERNAME = 'JIRA_USERNAME';
     public const JIRA_PASSWORD = 'JIRA_PASSWORD';
     public const DEPLOYMENT_PROJECT_NAME = 'DEPLOYMENT_PROJECT_NAME';
+    public const DEPLOYMENT_BUCKET = 'DEPLOYMENT_BUCKET';
     public const INFLUX_DB_TOKEN = 'INFLUX_DB_TOKEN';
     public const BOARD_ID = 'JIRA_BOARD_ID';
     public const BRANCH_DEVELOPMENT = 'BRANCH_DEVELOPMENT';
