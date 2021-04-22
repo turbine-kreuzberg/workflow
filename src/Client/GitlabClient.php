@@ -35,9 +35,13 @@ class GitlabClient
 
     private function getProjectUrl(): string
     {
+        $projectIdentifier = $this
+            ->configuration
+            ->get(Configuration::PROJECT_ID) ?: urlencode($this->configuration->get(Configuration::REPOSITORY));
+
         return $this->configuration->get(Configuration::GITLAB_API_URL)
             . 'projects/'
-            . urlencode($this->configuration->get(Configuration::REPOSITORY))
+            . $projectIdentifier
             . '/';
     }
 

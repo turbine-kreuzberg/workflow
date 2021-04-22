@@ -14,16 +14,18 @@ class GitlabClientTest extends TestCase
     public function testCreateMergeRequest(): void
     {
         $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::exactly(3))
+        $configurationMock->expects(self::exactly(4))
             ->method('get')
             ->withConsecutive(
-                ['GITLAB_API_URL'],
+                ['PROJECT_ID'],
                 ['REPOSITORY'],
+                ['GITLAB_API_URL'],
                 ['BRANCH_DEVELOPMENT'],
             )
             ->willReturnOnConsecutiveCalls(
-                'GITLAB_API_URL',
+                '',
                 'Project repository',
+                'GITLAB_API_URL',
                 'BRANCH_DEVELOPMENT',
             );
         $configurationMock->expects(self::once())
@@ -65,13 +67,13 @@ class GitlabClientTest extends TestCase
         $configurationMock->expects(self::exactly(3))
             ->method('get')
             ->withConsecutive(
+                ['PROJECT_ID'],
                 ['GITLAB_API_URL'],
-                ['REPOSITORY'],
                 ['BRANCH_DEVELOPMENT'],
             )
             ->willReturnOnConsecutiveCalls(
+                '123',
                 'GITLAB_API_URL',
-                'Project repository',
                 'BRANCH_DEVELOPMENT',
             );
         $configurationMock->expects(self::once())
@@ -82,7 +84,7 @@ class GitlabClientTest extends TestCase
         $gitlabHttpClientMock->expects(self::once())
             ->method('post')
             ->with(
-                'GITLAB_API_URLprojects/Project+repository/merge_requests',
+                'GITLAB_API_URLprojects/123/merge_requests',
                 [
                     'source_branch' => 'source_branch',
                     'target_branch' => 'target_branch',
@@ -109,17 +111,19 @@ class GitlabClientTest extends TestCase
     public function testCreateMergeRequestAgainstDeploymentBranchDoesNotNeedApproval(): void
     {
         $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::exactly(4))
+        $configurationMock->expects(self::exactly(5))
             ->method('get')
             ->withConsecutive(
-                ['GITLAB_API_URL'],
+                ['PROJECT_ID'],
                 ['REPOSITORY'],
+                ['GITLAB_API_URL'],
                 ['BRANCH_DEVELOPMENT'],
                 ['BRANCH_DEPLOYMENT'],
             )
             ->willReturnOnConsecutiveCalls(
-                'GITLAB_API_URL',
+                '',
                 'Project repository',
+                'GITLAB_API_URL',
                 'BRANCH_DEVELOPMENT',
                 'BRANCH_DEPLOYMENT',
             );
@@ -159,16 +163,18 @@ class GitlabClientTest extends TestCase
     public function testCreateMergeRequestFailedThrowsException(): void
     {
         $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::exactly(3))
+        $configurationMock->expects(self::exactly(4))
             ->method('get')
             ->withConsecutive(
-                ['GITLAB_API_URL'],
+                ['PROJECT_ID'],
                 ['REPOSITORY'],
+                ['GITLAB_API_URL'],
                 ['BRANCH_DEVELOPMENT'],
             )
             ->willReturnOnConsecutiveCalls(
-                'GITLAB_API_URL',
+                '',
                 'Project repository',
+                'GITLAB_API_URL',
                 'BRANCH_DEVELOPMENT',
             );
         $configurationMock->expects(self::once())
