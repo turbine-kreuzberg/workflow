@@ -36,7 +36,7 @@ class GitlabClientTest extends TestCase
         $gitlabHttpClientMock->expects(self::once())
             ->method('post')
             ->with(
-                'GITLAB_API_URLprojects/Project+repository/merge_requests',
+                'GITLAB_API_URL/projects/Project+repository/merge_requests',
                 [
                     'source_branch' => 'source_branch',
                     'target_branch' => 'target_branch',
@@ -84,7 +84,7 @@ class GitlabClientTest extends TestCase
         $gitlabHttpClientMock->expects(self::once())
             ->method('post')
             ->with(
-                'GITLAB_API_URLprojects/123/merge_requests',
+                'GITLAB_API_URL/projects/123/merge_requests',
                 [
                     'source_branch' => 'source_branch',
                     'target_branch' => 'target_branch',
@@ -108,6 +108,7 @@ class GitlabClientTest extends TestCase
 
         self::assertEquals('url', $url);
     }
+
     public function testCreateMergeRequestAgainstDeploymentBranchDoesNotNeedApproval(): void
     {
         $configurationMock = $this->createMock(Configuration::class);
@@ -135,7 +136,7 @@ class GitlabClientTest extends TestCase
         $gitlabHttpClientMock->expects(self::once())
             ->method('post')
             ->with(
-                'GITLAB_API_URLprojects/Project+repository/merge_requests',
+                'GITLAB_API_URL/projects/Project+repository/merge_requests',
                 [
                     'source_branch' => 'BRANCH_DEVELOPMENT',
                     'target_branch' => 'BRANCH_DEPLOYMENT',
@@ -187,7 +188,7 @@ class GitlabClientTest extends TestCase
         $gitlabHttpClientMock->expects(self::once())
             ->method('post')
             ->with(
-                'GITLAB_API_URLprojects/Project+repository/merge_requests',
+                'GITLAB_API_URL/projects/Project+repository/merge_requests',
                 [
                     'source_branch' => 'source_branch',
                     'target_branch' => 'target_branch',
@@ -208,6 +209,86 @@ class GitlabClientTest extends TestCase
             [
                 'source_branch' => 'source_branch',
                 'target_branch' => 'target_branch',
+            ]
+        );
+    }
+
+    public function testGetMergeRequestData(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::exactly(3))
+            ->method('get')
+            ->withConsecutive(
+                ['PROJECT_ID'],
+                ['REPOSITORY'],
+                ['GITLAB_API_URL']
+            )
+            ->willReturnOnConsecutiveCalls(
+                '',
+                'Project repository',
+                'GITLAB_API_URL',
+            );
+
+        $gitlabHttpClientMock = $this->createMock(GitlabHttpClient::class);
+        $gitlabHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'GITLAB_API_URL/projects/Project+repository/merge_requests?source_branch=branch1&target_branch=branch2'
+            )
+            ->willReturn([[]]);
+
+        $gitlabClient = new GitlabClient(
+            $gitlabHttpClientMock,
+            $configurationMock
+        );
+
+        $mergeRequestData = $gitlabClient->getMergeRequestData(
+            [
+                'source_branch' => 'branch1',
+                'target_branch' => 'branch2',
+            ]
+        );
+
+        self::assertSame([[]], $mergeRequestData);
+    }
+
+    public function testGetMergeRequestDataFailedThrowsException(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::exactly(3))
+            ->method('get')
+            ->withConsecutive(
+                ['PROJECT_ID'],
+                ['REPOSITORY'],
+                ['GITLAB_API_URL']
+            )
+            ->willReturnOnConsecutiveCalls(
+                '',
+                'Project repository',
+                'GITLAB_API_URL',
+            );
+
+        $exceptionMock = $this->createMock(BadResponseException::class);
+
+        $gitlabHttpClientMock = $this->createMock(GitlabHttpClient::class);
+        $gitlabHttpClientMock->expects(self::once())
+            ->method('get')
+            ->with(
+                'GITLAB_API_URL/projects/Project+repository/merge_requests?source_branch=branch1&target_branch=branch2'
+            )
+            ->willThrowException($exceptionMock);
+
+        $gitlabClient = new GitlabClient(
+            $gitlabHttpClientMock,
+            $configurationMock
+        );
+
+        $this->expectException(BadResponseException::class);
+
+        $gitlabClient->getMergeRequestData(
+            [
+                'source_branch' => 'branch1',
+                'target_branch' => 'branch2',
             ]
         );
     }

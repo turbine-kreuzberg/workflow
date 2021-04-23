@@ -2,6 +2,7 @@
 
 namespace Turbine\Workflow\Workflow\Provider;
 
+use Turbine\Workflow\Client\GitClient;
 use Turbine\Workflow\Client\JiraClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
@@ -10,9 +11,15 @@ class BranchNameProvider
 {
     public function __construct(
         private JiraClient $jiraClient,
+        private GitClient $gitClient,
         private Configuration $configuration,
     ) {
 
+    }
+
+    public function getCurrentBranchName(): string
+    {
+        return $this->gitClient->getCurrentBranchName();
     }
 
     public function getBranchNameFromTicket(string $ticketNumber): string

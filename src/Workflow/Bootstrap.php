@@ -4,6 +4,7 @@ namespace Turbine\Workflow\Workflow;
 
 use Symfony\Component\Console\Application;
 use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Console\AnnounceMergeRequestCommand;
 use Turbine\Workflow\Console\BookTimeCommand;
 use Turbine\Workflow\Console\CreateJiraIssueCommand;
 use Turbine\Workflow\Console\CreateMergeRequestCommand;
@@ -13,6 +14,7 @@ use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\MoveJiraIssueCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
 use Turbine\Workflow\Deployment\DeploymentFactory;
+use Turbine\Workflow\Workflow\Model\MergeRequestAnnouncementBuilder;
 
 class Bootstrap
 {
@@ -58,6 +60,12 @@ class Bootstrap
             new GetJiraIssueDataCommand(
                 workflowFactory: $workflowFactory,
                 issueReader: $workflowFactory->createJiraIssueReader(),
+            )
+        );
+        $application->add(
+            new AnnounceMergeRequestCommand(
+                workflowFactory: $workflowFactory,
+                mergeRequestAnnouncementBuilder: $workflowFactory->createMergeRequestAnnouncementBuilder()
             )
         );
 

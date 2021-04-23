@@ -18,6 +18,14 @@ class GitlabClient
 
     }
 
+    public function getMergeRequestData(array $searchAttributes = []): array
+    {
+        $mergeRequestBaseUrl = $this->getProjectUrl() . 'merge_requests?';
+        $queryString = http_build_query($searchAttributes);
+
+        return $this->gitlabHttpClient->get($mergeRequestBaseUrl . $queryString);
+    }
+
     public function createMergeRequest(array $mergeRequestData): string
     {
         $mergeRequestUrl = $this->getProjectUrl() . 'merge_requests';
@@ -39,8 +47,8 @@ class GitlabClient
             ->configuration
             ->get(Configuration::PROJECT_ID) ?: urlencode($this->configuration->get(Configuration::REPOSITORY));
 
-        return $this->configuration->get(Configuration::GITLAB_API_URL)
-            . 'projects/'
+        return rtrim($this->configuration->get(Configuration::GITLAB_API_URL), '/')
+            . '/projects/'
             . $projectIdentifier
             . '/';
     }
