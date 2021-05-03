@@ -199,7 +199,7 @@ class WorkflowFactory
         return $this->configuration;
     }
 
-    private function getCommitMessageProvider(): CommitMessageProvider
+    public function getCommitMessageProvider(): CommitMessageProvider
     {
         return new CommitMessageProvider($this->getClientFactory()->getGitClient());
     }

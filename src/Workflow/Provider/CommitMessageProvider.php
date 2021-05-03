@@ -10,11 +10,16 @@ class CommitMessageProvider
     public function __construct(
         private GitClient $gitClient
     ) {
-    
+
     }
 
     public function getLastCommitMessage() : string
     {
         return $this->gitClient->getLastCommitMessage();
+    }
+
+    public function isHotfixCommitMessage(): bool
+    {
+        return str_contains(mb_strtolower($this->getLastCommitMessage()), 'hotfix');
     }
 }

@@ -15,6 +15,7 @@ use Turbine\Workflow\Console\MoveJiraIssueCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
 use Turbine\Workflow\Deployment\DeploymentFactory;
 use Turbine\Workflow\Workflow\Model\MergeRequestAnnouncementBuilder;
+use Turbine\Workflow\Deployment\DeploymentStatisticsUpdater;
 
 class Bootstrap
 {
@@ -75,7 +76,12 @@ class Bootstrap
                 issueUpdater: $workflowFactory->createJiraIssueUpdater(),
             )
         );
-        $application->add(new DeploymentStatisticsCommand($deploymentFactory->createDeploymentStatisticsUpdater()));
+        $application->add(
+            new DeploymentStatisticsCommand(
+                deploymentStatisticsUpdater: $deploymentFactory->createDeploymentStatisticsUpdater(),
+                commitMessageProvider: $workflowFactory->getCommitMessageProvider()
+            )
+        );
 
         /**
          * $application->add(new CheckBranchStatusCommand());
