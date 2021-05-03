@@ -21,6 +21,8 @@ statistics:
   stage: statistics
   image: ${PHP_IMAGE}
   timeout: 5m
+  only:
+    - main
   script:
     - composer install --no-scripts --no-dev
     - bin/workflow workflow:deployment:statistics:update
