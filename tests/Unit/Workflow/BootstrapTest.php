@@ -8,7 +8,7 @@ class BootstrapTest extends TestCase
 {
     public function testWorkflowCommandsExist(): void
     {
-        $output = (\shell_exec('/var/www/bin/workflow'));
+        $output = (\shell_exec('bin/workflow'));
 
         self::assertStringEqualsFile('tests/Unit/fixtures/workflow_commands.txt', (string)$output);
     }

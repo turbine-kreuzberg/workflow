@@ -1,5 +1,6 @@
 stages:
   - image:build
+  - tests
   - statistics
 
 variables:
@@ -16,6 +17,14 @@ buildkit:
       --cache-repo=${PHP_IMAGE_CACHE}
       --context=.
       --file=./images/php/pipeline/Dockerfile
+
+tests:
+  stage: tests
+  image: ${PHP_IMAGE}
+  timeout: 5m
+  script:
+    - composer install --no-scripts --ignore-platform-reqs
+    - vendor/bin/phpunit --colors=always -c tests/phpunit.xml
 
 statistics:
   stage: statistics
