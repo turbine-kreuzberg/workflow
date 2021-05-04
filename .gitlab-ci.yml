@@ -18,13 +18,21 @@ buildkit:
       --context=.
       --file=./images/php/pipeline/Dockerfile
 
-tests:
+unit tests:
   stage: tests
   image: ${PHP_IMAGE}
   timeout: 5m
   script:
     - composer install --no-scripts --ignore-platform-reqs
     - vendor/bin/phpunit --colors=always -c tests/phpunit.xml
+
+phpstan:
+  stage: tests
+  image: ${PHP_IMAGE}
+  timeout: 5m
+  script:
+    - composer install --no-scripts --ignore-platform-reqs
+    - vendor/bin/phpstan analyse ./src ./tests -l 8
 
 statistics:
   stage: statistics
