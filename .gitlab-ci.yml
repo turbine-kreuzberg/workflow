@@ -34,6 +34,14 @@ phpstan:
     - composer install --no-scripts --ignore-platform-reqs
     - vendor/bin/phpstan analyse ./src ./tests -l 8
 
+code sniffer:
+  stage: tests
+  image: ${PHP_IMAGE}
+  timeout: 5m
+  script:
+    - composer install --no-scripts --ignore-platform-reqs
+    - vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
+
 statistics:
   stage: statistics
   image: ${PHP_IMAGE}
