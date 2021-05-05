@@ -4,10 +4,11 @@ stages:
   - statistics
 
 variables:
-    PHP_IMAGE:                  ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php:${CI_COMMIT_SHA}
+    PHP_IMAGE:                  ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php-cli:${CI_COMMIT_SHA}
+    PHP_IMAGE_DEV:              ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php-cli-dev:${CI_COMMIT_SHA}
     PHP_IMAGE_CACHE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php:cache
 
-buildkit:
+buildkit php cli:
   stage: image:build
   image: ${BUILDKIT_IMAGE}
   timeout: 5m
@@ -17,10 +18,23 @@ buildkit:
       --cache-repo=${PHP_IMAGE_CACHE}
       --context=.
       --file=./images/php/pipeline/Dockerfile
+      --target=php-cli
+
+buildkit php cli dev:
+  stage: image:build
+  image: ${BUILDKIT_IMAGE}
+  timeout: 5m
+  script:
+    - ${BUILDKIT_SCRIPT}
+      --tag=${PHP_IMAGE_DEV}
+      --cache-repo=${PHP_IMAGE_CACHE}
+      --context=.
+      --file=./images/php/pipeline/Dockerfile
+      --target=php-cli-dev
 
 unit tests:
   stage: tests
-  image: ${PHP_IMAGE}
+  image: ${PHP_IMAGE_DEV}
   timeout: 5m
   script:
     - cp -av /var/www/vendor ./vendor
@@ -28,14 +42,14 @@ unit tests:
 
 phpstan:
   stage: tests
-  image: ${PHP_IMAGE}
+  image: ${PHP_IMAGE_DEV}
   timeout: 5m
   script:
     - /var/www/vendor/bin/phpstan analyse ./src ./tests -l 8
 
 code sniffer:
   stage: tests
-  image: ${PHP_IMAGE}
+  image: ${PHP_IMAGE_DEV}
   timeout: 5m
   script:
     - /var/www/vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
