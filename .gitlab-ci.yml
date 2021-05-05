@@ -61,4 +61,5 @@ statistics:
   only:
     - main
   script:
+    - cp -av /var/www/vendor ./vendor
     - bin/workflow workflow:deployment:statistics:update
