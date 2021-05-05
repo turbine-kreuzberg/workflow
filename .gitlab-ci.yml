@@ -23,7 +23,7 @@ unit tests:
   image: ${PHP_IMAGE}
   timeout: 5m
   script:
-    - composer install --no-scripts --ignore-platform-reqs
+    - cp -av /var/www/vendor ./vendor
     - vendor/bin/phpunit --colors=always -c tests/phpunit.xml
 
 phpstan:
@@ -31,8 +31,14 @@ phpstan:
   image: ${PHP_IMAGE}
   timeout: 5m
   script:
-    - composer install --no-scripts --ignore-platform-reqs
-    - vendor/bin/phpstan analyse ./src ./tests -l 8
+    - /var/www/vendor/bin/phpstan analyse ./src ./tests -l 8
+
+code sniffer:
+  stage: tests
+  image: ${PHP_IMAGE}
+  timeout: 5m
+  script:
+    - /var/www/vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
 
 statistics:
   stage: statistics
@@ -41,5 +47,4 @@ statistics:
   only:
     - main
   script:
-    - composer install --no-scripts --no-dev
     - bin/workflow workflow:deployment:statistics:update
