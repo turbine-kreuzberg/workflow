@@ -1,4 +1,4 @@
-FROM php:8.0-cli
+FROM php:8.0-cli AS php-cli
 
 RUN apt-get update && apt-get install -y git \
     unzip \
@@ -12,6 +12,8 @@ WORKDIR /var/www
 COPY composer.json .
 COPY composer.lock .
 
+RUN composer install --no-dev --no-scripts --ignore-platform-reqs
+
+FROM php-cli AS php-cli-dev
+
 RUN composer install --no-scripts --ignore-platform-reqs
-
-
