@@ -37,7 +37,7 @@ unit tests:
   image: ${PHP_IMAGE_DEV}
   timeout: 5m
   script:
-    - cp -av /var/www/vendor ./vendor
+    - cd /var/www
     - vendor/bin/phpunit --colors=never -c tests/phpunit.xml --coverage-text --log-junit build/phpunit.xml
   artifacts:
     reports:
