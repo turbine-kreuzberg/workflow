@@ -9,17 +9,17 @@ RUN composer self-update --1
 
 WORKDIR /var/www
 
-COPY bin .
+COPY bin ./bin
 
 COPY composer.json .
 COPY composer.lock .
 RUN composer install --no-dev --no-scripts --ignore-platform-reqs
 
-COPY src .
+COPY src ./src
 
 FROM php-cli AS php-cli-dev
 
 RUN pecl install pcov && docker-php-ext-enable pcov
 RUN composer install --no-scripts --ignore-platform-reqs
 
-COPY tests .
+COPY tests ./tests
