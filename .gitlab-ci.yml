@@ -9,7 +9,7 @@ variables:
     PHP_IMAGE_EXTERNAL:         ${DOCKER_REGISTRY_EXTERNAL}/${CI_PROJECT_PATH_SLUG}/php-cli:${CI_COMMIT_SHA}
     PHP_IMAGE_DEV:              ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php-cli-dev:${CI_COMMIT_SHA}
     PHP_IMAGE_CACHE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php:cache
-    PHP_IMAGE_REMOTE:           ${CONTAINER_IMG_REGISTRY_RELEASE}/txb-workflow/php-cli:${CI_COMMIT_SHA}
+    PHP_IMAGE_REMOTE:           ${CONTAINER_IMG_REGISTRY_RELEASE}/txb-workflow/php-cli:${CI_COMMIT_TAG}
 
 buildkit php cli:
   stage: image:build
@@ -62,9 +62,10 @@ code sniffer:
 
 push php image:
   stage: image:push
-  when: manual
   image: ${SKOPEO_IMAGE}
   timeout: 5m
+  only:
+    - /release/
   script:
     - skopeo login --username ${DOCKER_REGISTRY_USERNAME} --password ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY_EXTERNAL}
     - skopeo login --username ${CONTAINER_IMG_REGISTRY_RELEASE_USERNAME} --password ${CONTAINER_IMG_REGISTRY_RELEASE_PASSWORD} ${CONTAINER_IMG_REGISTRY_RELEASE}
@@ -72,7 +73,7 @@ push php image:
 
 statistics:
   stage: statistics
-  image: ${PHP_IMAGE_REMOTE}
+  image: ${PHP_IMAGE}
   timeout: 5m
   only:
     - main
