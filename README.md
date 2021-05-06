@@ -1,4 +1,5 @@
 # Turbine Workflow
+[![coverage report](https://git.votum-media.net/turbine/workflow/badges/main/coverage.svg)](https://git.votum-media.net/turbine/workflow/-/commits/main)
 
 These tools help automate the development workflow.
 
