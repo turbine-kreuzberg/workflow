@@ -38,7 +38,7 @@ unit tests:
   timeout: 5m
   script:
     - cp -av /var/www/vendor ./vendor
-    - vendor/bin/phpunit --colors=always -c tests/phpunit.xml
+    - vendor/bin/phpunit --colors=never -c tests/phpunit.xml --coverage-text
 
 phpstan:
   stage: tests

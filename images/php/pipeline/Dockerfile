@@ -16,4 +16,5 @@ RUN composer install --no-dev --no-scripts --ignore-platform-reqs
 
 FROM php-cli AS php-cli-dev
 
+RUN pecl install pcov && docker-php-ext-enable pcov
 RUN composer install --no-scripts --ignore-platform-reqs
