@@ -1,12 +1,15 @@
 stages:
   - image:build
+  - image:push
   - tests
   - statistics
 
 variables:
     PHP_IMAGE:                  ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php-cli:${CI_COMMIT_SHA}
+    PHP_IMAGE_EXTERNAL:         ${DOCKER_REGISTRY_EXTERNAL}/${CI_PROJECT_PATH_SLUG}/php-cli:${CI_COMMIT_SHA}
     PHP_IMAGE_DEV:              ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php-cli-dev:${CI_COMMIT_SHA}
     PHP_IMAGE_CACHE:            ${DOCKER_REGISTRY_INTERNAL}/${CI_PROJECT_PATH_SLUG}/php:cache
+    PHP_IMAGE_REMOTE:           ${CONTAINER_IMG_REGISTRY_RELEASE}/txb-workflow/php-cli:${CI_COMMIT_SHA}
 
 buildkit php cli:
   stage: image:build
@@ -57,9 +60,19 @@ code sniffer:
   script:
     - /var/www/vendor/bin/phpcs src/ tests/ --standard=./config/codesniffer_ruleset.xml
 
+push php image:
+  stage: image:push
+  when: manual
+  image: ${SKOPEO_IMAGE}
+  timeout: 5m
+  script:
+    - skopeo login --username ${DOCKER_REGISTRY_USERNAME} --password ${DOCKER_REGISTRY_PASSWORD} ${DOCKER_REGISTRY_EXTERNAL}
+    - skopeo login --username ${CONTAINER_IMG_REGISTRY_RELEASE_USERNAME} --password ${CONTAINER_IMG_REGISTRY_RELEASE_PASSWORD} ${CONTAINER_IMG_REGISTRY_RELEASE}
+    - skopeo copy docker://${PHP_IMAGE_EXTERNAL} docker://${PHP_IMAGE_REMOTE}
+
 statistics:
   stage: statistics
-  image: ${PHP_IMAGE}
+  image: ${PHP_IMAGE_REMOTE}
   timeout: 5m
   only:
     - main
