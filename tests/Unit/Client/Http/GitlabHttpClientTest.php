@@ -12,6 +12,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPStan\Testing\TestCase;
 use Turbine\Workflow\Client\Http\GitlabHttpClient;
+use Turbine\Workflow\Configuration;
 
 class GitlabHttpClientTest extends TestCase
 {
@@ -32,10 +33,20 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $gitlabHttpClient = new GitlabHttpClient($clientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::exactly(2))
+            ->method('get')
+            ->with('GITLAB_PERSONAL_ACCESS_TOKEN')
+            ->willReturn('gitlab personal token');
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
         self::assertEquals([], $gitlabHttpClient->get('gitlab-url'));
         self::assertEquals(['blub' => 'content'], $gitlabHttpClient->get('gitlab-url'));
         self::assertEquals('gitlab-url', $container[0]['request']->getUri()->__toString());
+        self::assertEquals(
+            ['gitlab personal token'],
+            $container[0]['request']->getHeaders()['Private-Token']
+        );
     }
 
     public function testGetFunctionCallsGuzzleClientWithoutAccessThrowsException(): void
@@ -54,7 +65,9 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $gitlabHttpClient = new GitlabHttpClient($clientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
         $this->expectExceptionObject(
             new Exception(
                 'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
@@ -79,7 +92,9 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $gitlabHttpClient = new GitlabHttpClient($clientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
         $this->expectException(Exception::class);
         self::assertEquals([], $gitlabHttpClient->get('gitlab-url'));
     }
@@ -101,8 +116,19 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $gitlabHttpClient = new GitlabHttpClient($clientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::exactly(2))
+            ->method('get')
+            ->with('GITLAB_PERSONAL_ACCESS_TOKEN')
+            ->willReturn('gitlab personal token');
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
         self::assertEquals([], $gitlabHttpClient->post('gitlab-url'));
+        self::assertEquals(
+            ['gitlab personal token'],
+            $container[0]['request']->getHeaders()['Private-Token']
+        );
+
         self::assertEquals(['blub' => 'content'], $gitlabHttpClient->post('gitlab-url', ['postOptions' => 'blub']));
         self::assertEquals('gitlab-url', $container[0]['request']->getUri()->__toString());
         self::assertEquals(
@@ -127,7 +153,9 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $gitlabHttpClient = new GitlabHttpClient($clientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
         $this->expectExceptionObject(
             new Exception(
                 'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
@@ -152,7 +180,9 @@ class GitlabHttpClientTest extends TestCase
 
         $clientMock = new Client(['handler' => $handlerStack]);
 
-        $gitlabHttpClient = new GitlabHttpClient($clientMock);
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
         $this->expectException(Exception::class);
         self::assertEquals([], $gitlabHttpClient->post('gitlab-url'));
     }

@@ -3,6 +3,7 @@
 namespace Turbine\Workflow\Client;
 
 use GuzzleHttp\Client;
+use RuntimeException;
 use Turbine\Workflow\Client\Http\AtlassianHttpClient;
 use Turbine\Workflow\Client\Http\GitlabHttpClient;
 use Turbine\Workflow\Client\Http\SlackHttpClient;
@@ -23,21 +24,10 @@ class ClientFactory
     {
         return new GitlabClient(
             new GitlabHttpClient(
-                $this->createGitlabConfiguredGuzzleClient()
+                new Configuration(),
+                new Client()
             ),
             new Configuration()
-        );
-    }
-
-    private function createGitlabConfiguredGuzzleClient(): Client
-    {
-        return new Client(
-            [
-                'headers' => [
-                    'Private-Token' => (new Configuration())->get(Configuration::PERSONAL_ACCESS_TOKEN),
-                    'Content-Type' => 'application/json',
-                ],
-            ]
         );
     }
 
