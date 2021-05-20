@@ -6,7 +6,18 @@
     - alles folgt aber dem gleichen Prinzip:
 - Veränderung des Quell-Codes und Testen mit den geschrieben Tests (Erstellung von Mutanten).
   Bleiben die Tests "grün" (die Mutante überlebt), ist der Test nicht "gut genug".
-- 4+0 = 4 <=> 4-0 = 4
+- klassische add methode wie
+  ```
+  function add(a, b){ return a + b}
+  ```
+  test:
+    ```
+  function testAddFunction(){ assert(add(1,0) === 1)}
+  ```
+  mutation: + wird zu - mutiert Test bleibt weiterhin grün
+  ```
+  function add(a, b){ return a - b}
+  ```
 - States für Mutanten
     - uncovered
     - survived
