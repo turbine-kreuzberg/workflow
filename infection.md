@@ -55,14 +55,17 @@ Um dem entgegen zu wirken, benötigt es einer minimalen Änderung:
 Somit ist das Testergebnis für `1 + 1 = 2` weiterhin richtig, allerdings ist nun eine Mutation des Operanden nicht mehr möglich, da `1 - 1 = 2` einfach falsch ist. 
 
 # Wie/Warum setzen wir es ein?
-- Crazy Zusätzlicher Kollege: Edge cases werden dadurch einfach sichtbar
+If you ever heart of the Netflix "Chaos monkey", you can imagine what mutation testing is helping in "production" environments. 
+The mutation tester feels exactly like this, only producing chaos in your source code and helping to find weird edge cases
+you haven't thought of while writing your tests.
 
-- Neben verschiedenen anderen Test-Tools, ist Mutation testing ein weiteres Tool in unserem Entwickler-Baukasten, dass
-  wir für die Qualitätssicherung in unseren Projekten benutzen.
-  
-- Hilft aber auch bei der Maintenance der Tests
+Our experience shows that especially in long-running projects those edge cases will occur - no matter what. So having mutation
+testing as an addition in our development toolbox, is helping us to ensure higher quality in our projects already at the beginning 
+but even more in the long run. 
 
-- Code-Beispiel aus der Realität
+- it can help to remove unneeded code
+
+To make this more tangible we have a real-life example: 
 - Ausgangs-Methode:
 ```phpt
 if ($argumentTicketNumber !== null && is_string($argumentTicketNumber)) {
@@ -131,6 +134,10 @@ public function testGetProjectUrl(): void
     self::assertEquals('gitlaburl/projects/projectId/', $gitlabClient->getProjectUrl('gitlaburl/', 'projectId'));
 }
 ```
+
+
+Imagine you have to adjust a tiny bit in your source code and according to your opinion and your code coverage
+this change is well covered. Without mutation testing you're done but
 # Was ist unsere Einschätzung?
 
 - Code coverage ist gut, heißt aber nicht, dass die Test-Qualität gut ist -> Quality over Quantity
