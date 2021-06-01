@@ -66,25 +66,59 @@ but even more in the long run.
 - it can help to remove unneeded code
 
 To make this more tangible we have a real-life example: 
-- Ausgangs-Methode:
+In the `TimeExtractor` class the current method was implemented to return the worked time for the day (aggregated time
+of all tasks). If there was only one task that was worked on this method will return only the amount of time of this task.
+The method looks like this:
 ```phpt
-if ($argumentTicketNumber !== null && is_string($argumentTicketNumber)) {
-    return $argumentTicketNumber;
+public function getTimeSpent(JiraIssueTransfer $issueData): int {
+  return $issueData->aggregateTimeSpent ?? $issueData->timeSpent;
 }
 ```
-Mutation: 
-```phpt
-if ($argumentTicketNumber !== null || is_string($argumentTicketNumber)) {
-    return $argumentTicketNumber;
+The corresponding tests look like this. They cover both described cases and we achieve full code coverage.
+```
+public function testGetTimeSpentReturnsTimespent(): void
+{
+    $jiraIssueTransfer = new JiraIssueTransfer();
+    $jiraIssueTransfer->timeSpent = 23;
+
+    self::assertEquals(23, (new TimeExtractor())->getTimeSpent($jiraIssueTransfer));
+}
+
+public function testGetTimeSpentReturnsAggregateTimeSpent(): void
+{
+    $jiraIssueTransfer = new JiraIssueTransfer();
+    $jiraIssueTransfer->aggregateTimeSpent = 42;
+
+    self::assertEquals(42, (new TimeExtractor())->getTimeSpent($jiraIssueTransfer));
 }
 ```
-Ausgangs-Methode
+Now the mutation framework goes to work and among others creates the current mutation. It just swaps the operands.
+!!!Describe new behaviour!!!
 ```phpt
-['Time spent' => $issueData->aggregateTimeSpent ?? $issueData->timeSpent]
+public function getTimeSpent(JiraIssueTransfer $issueData): int {
+  return $issueData->timeSpent ?? $issueData->aggregateTimeSpent;
+}
 ```
-Mutation (Coalesce)
-```phpt
-['Time spent' => $issueData->timeSpent ?? $issueData->aggregateTimeSpent ]
+The current implemented tests do not catch this change. To kill the mutant we have to adjust one of the existing tests
+by adding just the second attribute `timeSpent` with a different value. As a result the swap won't 
+work anymore. 
+```
+public function testGetTimeSpentReturnsTimespent(): void
+{
+    $jiraIssueTransfer = new JiraIssueTransfer();
+    $jiraIssueTransfer->timeSpent = 23;
+
+    self::assertEquals(23, (new TimeExtractor())->getTimeSpent($jiraIssueTransfer));
+}
+
+public function testGetTimeSpentReturnsAggregateTimeSpent(): void
+{
+    $jiraIssueTransfer = new JiraIssueTransfer();
+    $jiraIssueTransfer->aggregateTimeSpent = 42;
+    $jiraIssueTransfer->timeSpent = 23;
+
+    self::assertEquals(42, (new TimeExtractor())->getTimeSpent($jiraIssueTransfer));
+}
 ```
 
 Original code
