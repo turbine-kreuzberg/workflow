@@ -60,7 +60,7 @@ class MoveJiraIssueCommand extends Command
                 sprintf('An error occurred moving ticket "%s" to status "%s"', $issueNumber, $choice)
             );
 
-            return 0;
+            return 1;
         }
 
         $inputOutputStyle->success('Ticket moved successfully to status ' . $choice);

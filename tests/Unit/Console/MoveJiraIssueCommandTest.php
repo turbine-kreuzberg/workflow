@@ -73,7 +73,9 @@ class MoveJiraIssueCommandTest extends TestCase
             ->willReturn(null);
         $outputMock = $this->createMock(OutputInterface::class);
 
-        $moveJiraIssueCommand->run($inputMock, $outputMock);
+        $exitCode = $moveJiraIssueCommand->run($inputMock, $outputMock);
+
+        self::assertEquals(0, $exitCode);
     }
 
     public function testMoveTicketAndNotAssignToUserWithoutArgument(): void
@@ -303,7 +305,8 @@ class MoveJiraIssueCommandTest extends TestCase
             ->willReturn(null);
         $outputMock = $this->createMock(OutputInterface::class);
 
-        $moveJiraIssueCommand->run($inputMock, $outputMock);
+        $exitCode = $moveJiraIssueCommand->run($inputMock, $outputMock);
+        self::assertEquals(1, $exitCode);
     }
 
 }
