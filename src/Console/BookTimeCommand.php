@@ -27,7 +27,6 @@ class BookTimeCommand extends Command
     private const FAST_WORKLOG = 'fast-worklog';
 
     public function __construct(
-        private Configuration $configuration,
         private WorkflowFactory $workflowFactory,
         private IssueUpdater $issueUpdater,
         private IssueReader $issueReader,

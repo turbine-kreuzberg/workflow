@@ -26,7 +26,6 @@ class Bootstrap
         $deploymentFactory = new DeploymentFactory();
         $application->add(
             new BookTimeCommand(
-                configuration: new Configuration(),
                 workflowFactory: $workflowFactory,
                 issueUpdater: $workflowFactory->createJiraIssueUpdater(),
                 issueReader: $workflowFactory->createJiraIssueReader(),

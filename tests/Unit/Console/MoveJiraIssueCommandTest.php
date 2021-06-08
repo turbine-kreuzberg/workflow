@@ -9,6 +9,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\MoveJiraIssueCommand;
 use Turbine\Workflow\Exception\JiraStateNotFoundException;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Workflow\Provider\BranchNameProvider;
 use Turbine\Workflow\Workflow\Provider\TicketTransitionStatusChoicesProvider;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -307,6 +308,20 @@ class MoveJiraIssueCommandTest extends TestCase
 
         $exitCode = $moveJiraIssueCommand->run($inputMock, $outputMock);
         self::assertEquals(1, $exitCode);
+    }
+
+    public function testCommandConfiguration(): void
+    {
+        $workOnTicketCommand = new MoveJiraIssueCommand(
+            $this->createMock(WorkflowFactory::class),
+            $this->createMock(IssueUpdater::class)
+        );
+
+        self::assertEquals('workflow:move:jira-issue', $workOnTicketCommand->getName());
+        self::assertEquals(
+            'Transition the status of a jira issue.',
+            $workOnTicketCommand->getDescription()
+        );
     }
 
 }

@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\BookTimeCommand;
+use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
 use Turbine\Workflow\Console\SubConsole\TicketNumberConsole;
 use Turbine\Workflow\Console\SubConsole\WorklogCommentConsole;
@@ -38,8 +39,6 @@ class BookTimeCommandTest extends TestCase
             ->with($inputMock, $outputMock)
             ->willReturn($symfonyStyleMock);
 
-        $configurationMock = $this->createMock(Configuration::class);
-
         $fastBookTimeConsoleMock = $this->createMock(FastBookTimeConsole::class);
         $fastBookTimeConsoleMock->expects(self::once())
             ->method('execFastBooking')
@@ -54,7 +53,6 @@ class BookTimeCommandTest extends TestCase
         $ticketNumberConsoleMock = $this->createMock(TicketNumberConsole::class);
 
         $bookTimeCommand = new BookTimeCommand(
-            configuration: $configurationMock,
             workflowFactory: $workflowFactoryMock,
             issueUpdater: $issueUpdaterMock,
             issueReader: $issueReaderMock,
@@ -97,8 +95,6 @@ class BookTimeCommandTest extends TestCase
             ->method('createSymfonyStyle')
             ->with($inputMock, $outputMock)
             ->willReturn($symfonyStyleMock);
-
-        $configurationMock = $this->createMock(Configuration::class);
 
         $fastBookTimeConsoleMock = $this->createMock(FastBookTimeConsole::class);
 
@@ -146,7 +142,6 @@ class BookTimeCommandTest extends TestCase
             ->willReturn('message');
 
         $bookTimeCommand = new BookTimeCommand(
-            configuration: $configurationMock,
             workflowFactory: $workflowFactoryMock,
             issueUpdater: $issueUpdaterMock,
             issueReader: $issueReaderMock,
@@ -189,8 +184,6 @@ class BookTimeCommandTest extends TestCase
             ->method('createSymfonyStyle')
             ->with($inputMock, $outputMock)
             ->willReturn($symfonyStyleMock);
-
-        $configurationMock = $this->createMock(Configuration::class);
 
         $fastBookTimeConsoleMock = $this->createMock(FastBookTimeConsole::class);
 
@@ -238,7 +231,6 @@ class BookTimeCommandTest extends TestCase
             ->willReturn('message');
 
         $bookTimeCommand = new BookTimeCommand(
-            configuration: $configurationMock,
             workflowFactory: $workflowFactoryMock,
             issueUpdater: $issueUpdaterMock,
             issueReader: $issueReaderMock,
@@ -287,8 +279,6 @@ class BookTimeCommandTest extends TestCase
             ->with($inputMock, $outputMock)
             ->willReturn($symfonyStyleMock);
 
-        $configurationMock = $this->createMock(Configuration::class);
-
         $fastBookTimeConsoleMock = $this->createMock(FastBookTimeConsole::class);
 
         $jiraWorklogEntry = new JiraWorklogEntryTransfer();
@@ -333,7 +323,6 @@ class BookTimeCommandTest extends TestCase
             ->willReturn('new worklog message');
 
         $bookTimeCommand = new BookTimeCommand(
-            configuration: $configurationMock,
             workflowFactory: $workflowFactoryMock,
             issueUpdater: $issueUpdaterMock,
             issueReader: $issueReaderMock,
@@ -376,8 +365,6 @@ class BookTimeCommandTest extends TestCase
             ->method('createSymfonyStyle')
             ->with($inputMock, $outputMock)
             ->willReturn($symfonyStyleMock);
-
-        $configurationMock = $this->createMock(Configuration::class);
 
         $fastBookTimeConsoleMock = $this->createMock(FastBookTimeConsole::class);
 
@@ -425,7 +412,6 @@ class BookTimeCommandTest extends TestCase
             ->willReturn('new worklog message');
 
         $bookTimeCommand = new BookTimeCommand(
-            configuration: $configurationMock,
             workflowFactory: $workflowFactoryMock,
             issueUpdater: $issueUpdaterMock,
             issueReader: $issueReaderMock,
@@ -436,5 +422,39 @@ class BookTimeCommandTest extends TestCase
         );
 
         $bookTimeCommand->run($inputMock, $outputMock);
+    }
+
+    public function testCommandConfiguration(): void
+    {
+        $bookTimeCommand = new BookTimeCommand(
+            $this->createMock(WorkflowFactory::class),
+            $this->createMock(IssueUpdater::class),
+            $this->createMock(IssueReader::class),
+            $this->createMock(FastBookTimeConsole::class),
+            $this->createMock(TicketIdProvider::class),
+            $this->createMock(TicketNumberConsole::class),
+            $this->createMock(WorklogCommentConsole::class)
+        );
+
+        self::assertEquals(
+            'workflow:book-time',
+            $bookTimeCommand->getName()
+        );
+        self::assertEquals(
+            'Book time for a jira issue.',
+            $bookTimeCommand->getDescription()
+        );
+        self::assertEquals(
+            'Use this option to book time for current branch',
+            $bookTimeCommand->getDefinition()->getOption('forCurrentBranch')->getDescription()
+        );
+        self::assertEquals(
+            'Use this option to enable fast worklog',
+            $bookTimeCommand->getDefinition()->getOption('fast-worklog')->getDescription()
+        );
+        self::assertEquals(
+            'You can provide the ticket number directly',
+            $bookTimeCommand->getDefinition()->getArgument('ticket number')->getDescription()
+        );
     }
 }

@@ -7,8 +7,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\AnnounceMergeRequestCommand;
+use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\MoveJiraIssueCommand;
 use Turbine\Workflow\Exception\JiraStateNotFoundException;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
 use Turbine\Workflow\Workflow\Model\MergeRequestAnnouncementBuilder;
 use Turbine\Workflow\Workflow\Model\SlackMessageSender;
@@ -51,5 +53,16 @@ class AnnounceMergeRequestCommandTest extends TestCase
         $outputMock = $this->createMock(OutputInterface::class);
 
         $announceMergeRequestCommand->run($inputMock, $outputMock);
+    }
+
+    public function testCommandConfiguration(): void
+    {
+        $announceMergeRequestCommand = new AnnounceMergeRequestCommand(
+            $this->createMock(WorkflowFactory::class),
+            $this->createMock(MergeRequestAnnouncementBuilder::class),
+        );
+
+        self::assertEquals('workflow:announce-merge-request', $announceMergeRequestCommand->getName());
+        self::assertEquals('Announces merge request on slack', $announceMergeRequestCommand->getDescription());
     }
 }

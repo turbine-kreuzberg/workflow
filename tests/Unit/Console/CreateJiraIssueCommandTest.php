@@ -8,8 +8,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\CreateJiraIssueCommand;
+use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueCreator;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class CreateJiraIssueCommandTest extends TestCase
@@ -146,5 +148,16 @@ class CreateJiraIssueCommandTest extends TestCase
 
         $this->expectException(RuntimeException::class);
         $createJiraIssueCommand->run($inputMock, $outputMock);
+    }
+
+    public function testCommandConfiguration(): void
+    {
+        $workOnTicketCommand = new CreateJiraIssueCommand(
+            workflowFactory: $this->createMock(WorkflowFactory::class),
+            name: null
+        );
+
+        self::assertEquals('workflow:create:jira-issue', $workOnTicketCommand->getName());
+        self::assertEquals('Create a jira issue.', $workOnTicketCommand->getDescription());
     }
 }

@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\GetJiraIssueDataCommand;
+use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\WorkflowFactory;
@@ -197,6 +198,17 @@ class GetJiraIssueDataCommandTest extends TestCase
         $outputMock = $this->createMock(OutputInterface::class);
 
         $getJiraIssueDataCommand->run($inputMock, $outputMock);
+    }
+
+    public function testCommandConfiguration(): void
+    {
+        $workOnTicketCommand = new GetJiraIssueDataCommand(
+            $this->createMock(WorkflowFactory::class),
+            $this->createMock(IssueReader::class)
+        );
+
+        self::assertEquals('workflow:get:jira-issue', $workOnTicketCommand->getName());
+        self::assertEquals('Get data from a jira issue.', $workOnTicketCommand->getDescription());
     }
 
     public function parentTypeProvider(): array

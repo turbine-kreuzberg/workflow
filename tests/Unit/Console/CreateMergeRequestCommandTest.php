@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\CreateMergeRequestCommand;
+use Turbine\Workflow\Console\ListBookingsCommand;
+use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Model\MergeRequestCreator;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -44,5 +46,22 @@ class CreateMergeRequestCommandTest extends TestCase
         );
 
         $createMergeRequestCommand->run($inputMock, $outputMock);
+    }
+
+    public function testCommandConfiguration(): void
+    {
+        $workOnTicketCommand = new CreateMergeRequestCommand(
+            $this->createMock(MergeRequestCreator::class),
+            $this->createMock(WorkflowFactory::class)
+        );
+
+        self::assertEquals(
+            'workflow:create-merge-request',
+            $workOnTicketCommand->getName()
+        );
+        self::assertEquals(
+            'Create merge request for current branch to develop.',
+            $workOnTicketCommand->getDescription()
+        );
     }
 }

@@ -7,10 +7,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Console\ListBookingsCommand;
+use Turbine\Workflow\Console\MoveJiraIssueCommand;
 use Turbine\Workflow\Transfers\JiraWorklogEntryCollectionTransfer;
 use Turbine\Workflow\Transfers\JiraWorklogEntryTransfer;
 use Turbine\Workflow\Transfers\JiraWorklogsTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
+use Turbine\Workflow\Workflow\Jira\IssueUpdater;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class ListBookingsCommandTest extends TestCase
@@ -93,5 +95,16 @@ class ListBookingsCommandTest extends TestCase
         $outputMock = $this->createMock(OutputInterface::class);
 
         self::assertEquals(0, $listBookingsCommand->run($inputMock, $outputMock));
+    }
+
+    public function testCommandConfiguration(): void
+    {
+        $workOnTicketCommand = new ListBookingsCommand(
+            $this->createMock(IssueReader::class),
+            $this->createMock(WorkflowFactory::class)
+        );
+
+        self::assertEquals('workflow:list-bookings', $workOnTicketCommand->getName());
+        self::assertEquals('List bookings of the day.', $workOnTicketCommand->getDescription());
     }
 }
