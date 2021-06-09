@@ -1,4 +1,11 @@
 # What is mutation testing
+
+###TL;DR
+- Helps to increase code quality and test quality.
+- Helps you to write better tests.
+- Mutation testing is time/resource consuming.
+
+###So, what is it?
 First of all: Mutation testing is nothing new. The concept is around for quite a while. 
 Regarding to Wikipedia (https://en.wikipedia.org/wiki/Mutation_testing) it was proposed already in 1971 by Richard Lipton.  
 For a long time it was just an academic approach because of its cost and time intensity. But as the performance of developer machines
@@ -32,6 +39,13 @@ Somit können sich folgende Status ergeben:
 - "timeout": Die Veränderungen des Quellcodes haben dafür gesorgt, dass das Ausführen des Codes eine (vor-definierte) Zeitbegrenzung überschritten hat.
 - "uncovered": Es gibt keine Test für den Quellcode.
 
+To have an idea about the quality of your tests you can use the so called "Mutation score indicator" (MSI).
+It is the relation between defeated mutants and total created mutations. So it will be calculated like that:
+```
+TotalDefeatedMutants = KilledCount + TimedOutCount + ErrorCount
+MSI = (TotalDefeatedMutants / TotalMutantsCount) * 100
+```
+
 Ein Lehrbuch-Beispiel zum einfacheren Verständnis wie Mutation-Testing funktioniert ist eine klassische add-Methode:  
   ```
   function add(a, b){ return a + b}
@@ -51,6 +65,7 @@ Um dem entgegen zu wirken, benötigt es einer minimalen Änderung:
   ```
 Somit ist das Testergebnis für `1 + 1 = 2` weiterhin richtig, allerdings ist nun eine Mutation des Operanden nicht mehr möglich, da `1 - 1 = 2` einfach falsch ist. 
 
+###And what about real projects?
 But enough about theory. Here's an example from a real-life project, which we use in our day-to-day work to make our
 developer lives easier. It helps us for example to make our beloved time bookings a little smoother - especially when working in pair or mob.
 For getting data out of Jira we have a class `TimeExtractor`.
@@ -112,7 +127,7 @@ public function testGetTimeSpentReturnsAggregateTimeSpent(): void
     self::assertEquals(42, (new TimeExtractor())->getTimeSpent($jiraIssueTransfer));
 }
 ```
-#Conclusion
+###Bottom line(s)
 If you ever heart of the Netflix "Chaos monkey", you can imagine how mutation testing is helping in "production" environments.
 The mutation tester acts exactly like this, producing chaos in your source code and helping to find weird edge cases
 you haven't even thought of while writing your tests.
@@ -127,12 +142,13 @@ With mutation testing we now have a second metric which is not about the quantit
 it improves not only the quality of our tests but also the quality of the code itself. For example we experienced 
 while using mutation testing that it really can help to find (and as a consequence remove) unneeded code.
 
-- Kann nicht immer laufen, da sehr zeitintensiv (Jede Mutante erwirkt eine erneuten Durchlauf der gesamten Test-Suite.)
-  -> es empfiehlt sich, Mutation-Testings per githook zu triggern
-  -> und vielleicht in bestimmten Abständen (nightly) über alle Tests laufen lassen?
-  -> oder Einschränkung des Mutanten-Sets (gibt es dafür ein gutes Beispiel)???
-MSI als mögliche Kennziffer für Qualitätsstand in Pipeline integriert
+For the library mentioned above we have the following stats when it comes to tests:
+* 144 PHPUnit tests running in about 0.5 sec
+* Code coverage of 98,37%
+* Mutation testing run took: 1 minute, 45 sec
 
-Test-Stats: 144 tests
-Code coverage: 98,37%
-Mutation testing run took: 1 minute, 45 sec
+As can be seen in the data, running the mutation tests is very time intensive. That's why we would recommend to find 
+a way to run the mutation tests per githook only on the changed files and according tests. 
+Additionally, it should be running inside a qa-pipeline that does a full check in a defined time period (e.g. once a day)
+and keeps track of the MSI. You could define thresholds alerting you if the MSI reach a critical level. 
+With this you have a good overview of the healthiness of your project.
