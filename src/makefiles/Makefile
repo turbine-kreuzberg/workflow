@@ -45,6 +45,10 @@ move-ticket: ##@workflow transition the status of a jira ticket.
 	$(DOCKER_RUN_WORKFLOW) workflow:move:jira-issue $(filter-out $@,$(MAKECMDGOALS))
 .PHONY: move-ticket
 
+ticket-done: ##@workflow Moves ticket to JIRA_DEVELOPMENT_DONE_STATUS and deletes the branch.
+	$(DOCKER_RUN_WORKFLOW) workflow:ticket-done
+.PHONY: ticket-done
+
 deployment-statistics-update: ##@workflow update deployment statistics
 	$(DOCKER_RUN_WORKFLOW) workflow:deployment:statistics:update
 .PHONY: deployment-statistics-update

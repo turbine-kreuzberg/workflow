@@ -3,6 +3,7 @@
 namespace Turbine\Workflow\Workflow;
 
 use Symfony\Component\Console\Application;
+use Turbine\Workflow\Client\ClientFactory;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\AnnounceMergeRequestCommand;
 use Turbine\Workflow\Console\BookTimeCommand;
@@ -12,6 +13,7 @@ use Turbine\Workflow\Console\DeploymentStatisticsCommand;
 use Turbine\Workflow\Console\GetJiraIssueDataCommand;
 use Turbine\Workflow\Console\ListBookingsCommand;
 use Turbine\Workflow\Console\MoveJiraIssueCommand;
+use Turbine\Workflow\Console\TicketDoneCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
 use Turbine\Workflow\Deployment\DeploymentFactory;
 use Turbine\Workflow\Workflow\Model\MergeRequestAnnouncementBuilder;
@@ -24,6 +26,7 @@ class Bootstrap
         $application = new Application();
         $workflowFactory = new WorkflowFactory();
         $deploymentFactory = new DeploymentFactory();
+        $clientFactory = new ClientFactory();
         $application->add(
             new BookTimeCommand(
                 workflowFactory: $workflowFactory,
@@ -79,6 +82,16 @@ class Bootstrap
             new DeploymentStatisticsCommand(
                 deploymentStatisticsUpdater: $deploymentFactory->createDeploymentStatisticsUpdater(),
                 commitMessageProvider: $workflowFactory->getCommitMessageProvider()
+            )
+        );
+
+        $application->add(
+            new TicketDoneCommand(
+                configuration: $workflowFactory->createConfiguration(),
+                gitClient: $clientFactory->getGitClient(),
+                workflowFactory: $workflowFactory,
+                ticketIdentifier: $workflowFactory->getTicketIdentifier(),
+                issueUpdater: $workflowFactory->createJiraIssueUpdater()
             )
         );
 
