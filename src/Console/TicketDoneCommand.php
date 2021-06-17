@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Turbine\Workflow\Client\GitClient;
 use Turbine\Workflow\Configuration;
+use Turbine\Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Workflow\TicketIdentifier;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class TicketDoneCommand extends Command
@@ -16,7 +18,9 @@ class TicketDoneCommand extends Command
     public function __construct(
         private Configuration $configuration,
         private GitClient $gitClient,
-        private WorkflowFactory $workflowFactory
+        private WorkflowFactory $workflowFactory,
+        private TicketIdentifier $ticketIdentifier,
+        private IssueUpdater $issueUpdater
     ) {
         parent::__construct();
     }
@@ -25,7 +29,7 @@ class TicketDoneCommand extends Command
     {
         $this->setName('workflow:ticket-done');
         $this->setDescription(
-            'Moves ticket to merged to develop status and deletes the branch'
+            'Moves ticket to JIRA_DEVELOPMENT_DONE_STATUS and deletes the branch'
         );
     }
 
@@ -34,17 +38,33 @@ class TicketDoneCommand extends Command
         $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
         $currentBranchName = $this->gitClient->getCurrentBranchName();
 
+        if ($this->isInvalidBranch($currentBranchName)) {
+            $inputOutputStyle->error('This command works only on feature branches!');
+
+            return 1;
+        }
+        $ticketId = $this->ticketIdentifier->extractFromBranchName($currentBranchName);
+        $this->issueUpdater->moveIssueToStatus(
+            $ticketId,
+            $this->configuration->get(Configuration::JIRA_DEVELOPMENT_DONE_STATUS)
+        );
+        $this->gitClient->deleteRemoteBranch($currentBranchName);
+
+        return 0;
+    }
+
+    /**
+     * @param string $currentBranchName
+     *
+     * @return bool
+     */
+    private function isInvalidBranch(string $currentBranchName): bool
+    {
         $protectedBranches = [
             $this->configuration->get(Configuration::BRANCH_DEPLOYMENT),
             $this->configuration->get(Configuration::BRANCH_DEVELOPMENT)
         ];
 
-        if (in_array($currentBranchName, $protectedBranches, true)) {
-            $inputOutputStyle->error('This command works only on feature branches!');
-
-            return 1;
-        }
-
-        return 0;
+        return in_array($currentBranchName, $protectedBranches, true);
     }
 }

@@ -190,7 +190,7 @@ class WorkflowFactory
         return new ClientFactory();
     }
 
-    private function createConfiguration(): Configuration
+    public function createConfiguration(): Configuration
     {
         if ($this->configuration === null) {
             $this->configuration = new Configuration();

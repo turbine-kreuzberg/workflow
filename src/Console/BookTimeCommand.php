@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\SubConsole\FastBookTimeConsole;
 use Turbine\Workflow\Console\SubConsole\TicketNumberConsole;
 use Turbine\Workflow\Console\SubConsole\WorklogCommentConsole;

@@ -4,7 +4,6 @@ namespace Turbine\Workflow\Client;
 
 class GitClient
 {
-
     public function getCurrentBranchName() : string
     {
         return (string)exec('git rev-parse --abbrev-ref HEAD');
@@ -29,5 +28,10 @@ class GitClient
         $gitLog = implode(PHP_EOL, $gitLog);
 
         return $gitLog;
+    }
+
+    public function deleteRemoteBranch(string $branchName) : string
+    {
+        return (string)exec("git push origin --delete origin/$branchName");
     }
 }
