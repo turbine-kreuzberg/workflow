@@ -186,4 +186,84 @@ class GitlabHttpClientTest extends TestCase
         $this->expectException(Exception::class);
         self::assertEquals([], $gitlabHttpClient->post('gitlab-url'));
     }
+
+    public function testDeleteFunctionCallsGuzzleClientWithUnknownReasonErrorThrowsException(): void
+    {
+        $container = [];
+        $historyMock = Middleware::history($container);
+
+        $responseMockHandler = new MockHandler(
+            [
+                new BadResponseException('bad response', new Request('DELETE', 'test'), new Response(402)),
+            ]
+        );
+
+        $handlerStack = HandlerStack::create($responseMockHandler);
+        $handlerStack->push($historyMock);
+
+        $clientMock = new Client(['handler' => $handlerStack]);
+
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
+        $this->expectException(Exception::class);
+        self::assertEquals([], $gitlabHttpClient->delete('gitlab-url'));
+    }
+
+    public function testDeleteFunctionCallsGuzzleClientWithoutAccessThrowsException(): void
+    {
+        $container = [];
+        $historyMock = Middleware::history($container);
+
+        $responseMockHandler = new MockHandler(
+            [
+                new BadResponseException('bad response', new Request('DELETE', 'gitlab-url'), new Response(401)),
+            ]
+        );
+
+        $handlerStack = HandlerStack::create($responseMockHandler);
+        $handlerStack->push($historyMock);
+
+        $clientMock = new Client(['handler' => $handlerStack]);
+
+        $configurationMock = $this->createMock(Configuration::class);
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
+        $this->expectExceptionObject(
+            new Exception(
+                'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
+            )
+        );
+        self::assertEquals([], $gitlabHttpClient->delete('gitlab-url'));
+    }
+
+    public function testDeleteFunctionCallsGuzzleClient(): void
+    {
+        $container = [];
+        $historyMock = Middleware::history($container);
+
+        $responseMockHandler = new MockHandler(
+            [
+                new Response(200, [], json_encode([], JSON_THROW_ON_ERROR)),
+            ]
+        );
+
+        $handlerStack = HandlerStack::create($responseMockHandler);
+        $handlerStack->push($historyMock);
+
+        $clientMock = new Client(['handler' => $handlerStack]);
+
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::once())
+            ->method('get')
+            ->with('GITLAB_PERSONAL_ACCESS_TOKEN')
+            ->willReturn('gitlab personal token');
+
+        $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
+        self::assertEquals([], $gitlabHttpClient->delete('gitlab-url'));
+        self::assertEquals(
+            ['gitlab personal token'],
+            $container[0]['request']->getHeaders()['Private-Token']
+        );
+    }
 }

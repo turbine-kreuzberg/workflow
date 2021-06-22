@@ -60,6 +60,28 @@ class GitlabHttpClient
         return json_decode($gitlabResponse->getBody()->getContents(), true);
     }
 
+    public function delete(string $uri): array
+    {
+        try {
+            $gitlabResponse = $this->client->delete(
+                $uri,
+                [
+                    RequestOptions::HEADERS => $this->getHeaders(),
+                ]
+            );
+        } catch (BadResponseException $exception) {
+            if ($exception->getResponse()->getStatusCode() === 401) {
+                throw new Exception(
+                    'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
+                );
+            }
+
+            throw $exception;
+        }
+
+        return json_decode($gitlabResponse->getBody()->getContents(), true);
+    }
+
     private function getHeaders(): array
     {
         return [
