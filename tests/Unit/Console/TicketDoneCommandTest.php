@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Client\GitClient;
+use Turbine\Workflow\Client\GitlabClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\TicketDoneCommand;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
@@ -42,9 +43,12 @@ class TicketDoneCommandTest extends TestCase
             ->method('getCurrentBranchName')
             ->willReturn('develop');
 
+        $gitlabClientMock = $this->createMock(GitlabClient::class);
+
         $workOnTicketCommand = new TicketDoneCommand(
             $configurationMock,
             $gitClientMock,
+            $gitlabClientMock,
             $workflowFactoryMock,
             $this->createMock(TicketIdentifier::class),
             $this->createMock(IssueUpdater::class)
@@ -81,9 +85,12 @@ class TicketDoneCommandTest extends TestCase
             ->method('getCurrentBranchName')
             ->willReturn('main');
 
+        $gitlabClientMock = $this->createMock(GitlabClient::class);
+
         $workOnTicketCommand = new TicketDoneCommand(
             $configurationMock,
             $gitClientMock,
+            $gitlabClientMock,
             $workflowFactoryMock,
             $this->createMock(TicketIdentifier::class),
             $this->createMock(IssueUpdater::class)
@@ -91,7 +98,7 @@ class TicketDoneCommandTest extends TestCase
 
         self::assertEquals(1, $workOnTicketCommand->run($inputMock, $outputMock));
     }
-    
+
     public function testCommandDeletesBranchAndMovesTicket(): void
     {
         $inputMock = $this->createMock(InputInterface::class);
@@ -116,7 +123,8 @@ class TicketDoneCommandTest extends TestCase
             ->method('getCurrentBranchName')
             ->willReturn('abc-123-branchToDelete');
 
-        $gitClientMock->expects(self::once())
+        $gitlabClientMock = $this->createMock(GitlabClient::class);
+        $gitlabClientMock->expects(self::once())
             ->method('deleteRemoteBranch')
             ->with('abc-123-branchToDelete');
 
@@ -134,6 +142,7 @@ class TicketDoneCommandTest extends TestCase
         $workOnTicketCommand = new TicketDoneCommand(
             $configurationMock,
             $gitClientMock,
+            $gitlabClientMock,
             $workflowFactoryMock,
             $ticketIdentifierMock,
             $issueUpdaterMock
@@ -147,11 +156,12 @@ class TicketDoneCommandTest extends TestCase
         $configurationMock = $this->createMock(Configuration::class);
         $gitClientMock = $this->createMock(GitClient::class);
         $workflowFactoryMock = $this->createMock(WorkflowFactory::class);
-
+        $gitlabClientMock = $this->createMock(GitlabClient::class);
 
         $workOnTicketCommand = new TicketDoneCommand(
             $configurationMock,
             $gitClientMock,
+            $gitlabClientMock,
             $workflowFactoryMock,
             $this->createMock(TicketIdentifier::class),
             $this->createMock(IssueUpdater::class)

@@ -292,4 +292,74 @@ class GitlabClientTest extends TestCase
             ]
         );
     }
+
+    public function testDeleteBranchFailedThrowsException(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::exactly(3))
+            ->method('get')
+            ->withConsecutive(
+                ['PROJECT_ID'],
+                ['REPOSITORY'],
+                ['GITLAB_API_URL']
+            )
+            ->willReturnOnConsecutiveCalls(
+                '',
+                'Project repository',
+                'GITLAB_API_URL',
+            );
+
+        $exceptionMock = $this->createMock(BadResponseException::class);
+
+        $branchName = 'branch_to_delete';
+        $gitlabHttpClientMock = $this->createMock(GitlabHttpClient::class);
+        $gitlabHttpClientMock->expects(self::once())
+            ->method('delete')
+            ->with(
+                'GITLAB_API_URL/projects/Project+repository/repository/branches/' . $branchName
+            )
+            ->willThrowException($exceptionMock);
+
+        $gitlabClient = new GitlabClient(
+            $gitlabHttpClientMock,
+            $configurationMock
+        );
+
+        $this->expectException(BadResponseException::class);
+
+        $gitlabClient->deleteRemoteBranch($branchName);
+    }
+
+    public function testDeleteBranch(): void
+    {
+        $configurationMock = $this->createMock(Configuration::class);
+        $configurationMock->expects(self::exactly(3))
+            ->method('get')
+            ->withConsecutive(
+                ['PROJECT_ID'],
+                ['REPOSITORY'],
+                ['GITLAB_API_URL']
+            )
+            ->willReturnOnConsecutiveCalls(
+                '',
+                'Project repository',
+                'GITLAB_API_URL',
+            );
+
+
+        $branchName = 'branch_to_delete';
+        $gitlabHttpClientMock = $this->createMock(GitlabHttpClient::class);
+        $gitlabHttpClientMock->expects(self::once())
+            ->method('delete')
+            ->with(
+                'GITLAB_API_URL/projects/Project+repository/repository/branches/' . $branchName
+            );
+
+        $gitlabClient = new GitlabClient(
+            $gitlabHttpClientMock,
+            $configurationMock
+        );
+
+        $gitlabClient->deleteRemoteBranch($branchName);
+    }
 }

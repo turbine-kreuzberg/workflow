@@ -6,6 +6,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Turbine\Workflow\Client\GitClient;
+use Turbine\Workflow\Client\GitlabClient;
 use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
 use Turbine\Workflow\Workflow\TicketIdentifier;
@@ -18,6 +19,7 @@ class TicketDoneCommand extends Command
     public function __construct(
         private Configuration $configuration,
         private GitClient $gitClient,
+        private GitlabClient $gitlabClient,
         private WorkflowFactory $workflowFactory,
         private TicketIdentifier $ticketIdentifier,
         private IssueUpdater $issueUpdater
@@ -48,7 +50,7 @@ class TicketDoneCommand extends Command
             $ticketId,
             $this->configuration->get(Configuration::JIRA_DEVELOPMENT_DONE_STATUS)
         );
-        $this->gitClient->deleteRemoteBranch($currentBranchName);
+        $this->gitlabClient->deleteRemoteBranch($currentBranchName);
 
         return 0;
     }

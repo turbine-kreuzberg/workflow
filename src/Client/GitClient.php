@@ -29,9 +29,4 @@ class GitClient
 
         return $gitLog;
     }
-
-    public function deleteRemoteBranch(string $branchName) : string
-    {
-        return (string)exec("git push origin --delete origin/$branchName");
-    }
 }

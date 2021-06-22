@@ -207,7 +207,7 @@ class GitlabHttpClientTest extends TestCase
 
         $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
         $this->expectException(Exception::class);
-        self::assertEquals([], $gitlabHttpClient->delete('gitlab-url'));
+        $gitlabHttpClient->delete('gitlab-url');
     }
 
     public function testDeleteFunctionCallsGuzzleClientWithoutAccessThrowsException(): void
@@ -234,7 +234,7 @@ class GitlabHttpClientTest extends TestCase
                 'Gitlab answered with 401 Unauthorized: Please check your personal access token in your .env file.'
             )
         );
-        self::assertEquals([], $gitlabHttpClient->delete('gitlab-url'));
+        $gitlabHttpClient->delete('gitlab-url');
     }
 
     public function testDeleteFunctionCallsGuzzleClient(): void
@@ -260,7 +260,7 @@ class GitlabHttpClientTest extends TestCase
             ->willReturn('gitlab personal token');
 
         $gitlabHttpClient = new GitlabHttpClient($configurationMock, $clientMock);
-        self::assertEquals([], $gitlabHttpClient->delete('gitlab-url'));
+        $gitlabHttpClient->delete('gitlab-url');
         self::assertEquals(
             ['gitlab personal token'],
             $container[0]['request']->getHeaders()['Private-Token']

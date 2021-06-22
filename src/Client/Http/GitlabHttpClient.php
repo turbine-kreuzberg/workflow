@@ -60,10 +60,10 @@ class GitlabHttpClient
         return json_decode($gitlabResponse->getBody()->getContents(), true);
     }
 
-    public function delete(string $uri): array
+    public function delete(string $uri): void
     {
         try {
-            $gitlabResponse = $this->client->delete(
+            $this->client->delete(
                 $uri,
                 [
                     RequestOptions::HEADERS => $this->getHeaders(),
@@ -78,8 +78,6 @@ class GitlabHttpClient
 
             throw $exception;
         }
-
-        return json_decode($gitlabResponse->getBody()->getContents(), true);
     }
 
     private function getHeaders(): array

@@ -89,6 +89,7 @@ class Bootstrap
             new TicketDoneCommand(
                 configuration: $workflowFactory->createConfiguration(),
                 gitClient: $clientFactory->getGitClient(),
+                gitlabClient: $clientFactory->getGitLabClient(),
                 workflowFactory: $workflowFactory,
                 ticketIdentifier: $workflowFactory->getTicketIdentifier(),
                 issueUpdater: $workflowFactory->createJiraIssueUpdater()

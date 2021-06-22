@@ -41,6 +41,13 @@ class GitlabClient
         return $gitlabResponse['web_url'];
     }
 
+    public function deleteRemoteBranch(string $branchName): void
+    {
+        $deleteBranchUrl = $this->getProjectUrl() . 'repository/branches/' . $branchName;
+
+        $this->gitlabHttpClient->delete($deleteBranchUrl);
+    }
+
     private function getProjectUrl(): string
     {
         $projectIdentifier = $this
