@@ -139,6 +139,10 @@ class TicketDoneCommandTest extends TestCase
             ->method('moveIssueToStatus')
             ->with('abc-123', 'merged to develop');
 
+        $symfonyStyleMock->expects(self::once())
+            ->method('success')
+            ->with("Remote 'abc-123-branchToDelete' was deleted and ticket was moved to 'merged to develop'!");
+
         $workOnTicketCommand = new TicketDoneCommand(
             $configurationMock,
             $gitClientMock,

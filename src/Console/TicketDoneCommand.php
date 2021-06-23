@@ -46,11 +46,16 @@ class TicketDoneCommand extends Command
             return 1;
         }
         $ticketId = $this->ticketIdentifier->extractFromBranchName($currentBranchName);
+        $jiraDevelopmentDoneStatus = $this->configuration->get(Configuration::JIRA_DEVELOPMENT_DONE_STATUS);
         $this->issueUpdater->moveIssueToStatus(
             $ticketId,
-            $this->configuration->get(Configuration::JIRA_DEVELOPMENT_DONE_STATUS)
+            $jiraDevelopmentDoneStatus
         );
         $this->gitlabClient->deleteRemoteBranch($currentBranchName);
+
+        $inputOutputStyle->success(
+            "Remote '$currentBranchName' was deleted and ticket was moved to '$jiraDevelopmentDoneStatus'!"
+        );
 
         return 0;
     }
