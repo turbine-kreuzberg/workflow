@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Client;
 
 class GitClient
 {
-    public function getCurrentBranchName() : string
+    public function getCurrentBranchName(): string
     {
-        return (string)exec('git rev-parse --abbrev-ref HEAD');
+        return (string) exec('git rev-parse --abbrev-ref HEAD');
     }
 
-    public function getLastCommitMessage() : string
+    public function getLastCommitMessage(): string
     {
-        return (string)exec('git log -n 1 --format=%s');
+        return (string) exec('git log -n 1 --format=%s');
     }
 
     public function createBranchOnTopOf(string $sourceBranch, string $branchName): void
@@ -25,8 +27,7 @@ class GitClient
     {
         $gitLog = [];
         exec('git log -1 --pretty=%B', $gitLog);
-        $gitLog = implode(PHP_EOL, $gitLog);
 
-        return $gitLog;
+        return implode(PHP_EOL, $gitLog);
     }
 }

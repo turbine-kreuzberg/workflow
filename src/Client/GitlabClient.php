@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Client;
 
-use GuzzleHttp\Exception\BadResponseException;
 use Turbine\Workflow\Client\Http\GitlabHttpClient;
 use Turbine\Workflow\Configuration;
 
@@ -15,7 +16,6 @@ class GitlabClient
         private GitlabHttpClient $gitlabHttpClient,
         private Configuration $configuration
     ) {
-
     }
 
     public function getMergeRequestData(array $searchAttributes = []): array
@@ -71,7 +71,7 @@ class GitlabClient
 
     private function shouldRemoveSourceBranch(string $sourceBranch): bool
     {
-        if (!in_array($sourceBranch, $this->configuration->getNonRemovableBranches(), true)) {
+        if (! in_array($sourceBranch, $this->configuration->getNonRemovableBranches(), true)) {
             return true;
         }
 

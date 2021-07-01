@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console\SubConsole;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -22,7 +24,7 @@ class FastBookTimeConsole
     ): bool {
         [$issue, $worklogComment] = $this->fastWorklogProvider->provide();
 
-        if (!isset($issue, $worklogComment)) {
+        if (! isset($issue, $worklogComment)) {
             return false;
         }
         $questionFastWorklog = sprintf(

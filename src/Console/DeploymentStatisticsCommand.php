@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
@@ -43,7 +45,7 @@ class DeploymentStatisticsCommand extends Command
             $deploymentType = self::HOTFIX;
         }
 
-        if ((bool)$input->getOption(self::HOTFIX)) {
+        if ((bool) $input->getOption(self::HOTFIX)) {
             $deploymentType = self::HOTFIX;
         }
 

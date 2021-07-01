@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow\Model;
 
 use Turbine\Workflow\Client\GitClient;
@@ -50,7 +52,6 @@ class MergeRequestCreator
 
         return $mergeRequestUrl;
     }
-
 
     private function createDescription(string $currentIssue): string
     {

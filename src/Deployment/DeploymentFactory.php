@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Deployment;
 
 use InfluxDB2\Client;
@@ -14,8 +16,8 @@ class DeploymentFactory
         return new DeploymentStatisticsUpdater(
             new Client(
                 [
-                    "url" => 'https://influxdb-devops-metrics.akropolis.turbinekreuzberg.io',
-                    "token" => $this->createConfiguration()->get('INFLUX_DB_TOKEN'),
+                    'url' => 'https://influxdb-devops-metrics.akropolis.turbinekreuzberg.io',
+                    'token' => $this->createConfiguration()->get('INFLUX_DB_TOKEN'),
                 ]
             ),
             $this->createConfiguration()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow\Jira;
 
 use DateTimeImmutable;
@@ -37,26 +39,6 @@ class IssueReader
         return new JiraIssueTransferCollection($issueArray);
     }
 
-    private function getLastWorkLogEntry(array $completeWorklog): JiraWorklogEntryTransfer
-    {
-        if (empty($completeWorklog)) {
-            throw new JiraNoWorklogException('No worklog entry found.');
-        }
-
-        if ($completeWorklog['total'] === 0) {
-            throw new JiraNoWorklogException('No worklog entry found.');
-        }
-
-        $workLogEntryData = $completeWorklog['worklogs'][($completeWorklog['total'] - 1)];
-
-        $jiraWorklogEntryTransfer = new JiraWorklogEntryTransfer();
-        $jiraWorklogEntryTransfer->author = $workLogEntryData['author']['displayName'];
-        $jiraWorklogEntryTransfer->comment = $workLogEntryData['comment'];
-        $jiraWorklogEntryTransfer->timeSpentSeconds = $workLogEntryData['timeSpentSeconds'];
-
-        return $jiraWorklogEntryTransfer;
-    }
-
     public function getTimeSpentToday(): float
     {
         return $this->jiraClient->getTimeSpentByDate(new DateTimeImmutable());
@@ -74,10 +56,29 @@ class IssueReader
         return $this->jiraClient->getIssue($issueKey);
     }
 
-
     public function getIssueTransitions(string $issueKey): array
     {
         return $this->jiraClient->getIssueTransitions($issueKey);
+    }
+
+    private function getLastWorkLogEntry(array $completeWorklog): JiraWorklogEntryTransfer
+    {
+        if (empty($completeWorklog)) {
+            throw new JiraNoWorklogException('No worklog entry found.');
+        }
+
+        if ($completeWorklog['total'] === 0) {
+            throw new JiraNoWorklogException('No worklog entry found.');
+        }
+
+        $workLogEntryData = $completeWorklog['worklogs'][$completeWorklog['total'] - 1];
+
+        $jiraWorklogEntryTransfer = new JiraWorklogEntryTransfer();
+        $jiraWorklogEntryTransfer->author = $workLogEntryData['author']['displayName'];
+        $jiraWorklogEntryTransfer->comment = $workLogEntryData['comment'];
+        $jiraWorklogEntryTransfer->timeSpentSeconds = $workLogEntryData['timeSpentSeconds'];
+
+        return $jiraWorklogEntryTransfer;
     }
 
     private function buildIssueKey(string $issueKey): string

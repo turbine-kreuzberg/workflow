@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Client;
 
 use GuzzleHttp\Client;
-use RuntimeException;
 use Turbine\Workflow\Client\Http\AtlassianHttpClient;
 use Turbine\Workflow\Client\Http\GitlabHttpClient;
 use Turbine\Workflow\Client\Http\SlackHttpClient;

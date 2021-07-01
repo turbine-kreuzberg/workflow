@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
@@ -65,7 +67,7 @@ class BookTimeCommand extends Command
         $inputOutputStyle = $this->workflowFactory->createSymfonyStyle($input, $output);
         $today = date('Y-m-d') . 'T12:00:00.000+0000';
 
-        if ((bool)$input->getOption(self::FAST_WORKLOG)) {
+        if ((bool) $input->getOption(self::FAST_WORKLOG)) {
             if ($this->fastBookTimeConsole->execFastBooking($inputOutputStyle, $today)) {
                 return 0;
             }
@@ -113,7 +115,7 @@ class BookTimeCommand extends Command
     ): float {
         $timeSpentInMinutes = $worklog->timeSpentSeconds / 60;
 
-        return (float)$inputOutputStyle->ask('For how long did you do it', (string)$timeSpentInMinutes);
+        return (float) $inputOutputStyle->ask('For how long did you do it', (string) $timeSpentInMinutes);
     }
 
     private function getIssueTicketNumber(InputInterface $input, SymfonyStyle $inputOutputStyle): string
@@ -129,5 +131,4 @@ class BookTimeCommand extends Command
 
         return $this->ticketNumberConsole->getIssueTicketNumber($inputOutputStyle);
     }
-
 }

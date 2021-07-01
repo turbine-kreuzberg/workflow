@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
@@ -7,7 +9,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Transfers\JiraIssueTransfer;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
@@ -17,7 +18,7 @@ class CreateJiraIssueCommand extends Command
     private const FOR_SPRINT_OPTION = 'forSprint';
     private const ISSUE_TYPE_ATTRIBUTE = 'issueType';
 
-    public function __construct(?string $name = null, private WorkflowFactory $workflowFactory)
+    public function __construct(?string $name, private WorkflowFactory $workflowFactory)
     {
         parent::__construct($name);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
@@ -38,14 +40,15 @@ class WorkOnTicketCommand extends Command
 
         $ticketNumber = $inputOutputStyle->ask('Ticket number?');
         $branchNameFromTicketCutAtFifty = substr(
-            $this->branchNameProvider->getBranchNameFromTicket($ticketNumber), 0, 50
+            $this->branchNameProvider->getBranchNameFromTicket($ticketNumber),
+            0,
+            50
         );
 
         $question = (new Question(
-            "Branch name?\n   $branchNameFromTicketCutAtFifty\n   " . str_repeat('-', 50),
+            "Branch name?\n   ${branchNameFromTicketCutAtFifty}\n   " . str_repeat('-', 50),
             $branchNameFromTicketCutAtFifty
-        )
-        )
+        ))
             ->setAutocompleterValues([$branchNameFromTicketCutAtFifty])
             ->setValidator(
                 function (string $name): string {

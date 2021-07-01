@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow;
 
 use Symfony\Component\Console\Input\InputInterface;
@@ -106,7 +108,7 @@ class WorkflowFactory
         );
     }
 
-    public function createFastWorklogProvider() : FastWorklogProvider
+    public function createFastWorklogProvider(): FastWorklogProvider
     {
         return new FastWorklogProvider($this->getCommitMessageProvider(), $this->createConfiguration());
     }
@@ -185,11 +187,6 @@ class WorkflowFactory
         );
     }
 
-    private function getClientFactory(): ClientFactory
-    {
-        return new ClientFactory();
-    }
-
     public function createConfiguration(): Configuration
     {
         if ($this->configuration === null) {
@@ -202,6 +199,11 @@ class WorkflowFactory
     public function getCommitMessageProvider(): CommitMessageProvider
     {
         return new CommitMessageProvider($this->getClientFactory()->getGitClient());
+    }
+
+    private function getClientFactory(): ClientFactory
+    {
+        return new ClientFactory();
     }
 
     private function createFavouriteWorklogCommentChoicesProvider(): FavouriteWorklogCommentChoicesProvider

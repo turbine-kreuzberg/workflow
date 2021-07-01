@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Turbine\Workflow\Workflow\Provider;
 
@@ -11,10 +12,9 @@ class FastWorklogProvider
         public CommitMessageProvider $commitMessageProvider,
         public Configuration $configuration
     ) {
-
     }
 
-    public function provide() : array
+    public function provide(): array
     {
         $lastCommitMessage = $this->commitMessageProvider->getLastCommitMessage();
         preg_match(
