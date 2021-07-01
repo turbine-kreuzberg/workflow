@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow\Jira;
 
 use Turbine\Workflow\Client\JiraClient;

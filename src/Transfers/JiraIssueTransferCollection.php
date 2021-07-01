@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Transfers;
 
 use Countable;
@@ -7,7 +9,6 @@ use Iterator;
 
 class JiraIssueTransferCollection implements Iterator, Countable
 {
-
     public function __construct(private array $issueCollection)
     {
     }
@@ -22,7 +23,7 @@ class JiraIssueTransferCollection implements Iterator, Countable
         next($this->issueCollection);
     }
 
-    public function key(): int|string|null
+    public function key(): int | string | null
     {
         return key($this->issueCollection);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console;
 
 use Exception;
@@ -80,6 +82,6 @@ class MoveJiraIssueCommand extends Command
     {
         $argumentTicketNumber = $input->getArgument(self::ARGUMENT_TICKET_NUMBER);
 
-        return $argumentTicketNumber ?: $inputOutputStyle->ask('Ticket number');
+        return $argumentTicketNumber ? $argumentTicketNumber : $inputOutputStyle->ask('Ticket number');
     }
 }

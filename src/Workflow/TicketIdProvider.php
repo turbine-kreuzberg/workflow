@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow;
 
 use Turbine\Workflow\Client\GitClient;
@@ -24,5 +26,4 @@ class TicketIdProvider
 
         return $this->ticketIdentifier->extractFromBranchName($currentBranchName);
     }
-
 }

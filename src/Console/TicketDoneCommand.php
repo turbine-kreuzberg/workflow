@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
@@ -54,22 +56,17 @@ class TicketDoneCommand extends Command
         $this->gitlabClient->deleteRemoteBranch($currentBranchName);
 
         $inputOutputStyle->success(
-            "Remote '$currentBranchName' was deleted and ticket was moved to '$jiraDevelopmentDoneStatus'!"
+            "Remote '${currentBranchName}' was deleted and ticket was moved to '${jiraDevelopmentDoneStatus}'!"
         );
 
         return 0;
     }
 
-    /**
-     * @param string $currentBranchName
-     *
-     * @return bool
-     */
     private function isInvalidBranch(string $currentBranchName): bool
     {
         $protectedBranches = [
             $this->configuration->get(Configuration::BRANCH_DEPLOYMENT),
-            $this->configuration->get(Configuration::BRANCH_DEVELOPMENT)
+            $this->configuration->get(Configuration::BRANCH_DEVELOPMENT),
         ];
 
         return in_array($currentBranchName, $protectedBranches, true);

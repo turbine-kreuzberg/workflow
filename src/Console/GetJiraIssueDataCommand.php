@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console;
 
 use Symfony\Component\Console\Command\Command;
@@ -15,9 +17,6 @@ class GetJiraIssueDataCommand extends Command
 {
     private const ARGUMENT_TICKET_NUMBER = 'ticket number';
 
-    /**
-     * @var string
-     */
     protected static $defaultName = 'workflow:get:jira-issue';
 
     public function __construct(
@@ -143,7 +142,7 @@ class GetJiraIssueDataCommand extends Command
         $argumentTicketNumber = $input->getArgument(self::ARGUMENT_TICKET_NUMBER);
 
         while (true) {
-            $issueNumber = $argumentTicketNumber ?: $inputOutputStyle->ask('Ticket number');
+            $issueNumber = $argumentTicketNumber ? $argumentTicketNumber : $inputOutputStyle->ask('Ticket number');
 
             try {
                 return $this->issueReader->getIssue($issueNumber);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Console\SubConsole;
 
 use Symfony\Component\Console\Style\SymfonyStyle;

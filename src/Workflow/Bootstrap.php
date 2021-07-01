@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow;
 
 use Symfony\Component\Console\Application;
 use Turbine\Workflow\Client\ClientFactory;
-use Turbine\Workflow\Configuration;
 use Turbine\Workflow\Console\AnnounceMergeRequestCommand;
 use Turbine\Workflow\Console\BookTimeCommand;
 use Turbine\Workflow\Console\CreateJiraIssueCommand;
@@ -16,8 +17,6 @@ use Turbine\Workflow\Console\MoveJiraIssueCommand;
 use Turbine\Workflow\Console\TicketDoneCommand;
 use Turbine\Workflow\Console\WorkOnTicketCommand;
 use Turbine\Workflow\Deployment\DeploymentFactory;
-use Turbine\Workflow\Workflow\Model\MergeRequestAnnouncementBuilder;
-use Turbine\Workflow\Deployment\DeploymentStatisticsUpdater;
 
 class Bootstrap
 {
@@ -106,7 +105,7 @@ class Bootstrap
          * $application->add(new DeployCommand());
          * $application->add(new TicketStatusCommand());
          * $application->add(new WorkflowCreateMergeRequestCommand());
-         **/
+         */
         $application->run();
     }
 }

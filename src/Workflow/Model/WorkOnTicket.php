@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow\Model;
 
 use Turbine\Workflow\Client\GitClient;
@@ -17,7 +19,6 @@ class WorkOnTicket
         private Configuration $configuration,
         private IssueUpdater $issueUpdater
     ) {
-
     }
 
     public function workOnTicket(string $ticketNumber, string $branchName): void

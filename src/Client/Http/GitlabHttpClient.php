@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Client\Http;
 
 use Exception;
@@ -10,7 +12,6 @@ use Turbine\Workflow\Configuration;
 
 class GitlabHttpClient
 {
-
     public function __construct(private Configuration $configuration, private Client $client)
     {
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow\Formatter;
 
 use DateTime;
@@ -17,16 +19,16 @@ class HumanReadableDateIntervalFormatter
 
         $result = [];
         if ($timeDiff->d) {
-            $result[] = $timeDiff->format("%dd");
+            $result[] = $timeDiff->format('%dd');
         }
         if ($timeDiff->h) {
-            $result[] = $timeDiff->format("%hh");
+            $result[] = $timeDiff->format('%hh');
         }
         if ($timeDiff->i) {
-            $result[] = $timeDiff->format("%im");
+            $result[] = $timeDiff->format('%im');
         }
         if ($timeDiff->s) {
-            $result[] = $timeDiff->format("%ss");
+            $result[] = $timeDiff->format('%ss');
         }
 
         return implode(' ', $result);

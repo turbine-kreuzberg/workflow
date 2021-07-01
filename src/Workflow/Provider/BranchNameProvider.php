@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow\Provider;
 
 use Turbine\Workflow\Client\GitClient;
@@ -14,7 +16,6 @@ class BranchNameProvider
         private GitClient $gitClient,
         private Configuration $configuration,
     ) {
-
     }
 
     public function getCurrentBranchName(): string

@@ -1,6 +1,6 @@
 <?php
-declare(strict_types = 1);
 
+declare(strict_types=1);
 
 namespace Turbine\Workflow\Workflow;
 
@@ -37,5 +37,4 @@ class TicketIdentifier
 
         throw new \RuntimeException(sprintf('Ticket number not found in branch name %s', $branchName));
     }
-
 }

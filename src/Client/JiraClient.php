@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Client;
 
 use DateTimeImmutable;
@@ -16,11 +18,10 @@ class JiraClient
 {
     private const BASE_URL = 'https://jira.votum.info:7443/';
     private const API_URL = self::BASE_URL . 'rest/api/latest/';
-    private const TEMPO_API_URL = "rest/tempo-timesheets/3";
+    private const TEMPO_API_URL = 'rest/tempo-timesheets/3';
     private const BROWSE_URL = self::BASE_URL . 'browse/';
     private const ISSUE_URL = self::API_URL . 'issue/';
     private const BOARD_URL = self::BASE_URL . 'rest/agile/1.0/board/';
-
 
     public function __construct(
         private AtlassianHttpClient $jiraHttpClient,
@@ -53,7 +54,7 @@ class JiraClient
     {
         $issue = $this->normalizeIssueNumber($issue);
 
-        return $this->jiraHttpClient->get(static::ISSUE_URL . $issue . '/' . 'transitions');
+        return $this->jiraHttpClient->get(self::ISSUE_URL . $issue . '/' . 'transitions');
     }
 
     public function transitionJiraIssue(string $issue, string $transitionId): void
@@ -70,11 +71,6 @@ class JiraClient
         $assigneeData = ['name' => $this->getUsername()];
         $issueUrl = self::ISSUE_URL . $this->normalizeIssueNumber($issue) . '/assignee';
         $this->jiraHttpClient->put($issueUrl, $assigneeData);
-    }
-
-    private function getUsername(): string
-    {
-        return $this->configuration->get(Configuration::JIRA_USERNAME);
     }
 
     public function bookTime(string $issue, array $worklogEntry): void
@@ -137,6 +133,11 @@ class JiraClient
         return $jiraWorklogsTransfer;
     }
 
+    private function getUsername(): string
+    {
+        return $this->configuration->get(Configuration::JIRA_USERNAME);
+    }
+
     private function mapResponseToJiraIssueTransfer(array $issue): JiraIssueTransfer
     {
         $jiraIssueTransfer = $this->jiraIssueMapper->map($issue);
@@ -153,13 +154,11 @@ class JiraClient
     private function getWorklogByDate(DateTimeImmutable $date): array
     {
         $dateString = $date->format('Y-m-d');
-        $result = $this->jiraHttpClient->get(
+        return $this->jiraHttpClient->get(
             self::BASE_URL .
             self::TEMPO_API_URL .
-            "/worklogs?dateFrom=$dateString&dateTo=$dateString"
+            "/worklogs?dateFrom=${dateString}&dateTo=${dateString}"
         );
-
-        return $result;
     }
 
     private function normalizeIssueNumber(string $issueNumber): string

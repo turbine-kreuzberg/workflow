@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Transfers;
 
 use Countable;
@@ -21,7 +23,7 @@ class JiraWorklogEntryCollectionTransfer implements Iterator, Countable
         next($this->issueCollection);
     }
 
-    public function key(): int|string|null
+    public function key(): int | string | null
     {
         return key($this->issueCollection);
     }

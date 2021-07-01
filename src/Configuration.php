@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Turbine\Workflow;
 
@@ -23,11 +24,10 @@ class Configuration
     public const FAVOURITE_WORKLOG_COMMENTS = 'FAVOURITE_WORKLOG_COMMENTS';
     public const SLACK_WEBHOOK_URL = 'SLACK_WEBHOOK_URL';
 
-
     public function get(string $key): string
     {
-        $configurationValue = (string)getenv($key);
-        if (!$configurationValue) {
+        $configurationValue = (string) getenv($key);
+        if (! $configurationValue) {
             $this->throwException($key);
         }
 

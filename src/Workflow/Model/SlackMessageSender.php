@@ -1,8 +1,8 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Turbine\Workflow\Workflow\Model;
-
 
 use Turbine\Workflow\Client\SlackClient;
 
@@ -12,7 +12,7 @@ class SlackMessageSender
     {
     }
 
-    public function send(string $text ): void
+    public function send(string $text): void
     {
         $this->slackClient->sendMessageUsingWebhook($text);
     }

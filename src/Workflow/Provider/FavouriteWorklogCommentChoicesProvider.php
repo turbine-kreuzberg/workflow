@@ -1,8 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Turbine\Workflow\Workflow\Provider;
 
 use Turbine\Workflow\Configuration;
-use Turbine\Workflow\Workflow\Jira\IssueReader;
 
 class FavouriteWorklogCommentChoicesProvider
 {
