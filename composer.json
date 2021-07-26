@@ -25,6 +25,7 @@
         "laravel-zero/framework": "^8.8"
     },
     "require-dev": {
+        "laravel/sail": "^1.8",
         "mockery/mockery": "^1.4.3",
         "pestphp/pest": "^1.3"
     },
