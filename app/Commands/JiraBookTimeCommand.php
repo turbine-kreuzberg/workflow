@@ -11,12 +11,15 @@ use Turbine\Workflow\Exception\JiraNoWorklogException;
 use Turbine\Workflow\Transfers\BuildStatusTransfer;
 use Turbine\Workflow\Workflow\Jira\IssueReader;
 use Turbine\Workflow\Workflow\Jira\IssueUpdater;
+use Turbine\Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
 use Turbine\Workflow\Workflow\TicketIdProvider;
 use Turbine\Workflow\Workflow\WorkflowFactory;
 
 class JiraBookTimeCommand extends Command
 {
     private const FAST_WORKLOG = 'fast-worklog';
+    private const CUSTOM_INPUT_KEY = 'custom';
+    private const CUSTOM_INPUT = 'Custom input';
 
     public function __construct(
         private WorkflowFactory $workflowFactory,
@@ -25,7 +28,8 @@ class JiraBookTimeCommand extends Command
         private FastBookTimeConsole $fastBookTimeConsole,
         private TicketIdProvider $ticketIdProvider,
         private TicketNumberConsole $ticketNumberConsole,
-        private WorklogCommentConsole $worklogCommentConsole
+        private WorklogCommentConsole $worklogCommentConsole,
+        private FavouriteTicketChoicesProvider $choicesProvider
     ) {
         parent::__construct();
     }
@@ -54,57 +58,33 @@ class JiraBookTimeCommand extends Command
      */
     public function handle()
     {
-        new BuildStatusTransfer(...$this->options());
-        $today = date('Y-m-d') . 'T12:00:00.000+0000';
+        $issueTicketNumber = $this->getIssueTicketNumber();
 
-        $fastWorkflow = $this->option(self::FAST_WORKLOG);
-        if ($fastWorkflow && $this->fastBookTimeConsole->execFastBooking($inputOutputStyle, $today))
-        {
-            return 0;
-        }
+        $workTime = $this->ask('How long you worked on the ticket');
 
-        $issueNumber = $this->getIssueTicketNumber($input, $inputOutputStyle);
-
-        $issue = $this->issueReader->getIssue($issueNumber);
-        $inputOutputStyle->title(\sprintf('Book time on ticket: %s - %s', $issue->key, $issue->summary));
-
-        $worklogComment = $this->worklogCommentConsole->createWorklogComment($issueNumber, $inputOutputStyle);
-
-        try {
-            $lastTicketWorklog = $this->issueReader->getLastTicketWorklog($issueNumber);
-            $duration = $this->createWorklogDuration($lastTicketWorklog, $inputOutputStyle);
-        } catch (JiraNoWorklogException $jiraNoWorklogException) {
-            $duration = $inputOutputStyle->ask('For how long did you do it');
-        }
-
-        $bookedTimeInMinutes = $this->issueUpdater->bookTime(
-            $issueNumber,
-            $worklogComment,
-            $duration,
-            $today
-        );
-
-        $inputOutputStyle->success(
-            'Booked '
-            . $bookedTimeInMinutes
-            . ' minutes for "'
-            . $worklogComment
-            . '" on '
-            . $issueNumber
-            . "\nTotal booked time today: "
-            . $this->issueReader->getTimeSpentToday()
-            . 'h'
-        );
+        $this->info('Booked 30 min on Test-123');
     }
 
-    /**
-     * Define the command's schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule $schedule
-     * @return void
-     */
-    public function schedule(Schedule $schedule): void
+    private function getIssueTicketNumber(): string
     {
-        // $schedule->command(static::class)->everyMinute();
+        $choices = $this->choicesProvider->provide();
+
+        if (empty($choices)) {
+            return $this->ask('What ticket do you want to book time on? Ticket number');
+        }
+
+        $choices[self::CUSTOM_INPUT_KEY] = self::CUSTOM_INPUT;
+
+        $choice = $this->choice(
+            'What ticket do you want to book time on',
+            $choices,
+            self::CUSTOM_INPUT_KEY
+        );
+
+        if ($choice !== self::CUSTOM_INPUT_KEY) {
+            return $choice;
+        }
+
+        return $this->ask('What ticket do you want to book time on? Ticket number');
     }
 }
