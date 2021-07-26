@@ -52,8 +52,6 @@ return [
         \Turbine\Workflow\Console\MoveJiraIssueCommand::class,
         \Turbine\Workflow\Console\TicketDoneCommand::class,
         \Turbine\Workflow\Console\WorkOnTicketCommand::class,
-        \Laravel\Sail\Console\InstallCommand::class,
-        \Laravel\Sail\Console\PublishCommand::class,
     ],
 
     /*
