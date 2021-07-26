@@ -8,7 +8,7 @@ setup: ##@setup install dependencies
 .PHONY: setup
 
 tests: ##@development run tests
-	docker-compose exec -T php /var/www/vendor/bin/phpunit --colors=always -c tests/phpunit.xml
+	docker-compose exec -T php /var/www/workflow test
 .PHONY: tests
 
 test-coverage: ##@development run tests
