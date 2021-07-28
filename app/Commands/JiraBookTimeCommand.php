@@ -29,7 +29,6 @@ class JiraBookTimeCommand extends Command
         private TicketIdProvider $ticketIdProvider,
         private TicketNumberConsole $ticketNumberConsole,
         private WorklogCommentConsole $worklogCommentConsole,
-        private FavouriteTicketChoicesProvider $choicesProvider
     ) {
         parent::__construct();
     }
@@ -56,18 +55,18 @@ class JiraBookTimeCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(FavouriteTicketChoicesProvider $choicesProvider)
     {
-        $issueTicketNumber = $this->getIssueTicketNumber();
+        $issueTicketNumber = $this->getIssueTicketNumber($choicesProvider);
 
         $workTime = $this->ask('How long you worked on the ticket');
 
         $this->info('Booked 30 min on Test-123');
     }
 
-    private function getIssueTicketNumber(): string
+    private function getIssueTicketNumber(FavouriteTicketChoicesProvider $choicesProvider): string
     {
-        $choices = $this->choicesProvider->provide();
+        $choices = $choicesProvider->provide();
 
         if (empty($choices)) {
             return $this->ask('What ticket do you want to book time on? Ticket number');
