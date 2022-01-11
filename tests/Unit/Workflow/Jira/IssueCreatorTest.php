@@ -34,17 +34,23 @@ issue-summary\n\nh1.How to reproduce\n\nh1.Expected Behavior\n\nh1.Details\n",
                     'project' => [
                         'key' => 'BCM'
                     ],
-                    'customfield_10002' => '162',
+                    'customfield_10002' => 'ACCOUNT_ID',
                 ],
                 ]
             )
             ->willReturn(new JiraIssueTransfer());
 
         $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::once())
+        $configurationMock->expects(self::exactly(2))
             ->method('get')
-            ->with('JIRA_PROJECT_KEY')
-            ->willReturn('BCM');
+            ->withConsecutive(
+                ['JIRA_PROJECT_KEY'],
+                ['JIRA_PROJECT_ACCOUNT_ID'],
+            )
+            ->willReturnOnConsecutiveCalls(
+                'BCM',
+                'ACCOUNT_ID'
+            );
 
         $issueCreator = new IssueCreator($jiraClientMock, $configurationMock);
 
@@ -73,17 +79,23 @@ issue-summary\n\nh1.How to reproduce\n\nh1.Expected Behavior\n\nh1.Details\n",
                     'project' => [
                         'key' => 'BCM'
                     ],
-                    'customfield_10002' => '162',
+                    'customfield_10002' => 'ACCOUNT_ID',
                 ],
                 ]
             )
             ->willReturn(new JiraIssueTransfer());
 
         $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::once())
+        $configurationMock->expects(self::exactly(2))
             ->method('get')
-            ->with('JIRA_PROJECT_KEY')
-            ->willReturn('BCM');
+            ->withConsecutive(
+                ['JIRA_PROJECT_KEY'],
+                ['JIRA_PROJECT_ACCOUNT_ID'],
+            )
+            ->willReturnOnConsecutiveCalls(
+                'BCM',
+                'ACCOUNT_ID'
+            );
 
         $issueCreator = new IssueCreator($jiraClientMock, $configurationMock);
 
@@ -120,7 +132,7 @@ issue-summary\n\nh1.How to reproduce\n\nh1.Expected Behavior\n\nh1.Details\n",
                             'key' => 'BCM'
                         ],
                         'customfield_10007' => '123',
-                        'customfield_10002' => '162',
+                        'customfield_10002' => 'ACCOUNT_ID',
                     ],
                 ]
             )
@@ -134,11 +146,16 @@ issue-summary\n\nh1.How to reproduce\n\nh1.Expected Behavior\n\nh1.Details\n",
             );
 
         $configurationMock = $this->createMock(Configuration::class);
-        $configurationMock->expects(self::once())
+        $configurationMock->expects(self::exactly(2))
             ->method('get')
-            ->with('JIRA_PROJECT_KEY')
-            ->willReturn('BCM');
-
+            ->withConsecutive(
+                ['JIRA_PROJECT_KEY'],
+                ['JIRA_PROJECT_ACCOUNT_ID'],
+            )
+            ->willReturnOnConsecutiveCalls(
+                'BCM',
+                'ACCOUNT_ID'
+            );
         $issueCreator = new IssueCreator($jiraClientMock, $configurationMock);
 
         $issueCreator->createIssueForSprint('issue-summary', 'improvement');

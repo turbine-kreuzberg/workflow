@@ -23,6 +23,7 @@ class Configuration
     public const GITLAB_PERSONAL_ACCESS_TOKEN = 'GITLAB_PERSONAL_ACCESS_TOKEN';
     public const FAVOURITE_WORKLOG_COMMENTS = 'FAVOURITE_WORKLOG_COMMENTS';
     public const SLACK_WEBHOOK_URL = 'SLACK_WEBHOOK_URL';
+    public const JIRA_PROJECT_ACCOUNT_ID = 'JIRA_PROJECT_ACCOUNT_ID';
 
     public function get(string $key): string
     {

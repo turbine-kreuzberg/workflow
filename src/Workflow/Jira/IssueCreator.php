@@ -11,7 +11,6 @@ use Turbine\Workflow\Transfers\JiraIssueTransfer;
 class IssueCreator
 {
     private const ACCOUNT_CUSTOM_FIELD = 'customfield_10002';
-    private const ACCOUNT_ID = '162';
     private const SPRINT_FIELD = 'customfield_10007';
 
     private const TRANSITION_ID_DEVELOPER_APPROVAL = '821';
@@ -93,7 +92,7 @@ h1.Details
                 'project' => [
                     'key' => $this->configuration->get(Configuration::JIRA_PROJECT_KEY),
                 ],
-                self::ACCOUNT_CUSTOM_FIELD => self::ACCOUNT_ID,
+                self::ACCOUNT_CUSTOM_FIELD => $this->configuration->get(Configuration::JIRA_PROJECT_ACCOUNT_ID),
             ],
         ];
     }
