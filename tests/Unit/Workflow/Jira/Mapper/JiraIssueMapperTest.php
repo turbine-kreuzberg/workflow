@@ -135,7 +135,7 @@ class JiraIssueMapperTest extends TestCase
                 'timetracking' => [
                     'timeSpent' => '1h',
                 ],
-                'aggregatetimespent' => '12300',
+                'aggregatetimespent' => 12300,
                 'description' => 'description',
                 'subtasks' => [],
                 'parent' => [

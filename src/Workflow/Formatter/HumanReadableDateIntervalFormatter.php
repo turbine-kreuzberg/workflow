@@ -8,12 +8,8 @@ use DateTime;
 
 class HumanReadableDateIntervalFormatter
 {
-    public function format(string $timeInSeconds): string
+    public function format(int $timeInSeconds): string
     {
-        if ($timeInSeconds === '') {
-            return '';
-        }
-
         $dateTime = new DateTime('@' . $timeInSeconds);
         $timeDiff = date_diff(new DateTime('@0'), $dateTime, true);
 

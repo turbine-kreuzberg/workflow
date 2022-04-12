@@ -46,7 +46,7 @@ class JiraIssueMapper
         return $jiraIssueTransfer;
     }
 
-    private function toHumanReadableTime(?string $timeInSeconds): ?string
+    private function toHumanReadableTime(?int $timeInSeconds): ?string
     {
         if ($timeInSeconds === null) {
             return null;
