@@ -16,7 +16,7 @@ use Turbine\Workflow\Workflow\Jira\Mapper\JiraIssueMapper;
 
 class JiraClient
 {
-    private const BASE_URL = 'https://jira.votum.info:7443/';
+    private const BASE_URL = 'https://jira.turbinekreuzberg.io/';
     private const API_URL = self::BASE_URL . 'rest/api/latest/';
     private const TEMPO_API_URL = 'rest/tempo-timesheets/3';
     private const BROWSE_URL = self::BASE_URL . 'browse/';

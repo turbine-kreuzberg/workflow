@@ -21,7 +21,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/worklog')
+            ->with('https://jira.turbinekreuzberg.io/rest/api/latest/issue/BCM-12/worklog')
             ->willReturn(['some-worklog']);
 
         $jiraClient = new JiraClient(
@@ -39,7 +39,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('post')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/worklog')
+            ->with('https://jira.turbinekreuzberg.io/rest/api/latest/issue/BCM-12/worklog')
             ->willReturn(['some-worklog']);
 
         $jiraClient = new JiraClient(
@@ -55,7 +55,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12')
+            ->with('https://jira.turbinekreuzberg.io/rest/api/latest/issue/BCM-12')
             ->willReturn(['some-response']);
 
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
@@ -76,7 +76,7 @@ class JiraClientTest extends TestCase
 
         $expectedJiraIssueTransfer = new JiraIssueTransfer();
         $expectedJiraIssueTransfer->key = 'BCM-12';
-        $expectedJiraIssueTransfer->url = 'https://jira.votum.info:7443/browse/BCM-12';
+        $expectedJiraIssueTransfer->url = 'https://jira.turbinekreuzberg.io/browse/BCM-12';
 
         self::assertEquals($expectedJiraIssueTransfer, $jiraIssueTransfer);
     }
@@ -86,7 +86,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/ProjectKey-12')
+            ->with('https://jira.turbinekreuzberg.io/rest/api/latest/issue/ProjectKey-12')
             ->willReturn(['some-response']);
 
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
@@ -112,7 +112,7 @@ class JiraClientTest extends TestCase
 
         $expectedJiraIssueTransfer = new JiraIssueTransfer();
         $expectedJiraIssueTransfer->key = 'ProjectKey-12';
-        $expectedJiraIssueTransfer->url = 'https://jira.votum.info:7443/browse/ProjectKey-12';
+        $expectedJiraIssueTransfer->url = 'https://jira.turbinekreuzberg.io/browse/ProjectKey-12';
 
         self::assertEquals($expectedJiraIssueTransfer, $jiraIssueTransfer);
     }
@@ -122,12 +122,12 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('post')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/')
+            ->with('https://jira.turbinekreuzberg.io/rest/api/latest/issue/')
             ->willReturn(['key' => 'BCM-12']);
 
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12')
+            ->with('https://jira.turbinekreuzberg.io/rest/api/latest/issue/BCM-12')
             ->willReturn(['some-response']);
 
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
@@ -148,7 +148,7 @@ class JiraClientTest extends TestCase
 
         $expectedJiraIssueTransfer = new JiraIssueTransfer();
         $expectedJiraIssueTransfer->key = 'BCM-12';
-        $expectedJiraIssueTransfer->url = 'https://jira.votum.info:7443/browse/BCM-12';
+        $expectedJiraIssueTransfer->url = 'https://jira.turbinekreuzberg.io/browse/BCM-12';
 
         self::assertEquals($expectedJiraIssueTransfer, $jiraIssueTransfer);
     }
@@ -165,7 +165,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('put')
             ->with(
-                'https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/assignee',
+                'https://jira.turbinekreuzberg.io/rest/api/latest/issue/BCM-12/assignee',
                 ['name' => 'testUser']
             )
             ->willReturn(['key' => 'BCM-12']);
@@ -188,7 +188,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
-            ->with('https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions')
+            ->with('https://jira.turbinekreuzberg.io/rest/api/latest/issue/BCM-12/transitions')
             ->willReturn(['transitions']);
 
         $jiraIssueMapperMock = $this->createMock(JiraIssueMapper::class);
@@ -209,7 +209,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('post')
             ->with(
-                'https://jira.votum.info:7443/rest/api/latest/issue/BCM-12/transitions',
+                'https://jira.turbinekreuzberg.io/rest/api/latest/issue/BCM-12/transitions',
                 ['transition' => ['id' => '123']]
             );
 
@@ -238,7 +238,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
             ->with(
-                'https://jira.votum.info:7443/rest/agile/1.0/board/232/sprint',
+                'https://jira.turbinekreuzberg.io/rest/agile/1.0/board/232/sprint',
             )
             ->willReturn(
                 [
@@ -297,7 +297,7 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
             ->with(
-                'https://jira.votum.info:7443/rest/agile/1.0/board/232/sprint',
+                'https://jira.turbinekreuzberg.io/rest/agile/1.0/board/232/sprint',
             )
             ->willReturn(
                 [
@@ -330,7 +330,8 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
             ->with(
-                'https://jira.votum.info:7443/rest/tempo-timesheets/3/worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
+                'https://jira.turbinekreuzberg.io/rest/tempo-timesheets/3/' .
+                'worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
             )
             ->willReturn($worklogs);
 
@@ -354,7 +355,8 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
             ->with(
-                'https://jira.votum.info:7443/rest/tempo-timesheets/3/worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
+                'https://jira.turbinekreuzberg.io/rest/tempo-timesheets/3/' .
+                'worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
             )
             ->willReturn([]);
 
@@ -380,7 +382,8 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
             ->with(
-                'https://jira.votum.info:7443/rest/tempo-timesheets/3/worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
+                'https://jira.turbinekreuzberg.io/rest/tempo-timesheets/3/' .
+                'worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
             )
             ->willReturn(
                 [
@@ -424,7 +427,8 @@ class JiraClientTest extends TestCase
         $jiraHttpClientMock->expects(self::once())
             ->method('get')
             ->with(
-                'https://jira.votum.info:7443/rest/tempo-timesheets/3/worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
+                'https://jira.turbinekreuzberg.io/rest/tempo-timesheets/3/' .
+                'worklogs?dateFrom=2020-01-01&dateTo=2020-01-01'
             )
             ->willReturn(
                 [
