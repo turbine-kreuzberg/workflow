@@ -47,7 +47,7 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://git.votum-media.net/turbine/workflow.git"
+      "url": "https://git.turbinekreuzberg.io/turbine/workflow.git"
     }
   ]
 }

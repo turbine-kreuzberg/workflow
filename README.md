@@ -1,5 +1,5 @@
 # Turbine Workflow
-[![coverage report](https://git.votum-media.net/turbine/workflow/badges/main/coverage.svg)](https://git.votum-media.net/turbine/workflow/-/commits/main)
+[![coverage report](https://git.turbinekreuzberg.io/turbine/workflow/badges/main/coverage.svg)](https://git.turbinekreuzberg.io/turbine/workflow/-/commits/main)
 
 These tools help automate the development workflow.
 
@@ -9,7 +9,7 @@ These tools help automate the development workflow.
   "repositories": [  
    {
         "type": "git",
-        "url": "https://git.votum-media.net/turbine/workflow.git"
+        "url": "https://git.turbinekreuzberg.io/turbine/workflow.git"
    }
   ]
   
@@ -21,7 +21,7 @@ JIRA_USERNAME=maxmusterman
 JIRA_PASSWORD=password
 JIRA_FAVOURITE_TICKETS=TXB-2,TXB-9
 #Add your GitLab Personal Access Token to enable workflow automations
-#Create your token with API scope here: https://git.votum-media.net/-/profile/personal_access_tokens
+#Create your token with API scope here: https://git.turbinekreuzberg.io/-/profile/personal_access_tokens
 #The scope of api should be checked
 GITLAB_PERSONAL_ACCESS_TOKEN=access-token
 ```
