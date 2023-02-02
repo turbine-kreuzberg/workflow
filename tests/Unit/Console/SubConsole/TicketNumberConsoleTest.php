@@ -12,15 +12,12 @@ class TicketNumberConsoleTest extends TestCase
 {
     public function testGetIssueTicketNumberWithoutAnyChoicesWillAskForTicketNumber(): void
     {
-        $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
-
         $favouriteTicketChoicesProviderMock = $this->createMock(FavouriteTicketChoicesProvider::class);
         $favouriteTicketChoicesProviderMock->expects(self::once())
             ->method('provide')
             ->willReturn([]);
 
         $ticketNumberConsole = new TicketNumberConsole(
-            $ticketIdProviderMock,
             $favouriteTicketChoicesProviderMock
         );
 
@@ -35,8 +32,6 @@ class TicketNumberConsoleTest extends TestCase
 
     public function testGetIssueTicketNumberFromChoices(): void
     {
-        $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
-
         $favouriteTicketChoicesProviderMock = $this->createMock(FavouriteTicketChoicesProvider::class);
         $favouriteTicketChoicesProviderMock->expects(self::once())
             ->method('provide')
@@ -48,7 +43,6 @@ class TicketNumberConsoleTest extends TestCase
             );
 
         $ticketNumberConsole = new TicketNumberConsole(
-            $ticketIdProviderMock,
             $favouriteTicketChoicesProviderMock
         );
 
@@ -71,8 +65,6 @@ class TicketNumberConsoleTest extends TestCase
 
     public function testGetIssueTicketNumberWithChoicesButSelectCustomInput(): void
     {
-        $ticketIdProviderMock = $this->createMock(TicketIdProvider::class);
-
         $favouriteTicketChoicesProviderMock = $this->createMock(FavouriteTicketChoicesProvider::class);
         $favouriteTicketChoicesProviderMock->expects(self::once())
             ->method('provide')
@@ -84,7 +76,6 @@ class TicketNumberConsoleTest extends TestCase
             );
 
         $ticketNumberConsole = new TicketNumberConsole(
-            $ticketIdProviderMock,
             $favouriteTicketChoicesProviderMock
         );
 

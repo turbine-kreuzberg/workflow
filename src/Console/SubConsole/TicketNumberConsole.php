@@ -6,7 +6,6 @@ namespace Turbine\Workflow\Console\SubConsole;
 
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Turbine\Workflow\Workflow\Provider\FavouriteTicketChoicesProvider;
-use Turbine\Workflow\Workflow\TicketIdProvider;
 
 class TicketNumberConsole
 {
@@ -14,7 +13,6 @@ class TicketNumberConsole
     private const CUSTOM_INPUT = 'Custom input';
 
     public function __construct(
-        private TicketIdProvider $ticketIdProvider,
         private FavouriteTicketChoicesProvider $favouriteTicketChoicesProvider
     ) {
     }

@@ -10,7 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use PHPStan\Testing\TestCase;
+use PHPUnit\Framework\TestCase;
 use Turbine\Workflow\Client\Http\GitlabHttpClient;
 use Turbine\Workflow\Configuration;
 

@@ -12,7 +12,6 @@ use Turbine\Workflow\Configuration;
 class DeploymentStatisticsUpdater
 {
     private const ORG = 'Turbine Kreuzberg';
-    private const BUCKET = 'devops-metrics';
 
     public function __construct(
         private Client $client,
