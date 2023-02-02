@@ -158,7 +158,6 @@ class WorkflowFactory
     public function createTicketNumberConsole(): TicketNumberConsole
     {
         return new TicketNumberConsole(
-            $this->getTicketIdProvider(),
             $this->createFavouriteTicketChoicesProvider()
         );
     }

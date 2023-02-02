@@ -1,4 +1,4 @@
-FROM php:8.0-cli AS php-cli
+FROM php:8.1-cli AS php-cli
 
 RUN apt-get update && apt-get install -y git \
     unzip \
