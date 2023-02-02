@@ -3,7 +3,7 @@
   "description": "",
   "license": "MIT",
   "require": {
-    "symfony/console": "^6",
+    "symfony/console": "^5|^6",
     "guzzlehttp/guzzle": "^6.5.0|^7",
     "influxdata/influxdb-client-php": "^1"
   },
