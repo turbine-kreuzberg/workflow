@@ -4,8 +4,12 @@ CLI_COLORED = docker-compose exec cli
 
 setup: ##@setup install dependencies
 	make install-git-hooks
-	docker-compose up -d
+	docker-compose build --build-arg UID=$(shell id -u) --build-arg GID=$(shell id -g) --build-arg UNAME=$(shell whoami)
 .PHONY: setup
+
+start: ##@start
+	UNAME=$(shell whoami) docker-compose up -d
+.PHONY: start
 
 tests: ##@development run tests
 	docker-compose exec -T php /var/www/vendor/bin/phpunit --colors=always -c tests/phpunit.xml
