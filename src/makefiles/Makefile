@@ -1,8 +1,8 @@
-DOCKER_RUN=docker run --rm --volume ${PWD}:/var/www --env-file ${PWD}/.env -w /var/www -it --user $(shell id -u):$(shell id -g) workflow
+DOCKER_RUN=docker run --rm --volume ${PWD}:/var/www --volume ~/.ssh:/home/$(shell whoami)/.ssh --env-file ${PWD}/.env -w /var/www -it workflow
 DOCKER_RUN_WORKFLOW=$(DOCKER_RUN) /var/www/vendor/bin/workflow
 
 workflow-setup: ##@workflow setup turbine workflow
-	docker build -f vendor/turbine/workflow/images/php/Dockerfile vendor/turbine/workflow/images/php -t workflow
+	docker build --build-arg UID=$(shell id -u) --build-arg GID=$(shell id -g) --build-arg UNAME=$(shell whoami) -f vendor/turbine/workflow/images/php/Dockerfile vendor/turbine/workflow/images/php -t workflow
 .PHONY: workflow-setup
 
 book-time: ##@workflow book time on ticket
