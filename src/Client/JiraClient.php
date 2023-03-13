@@ -20,6 +20,7 @@ class JiraClient
     private const API_URL = self::BASE_URL . 'rest/api/latest/';
     private const TEMPO_API_URL = 'rest/tempo-timesheets/3';
     private const BROWSE_URL = self::BASE_URL . 'browse/';
+    private const SEARCH_URL = self::BASE_URL . 'search/';
     private const ISSUE_URL = self::API_URL . 'issue/';
     private const BOARD_URL = self::BASE_URL . 'rest/agile/1.0/board/';
 
@@ -131,6 +132,12 @@ class JiraClient
         $jiraWorklogsTransfer->totalSpentTime = $totalTimeSpentInSeconds;
 
         return $jiraWorklogsTransfer;
+    }
+
+    public function getRecentBugTickets(): array
+    {
+        $projectKey = $this->configuration->get(Configuration::JIRA_PROJECT_KEY);
+        return $this->jiraHttpClient->get(self::SEARCH_URL."?jql=project={$projectKey}&type=bug");
     }
 
     private function getUsername(): string
