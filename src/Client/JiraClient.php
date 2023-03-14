@@ -20,7 +20,7 @@ class JiraClient
     private const API_URL = self::BASE_URL . 'rest/api/latest/';
     private const TEMPO_API_URL = 'rest/tempo-timesheets/3';
     private const BROWSE_URL = self::BASE_URL . 'browse/';
-    private const SEARCH_URL = self::BASE_URL . 'search/';
+    private const SEARCH_URL = self::API_URL . 'search';
     private const ISSUE_URL = self::API_URL . 'issue/';
     private const BOARD_URL = self::BASE_URL . 'rest/agile/1.0/board/';
 
@@ -137,7 +137,8 @@ class JiraClient
     public function getRecentBugTickets(): array
     {
         $projectKey = $this->configuration->get(Configuration::JIRA_PROJECT_KEY);
-        return $this->jiraHttpClient->get(self::SEARCH_URL."?jql=project={$projectKey}&type=bug");
+
+        return $this->jiraHttpClient->get(self::SEARCH_URL .'?jql=project=Bread%20AND%20issuetype=Bug%20AND%20status!=Closed%20AND%20status!=DEPLOYED%20AND%20status!=Done%20AND%20status!=Archived&maxResults=1000');
     }
 
     private function getUsername(): string

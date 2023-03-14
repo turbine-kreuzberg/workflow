@@ -24,7 +24,15 @@ class JiraClientBugTicketsTest extends TestCase
         $jiraIssueMapper = $this->createMock(JiraIssueMapper::class);
         $jiraClient = new JiraClient($atlassianHttpClient, $configuration, $jiraIssueMapper);
 
-        $this->assertSame([], $jiraClient->getActiveSprint());
-//        $this->assertSame([], $jiraClient->getRecentBugTickets());
+//        $this->assertSame([], $jiraClient->getActiveSprint());
+        $issues = $jiraClient->getRecentBugTickets()['issues'];
+
+        $statuses = [];
+        foreach ($issues as $issue) {
+            $statuses[$issue['fields']['status']['name']] =$issue['fields']['status']['name'];
+        }
+        $this->assertSame(12, ($issues));
+
+        $this->assertSame(12, count($jiraClient->getRecentBugTickets()['issues']));
     }
 }
