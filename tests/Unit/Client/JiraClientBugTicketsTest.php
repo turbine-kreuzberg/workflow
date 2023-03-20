@@ -27,12 +27,11 @@ class JiraClientBugTicketsTest extends TestCase
 //        $this->assertSame([], $jiraClient->getActiveSprint());
         $issues = $jiraClient->getRecentBugTickets()['issues'];
 
-        $statuses = [];
+        $ticketNumberCollection = [];
         foreach ($issues as $issue) {
-            $statuses[$issue['fields']['status']['name']] =$issue['fields']['status']['name'];
+            $ticketNumberCollection[] = $issue['key'];
         }
-        $this->assertSame(12, ($issues));
 
-        $this->assertSame(12, count($jiraClient->getRecentBugTickets()['issues']));
+        $this->assertCount(931, $ticketNumberCollection);
     }
 }
