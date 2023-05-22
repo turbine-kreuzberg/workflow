@@ -68,7 +68,7 @@ class JiraClient
 
     public function assignJiraIssueToUser(string $issue): void
     {
-        $assigneeData = ['name' => $this->getUsername()];
+        $assigneeData = ['accountId' => $this->getUserAccountId()];
         $issueUrl = self::ISSUE_URL . $this->normalizeIssueNumber($issue) . '/assignee';
         $this->jiraHttpClient->put($issueUrl, $assigneeData);
     }
@@ -133,9 +133,9 @@ class JiraClient
         return $jiraWorklogsTransfer;
     }
 
-    private function getUsername(): string
+    private function getUserAccountId(): string
     {
-        return $this->configuration->get(Configuration::JIRA_USERNAME);
+        return $this->configuration->get(Configuration::JIRA_USER_ACCOUNT_ID);
     }
 
     private function mapResponseToJiraIssueTransfer(array $issue): JiraIssueTransfer

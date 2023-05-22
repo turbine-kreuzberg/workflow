@@ -24,6 +24,7 @@ class Configuration
     public const FAVOURITE_WORKLOG_COMMENTS = 'FAVOURITE_WORKLOG_COMMENTS';
     public const SLACK_WEBHOOK_URL = 'SLACK_WEBHOOK_URL';
     public const JIRA_PROJECT_ACCOUNT_ID = 'JIRA_PROJECT_ACCOUNT_ID';
+    public const JIRA_USER_ACCOUNT_ID = 'JIRA_USER_ACCOUNT_ID';
 
     public function get(string $key): string
     {

@@ -158,15 +158,15 @@ class JiraClientTest extends TestCase
         $configurationMock = $this->createMock(Configuration::class);
         $configurationMock->expects(self::once())
             ->method('get')
-            ->with('JIRA_USERNAME')
-            ->willReturn('testUser');
+            ->with('JIRA_USER_ACCOUNT_ID')
+            ->willReturn('testUserAccountId');
 
         $jiraHttpClientMock = $this->createMock(AtlassianHttpClient::class);
         $jiraHttpClientMock->expects(self::once())
             ->method('put')
             ->with(
                 'https://turbinekreuzberg.atlassian.net/rest/api/latest/issue/BCM-12/assignee',
-                ['name' => 'testUser']
+                ['accountId' => 'testUserAccountId']
             )
             ->willReturn(['key' => 'BCM-12']);
 
