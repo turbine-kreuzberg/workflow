@@ -46,7 +46,7 @@ class WorkOnTicketCommand extends Command
         );
 
         $question = (new Question(
-            "Branch name?\n   ${branchNameFromTicketCutAtFifty}\n   " . str_repeat('-', 50),
+            "Branch name?\n   {$branchNameFromTicketCutAtFifty}\n   " . str_repeat('-', 50),
             $branchNameFromTicketCutAtFifty
         ))
             ->setAutocompleterValues([$branchNameFromTicketCutAtFifty])

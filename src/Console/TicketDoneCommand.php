@@ -56,7 +56,7 @@ class TicketDoneCommand extends Command
         $this->gitlabClient->deleteRemoteBranch($currentBranchName);
 
         $inputOutputStyle->success(
-            "Remote '${currentBranchName}' was deleted and ticket was moved to '${jiraDevelopmentDoneStatus}'!"
+            "Remote '{$currentBranchName}' was deleted and ticket was moved to '{$jiraDevelopmentDoneStatus}'!"
         );
 
         return 0;

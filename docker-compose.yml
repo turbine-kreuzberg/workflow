@@ -14,6 +14,6 @@ services:
 
   composer:
     image: composer:latest
-    command: install -o --ignore-platform-reqs
+    command: install -o --ignore-platform-reqs --no-plugins
     volumes:
       - .:/app:delegated

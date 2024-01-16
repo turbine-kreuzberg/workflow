@@ -157,7 +157,7 @@ class JiraClient
         return $this->jiraHttpClient->get(
             self::BASE_URL .
             self::TEMPO_API_URL .
-            "/worklogs?dateFrom=${dateString}&dateTo=${dateString}"
+            "/worklogs?dateFrom={$dateString}&dateTo={$dateString}"
         );
     }
 
