@@ -5,7 +5,7 @@
   "require": {
     "symfony/console": "^6",
     "guzzlehttp/guzzle": "^6.5.0|^7",
-    "influxdata/influxdb-client-php": "^1"
+    "influxdata/influxdb-client-php": "^3"
   },
   "require-dev": {
     "php": ">=8.2",
